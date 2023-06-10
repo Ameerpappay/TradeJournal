@@ -17,7 +17,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GetStrategyDto>>> GetStrategies()
+        public async Task<ActionResult<IEnumerable<GetStrategyDto>>> GetAll()
         {
 
             var response = await _strategyService.GetStrategies();
