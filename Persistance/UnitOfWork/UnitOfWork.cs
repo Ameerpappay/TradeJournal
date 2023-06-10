@@ -23,9 +23,9 @@ namespace Persistance.UnitOfWork
             StrategyRepository = strategyRepository;
         }
 
-        public Task Save(CancellationToken cancellationToken)
+        public Task SaveChangesAsync()
         {
-            return _dbContext.SaveChangesAsync(cancellationToken);
+            return _dbContext.SaveChangesAsync();
         }
 
         public void Dispose()

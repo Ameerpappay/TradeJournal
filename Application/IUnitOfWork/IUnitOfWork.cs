@@ -9,7 +9,7 @@ namespace Application
 {
     public interface IUnitOfWork:IDisposable
     {
-        Task Save(CancellationToken cancellationToken);
+        Task SaveChangesAsync();
 
         IStrategyRepository StrategyRepository { get; }
     }

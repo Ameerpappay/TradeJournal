@@ -1,4 +1,5 @@
 ﻿using Application.Dtos;
+using Application.Dtos.Strategy;
 using Application.IServices;
 using Microsoft.AspNetCore.Mvc;
 
@@ -35,8 +36,9 @@ namespace WebApi.Controllers
 
         // POST api/<StrategyController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult<GetStrategyDto>> Add(AddStrategyDto requestBody )
         {
+            return Ok(await _strategyService.AddStrategy(requestBody));
         }
 
         // PUT api/<StrategyController>/5
@@ -49,6 +51,7 @@ namespace WebApi.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            _strategyService.DeleteStrategyById(id);
         }
     }
 }
