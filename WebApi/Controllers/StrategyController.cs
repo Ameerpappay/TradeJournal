@@ -10,25 +10,20 @@ namespace WebApi.Controllers
     [ApiController]
     public class StrategyController : ControllerBase
     {
-        private IStrategyService _strategyService; 
-        public StrategyController(IStrategyService strategyService) {
-            _strategyService = strategyService;       
+        private IStrategyService _strategyService;
+        public StrategyController(IStrategyService strategyService)
+        {
+            _strategyService = strategyService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GetStrategyDto>>> GetStrategies()
+        public async Task<ActionResult<IEnumerable<GetStrategyDto>>> GetAll()
         {
-            try
-            {
-                var response = await _strategyService.GetStrategies();
 
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
+            var response = await _strategyService.GetStrategies();
 
-                throw;
-            }
+            return Ok(response);
+
         }
 
         // GET api/<StrategyController>/5
