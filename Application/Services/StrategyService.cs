@@ -26,6 +26,7 @@ namespace Application.Services
             {
                 Id = s.Id,
                 Name = s.Name,
+                Description=s.Description,
             }).ToList();
 
             return strategies;
