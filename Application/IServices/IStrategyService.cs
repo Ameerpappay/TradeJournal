@@ -15,7 +15,8 @@ namespace Application.IServices
         Task<GetStrategyDto > AddStrategy(AddStrategyDto strategy);
 
        Task<GetStrategyDto> GetStrategyById(int strategyId);
-        Task<GetStrategyDto> UpdateStrategyById(int strategyId);
-        DeleteStrategyById(int strategyId);
+        
+        Task  UpdateStrategy(int Id,UpdateStrategyDto updateStrategyDto);
+        Task  DeleteStrategyById(int strategyId);
     }
 }

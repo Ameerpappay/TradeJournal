@@ -43,15 +43,16 @@ namespace WebApi.Controllers
 
         // PUT api/<StrategyController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
+        public async Task PutAsync(int id, [FromBody] UpdateStrategyDto requestBody)
+        {      
+            await _strategyService.UpdateStrategy(id,requestBody);
         }
 
         // DELETE api/<StrategyController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task  Delete(int id)
         {
-            _strategyService.DeleteStrategyById(id);
+           await  _strategyService.DeleteStrategyById(id);
         }
     }
 }

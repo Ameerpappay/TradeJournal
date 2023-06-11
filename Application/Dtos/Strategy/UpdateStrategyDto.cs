@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 namespace Application.Dtos.Strategy
 {
     public class UpdateStrategyDto
-    {
-        public int Id { get; set; }
+    {      
         public string Name { get; set; }
         public string Description { get; set; }
             

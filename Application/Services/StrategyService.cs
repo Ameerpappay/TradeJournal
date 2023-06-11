@@ -33,10 +33,11 @@ namespace Application.Services
             return new GetStrategyDto() { Description = addedStrategy.Description,Name = addedStrategy.Name,Id=addedStrategy.Id};
         }
 
-        public async Task<GetStrategyDto> DeleteStrategyById(int strategyId)
+        public async Task  DeleteStrategyById(int strategyId)
         {
              await _unitOfWork.StrategyRepository.Delete(strategyId);
-
+             await _unitOfWork.SaveChangesAsync();
+            //_unitOfWork.Dispose();
             //throw new NotImplementedException();
         }
 
@@ -64,10 +65,25 @@ namespace Application.Services
             return strategy;
         }
 
-        public Task<GetStrategyDto> UpdateStrategyById(int strategyId)
+        //public void UpdateStrategyById(Strategy strategy)
+        //{
+        //    var result =   _unitOfWork.StrategyRepository.Update(strategy);
+        //    throw new NotImplementedException();
+        //}
+
+        public async Task  UpdateStrategy(int Id,UpdateStrategyDto strategy)
         {
-            //var result = await _unitOfWork.StrategyRepository.Update( );
-            throw new NotImplementedException();
+            var result=await _unitOfWork.StrategyRepository.Get(Id);
+            result.Description = strategy.Description;
+            result.Name = strategy.Name;
+
+           
+            await  _unitOfWork.StrategyRepository.Update(result);
+
+             await _unitOfWork.SaveChangesAsync();
+            //throw new NotImplementedException();
         }
+
+        
     }
 }
