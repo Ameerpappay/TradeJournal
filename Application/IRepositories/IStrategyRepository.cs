@@ -8,6 +8,6 @@ using System.Threading.Tasks;
 namespace Application.IRepositories
 {
     public interface IStrategyRepository : IGenericRepository<Strategy>
-    { 
+    {
     }
 }

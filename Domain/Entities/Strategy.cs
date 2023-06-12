@@ -10,5 +10,6 @@ namespace Domain.Entities
     public class Strategy : BaseEntity
     {
         public String Name { get; set; }
+        public String Description { get; set; }
     }
 }

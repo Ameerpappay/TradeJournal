@@ -12,7 +12,6 @@ namespace Persistance.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {
-
         private readonly TradeJournalDataContext _dbContext;
 
         public IStrategyRepository StrategyRepository { get; set; }
@@ -23,9 +22,9 @@ namespace Persistance.UnitOfWork
             StrategyRepository = strategyRepository;
         }
 
-        public Task Save(CancellationToken cancellationToken)
+        public Task SaveChangesAsync()
         {
-            return _dbContext.SaveChangesAsync(cancellationToken);
+            return _dbContext.SaveChangesAsync();
         }
 
         public void Dispose()
