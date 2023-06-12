@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Application
 {
-    public interface IUnitOfWork:IDisposable
+    public interface IUnitOfWork : IDisposable
     {
         Task SaveChangesAsync();
 

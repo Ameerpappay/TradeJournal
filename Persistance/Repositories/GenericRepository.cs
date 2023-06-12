@@ -38,6 +38,7 @@ namespace Persistance.Repositories
         public async Task<IEnumerable<T>> Get()
         {
             var result = await _context.Set<T>().ToListAsync();
+
             return result;
         }
 

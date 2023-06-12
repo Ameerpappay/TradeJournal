@@ -16,6 +16,5 @@ namespace Domain.Entities
         public Decimal StopLoss { get; set; }
         public Strategy Strategy { get; set; }
         public string Narration { get; set; }
-
     }
 }

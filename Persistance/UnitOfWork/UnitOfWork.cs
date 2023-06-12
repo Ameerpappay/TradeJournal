@@ -12,7 +12,6 @@ namespace Persistance.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {
-
         private readonly TradeJournalDataContext _dbContext;
 
         public IStrategyRepository StrategyRepository { get; set; }

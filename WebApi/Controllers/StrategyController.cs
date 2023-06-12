@@ -20,11 +20,9 @@ namespace WebApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetStrategyDto>>> GetAll()
         {
-
             var response = await _strategyService.GetStrategies();
 
             return Ok(response);
-
         }
 
         // GET api/<StrategyController>/5

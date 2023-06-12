@@ -12,11 +12,12 @@ namespace Application.IServices
     {
         Task<List<GetStrategyDto>> GetStrategies();
 
-        Task<GetStrategyDto > AddStrategy(AddStrategyDto strategy);
+        Task<GetStrategyDto> AddStrategy(AddStrategyDto strategy);
 
-       Task<GetStrategyDto> GetStrategyById(int strategyId);
-        
-        Task  UpdateStrategy(int Id,UpdateStrategyDto updateStrategyDto);
-        Task  DeleteStrategyById(int strategyId);
+        Task<GetStrategyDto> GetStrategyById(int strategyId);
+
+        Task UpdateStrategy(int Id, UpdateStrategyDto updateStrategyDto);
+
+        Task DeleteStrategyById(int strategyId);
     }
 }

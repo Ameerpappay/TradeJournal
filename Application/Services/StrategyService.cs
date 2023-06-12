@@ -28,28 +28,31 @@ namespace Application.Services
                 Name = strategy.Name,
                 Description = strategy.Description,
             };
-            var addedStrategy=await _unitOfWork.StrategyRepository.Add(newStrategy);
+            var addedStrategy = await _unitOfWork.StrategyRepository.Add(newStrategy);
             await _unitOfWork.SaveChangesAsync();
-            return new GetStrategyDto() { Description = addedStrategy.Description,Name = addedStrategy.Name,Id=addedStrategy.Id};
+            return new GetStrategyDto()
+            {
+                Description = addedStrategy.Description,
+                Name = addedStrategy.Name,
+                Id = addedStrategy.Id
+            };
         }
 
-        public async Task  DeleteStrategyById(int strategyId)
+        public async Task DeleteStrategyById(int strategyId)
         {
-             await _unitOfWork.StrategyRepository.Delete(strategyId);
-             await _unitOfWork.SaveChangesAsync();
-            //_unitOfWork.Dispose();
-            //throw new NotImplementedException();
+            await _unitOfWork.StrategyRepository.Delete(strategyId);
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task<List<GetStrategyDto>> GetStrategies()
         {
             var result = await _unitOfWork.StrategyRepository.Get();
 
-            var strategies  = result.Select(s=>new GetStrategyDto
+            var strategies = result.Select(s => new GetStrategyDto
             {
                 Id = s.Id,
                 Name = s.Name,
-                Description=s.Description,
+                Description = s.Description,
             }).ToList();
 
             return strategies;
@@ -65,25 +68,15 @@ namespace Application.Services
             return strategy;
         }
 
-        //public void UpdateStrategyById(Strategy strategy)
-        //{
-        //    var result =   _unitOfWork.StrategyRepository.Update(strategy);
-        //    throw new NotImplementedException();
-        //}
-
-        public async Task  UpdateStrategy(int Id,UpdateStrategyDto strategy)
+        public async Task UpdateStrategy(int Id, UpdateStrategyDto strategy)
         {
-            var result=await _unitOfWork.StrategyRepository.Get(Id);
+            var result = await _unitOfWork.StrategyRepository.Get(Id);
             result.Description = strategy.Description;
             result.Name = strategy.Name;
 
-           
-            await  _unitOfWork.StrategyRepository.Update(result);
+            await _unitOfWork.StrategyRepository.Update(result);
 
-             await _unitOfWork.SaveChangesAsync();
-            //throw new NotImplementedException();
+            await _unitOfWork.SaveChangesAsync();
         }
-
-        
     }
 }
