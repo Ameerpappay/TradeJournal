@@ -21,7 +21,6 @@ namespace WebApi.Controllers
         public async Task<ActionResult<IEnumerable<GetStrategyDto>>> GetAll()
         {
             var response = await _strategyService.GetStrategies();
-
             return Ok(response);
         }
 
