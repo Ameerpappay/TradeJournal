@@ -13,7 +13,6 @@ namespace Application.Services
 {
     public class StrategyService : IStrategyService
     {
-
         private readonly IUnitOfWork _unitOfWork;
 
         public StrategyService(IUnitOfWork unitOfWork)
@@ -47,7 +46,6 @@ namespace Application.Services
         public async Task<List<GetStrategyDto>> GetStrategies()
         {
             var result = await _unitOfWork.StrategyRepository.Get();
-
             var strategies = result.Select(s => new GetStrategyDto
             {
                 Id = s.Id,
@@ -75,7 +73,6 @@ namespace Application.Services
             result.Name = strategy.Name;
 
             await _unitOfWork.StrategyRepository.Update(result);
-
             await _unitOfWork.SaveChangesAsync();
         }
     }
