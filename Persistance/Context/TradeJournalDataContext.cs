@@ -14,6 +14,8 @@ namespace Persistance.Context
 
         DbSet<Strategy> Strategies { get; set; }
 
+        DbSet<Trade> Trade { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

@@ -24,12 +24,14 @@ namespace WebApi
 
             //repositories
             builder.Services.AddScoped<IStrategyRepository, StrategyRepository>();
+            builder.Services.AddScoped<ITradeRepository, TradeRepository>();
 
             //unitofwork
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             //Services
             builder.Services.AddScoped<IStrategyService, StrategyService>();
+            builder.Services.AddScoped<ITradeServices, TradeServices>();
 
 
             builder.Services.AddDbContext<TradeJournalDataContext>(options =>
