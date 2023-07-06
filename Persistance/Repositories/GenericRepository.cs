@@ -30,12 +30,12 @@ namespace Persistance.Repositories
             record.IsDeleted = true;
         }
 
-        public async Task<T> Get(int id)
+        public virtual async Task<T> Get(int id)
         {
             return await _context.Set<T>().FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<IEnumerable<T>> Get()
+        public virtual async Task<IEnumerable<T>> Get()
         {
             var result = await _context.Set<T>().ToListAsync();
 

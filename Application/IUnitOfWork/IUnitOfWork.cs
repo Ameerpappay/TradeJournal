@@ -12,5 +12,7 @@ namespace Application
         Task SaveChangesAsync();
 
         IStrategyRepository StrategyRepository { get; }
+
+        ITradeRepository TradeRepository { get; }
     }
 }
