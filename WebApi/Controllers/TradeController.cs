@@ -1,18 +1,23 @@
-﻿using Application.Dtos.Trade;
+﻿using Application.Dtos.Image;
+using Application.Dtos.Trade;
 using Application.IServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
 {
-    [Route("api/trade")]
+    [Route("api/Trade")]
     [ApiController]
     public class TradeController: ControllerBase
     {
         private ITradeServices _services;
+        private IImageService _imageService;
+        public static IWebHostEnvironment _environment;
 
-        public TradeController(ITradeServices tradeService)
+        public TradeController(ITradeServices tradeService,IImageService imageService, IWebHostEnvironment environment)
         {
             _services = tradeService;
+            _imageService = imageService;
+            _environment = environment;
         }
 
         [HttpGet]
@@ -31,9 +36,10 @@ namespace WebApi.Controllers
 
         // POST api/<TradeController>
         [HttpPost]
-        public async Task<ActionResult<GetTradeDto>> Add(AddTradeDto requestBody)
+        public async Task<ActionResult<GetTradeDto>> Add([FromForm]AddTradeDto requestBody)
         {
-            return Ok(await _services.AddTrade(requestBody));
+            //var response = await _imageService.AddImage(AddImageDto);
+            return Ok(await _services.AddTrade(requestBody,_environment.ContentRootPath));
         }
 
         // PUT api/<TradeController>/5

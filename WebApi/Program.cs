@@ -2,7 +2,9 @@ using Application;
 using Application.IRepositories;
 using Application.IServices;
 using Application.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Persistance.Context;
 using Persistance.Repositories;
 using Persistance.UnitOfWork;
@@ -25,6 +27,7 @@ namespace WebApi
             //repositories
             builder.Services.AddScoped<IStrategyRepository, StrategyRepository>();
             builder.Services.AddScoped<ITradeRepository, TradeRepository>();
+            builder.Services.AddScoped<IImageRepository, ImageRepository>();
 
             //unitofwork
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -32,13 +35,13 @@ namespace WebApi
             //Services
             builder.Services.AddScoped<IStrategyService, StrategyService>();
             builder.Services.AddScoped<ITradeServices, TradeServices>();
+            builder.Services.AddScoped<IImageService, Imageservice>();
+            builder.Services.AddDbContext<TradeJournalDataContext>(options =>    
+            options.UseNpgsql(builder.Configuration.GetConnectionString("tradejournal")));
 
-
-            builder.Services.AddDbContext<TradeJournalDataContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("tradejournal")));
-
+            builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<TradeJournalDataContext>();
             var app = builder.Build();
-
+            
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
@@ -47,6 +50,7 @@ namespace WebApi
             }
 
             app.UseHttpsRedirection();
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

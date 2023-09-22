@@ -1,4 +1,7 @@
 ﻿using Domain.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+//using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,9 +11,12 @@ using System.Threading.Tasks;
 
 namespace Persistance.Context
 {
-    public class TradeJournalDataContext : DbContext
+    public class TradeJournalDataContext :IdentityDbContext<IdentityUser,IdentityRole,string>
     {
-        public TradeJournalDataContext(DbContextOptions<TradeJournalDataContext> options) : base(options) { }
+        public TradeJournalDataContext(DbContextOptions<TradeJournalDataContext> options) : base(options) 
+        { 
+
+        }
 
         DbSet<Strategy> Strategies { get; set; }
 

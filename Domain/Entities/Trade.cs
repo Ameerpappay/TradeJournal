@@ -24,5 +24,7 @@ namespace Domain.Entities
         public Strategy Strategy { get; set; }
 
         public string? Narration { get; set; }
+
+        public List<Image> Images { get; set; }
     }
 }
