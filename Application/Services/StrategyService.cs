@@ -71,6 +71,7 @@ namespace Application.Services
             var result = await _unitOfWork.StrategyRepository.Get(Id);
             result.Description = strategy.Description;
             result.Name = strategy.Name;
+            
 
             await _unitOfWork.StrategyRepository.Update(result);
             await _unitOfWork.SaveChangesAsync();

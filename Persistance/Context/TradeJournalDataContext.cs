@@ -1,6 +1,6 @@
 ﻿using Domain.Entities;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+//using Microsoft.AspNetCore.Identity;
+//using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 //using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -11,22 +11,14 @@ using System.Threading.Tasks;
 
 namespace Persistance.Context
 {
-    public class TradeJournalDataContext :IdentityDbContext<IdentityUser,IdentityRole,string>
+    public class TradeJournalDataContext :DbContext
     {
         public TradeJournalDataContext(DbContextOptions<TradeJournalDataContext> options) : base(options) 
         { 
-
         }
 
         DbSet<Strategy> Strategies { get; set; }
 
         DbSet<Trade> Trade { get; set; }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Entity<Strategy>().HasData(new Strategy { Id = 1, Name = "Seed Data 1" ,Description="None"});
-        }
     }
 }

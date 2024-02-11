@@ -12,18 +12,55 @@ using Persistance.Context;
 namespace Persistance.Migrations
 {
     [DbContext(typeof(TradeJournalDataContext))]
-    [Migration("20230628144230_test")]
-    partial class test
+    [Migration("20240211124541_first")]
+    partial class first
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.5")
+                .HasAnnotation("ProductVersion", "7.0.12")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("Domain.Entities.Image", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DateDeleted")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DateUpdated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("ImageTag")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("TradeId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TradeId");
+
+                    b.ToTable("Image");
+                });
 
             modelBuilder.Entity("Domain.Entities.Strategy", b =>
                 {
@@ -33,14 +70,13 @@ namespace Persistance.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTimeOffset>("DateCreated")
-                        .ValueGeneratedOnAddOrUpdate()
+                    b.Property<DateTime>("DateCreated")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTimeOffset?>("DateDeleted")
+                    b.Property<DateTime?>("DateDeleted")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTimeOffset?>("DateUpdated")
+                    b.Property<DateTime?>("DateUpdated")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
@@ -57,16 +93,6 @@ namespace Persistance.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Strategies");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            DateCreated = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Description = "None",
-                            IsDeleted = false,
-                            Name = "Seed Data 1"
-                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.Trade", b =>
@@ -81,14 +107,13 @@ namespace Persistance.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTimeOffset>("DateCreated")
-                        .ValueGeneratedOnAddOrUpdate()
+                    b.Property<DateTime>("DateCreated")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTimeOffset?>("DateDeleted")
+                    b.Property<DateTime?>("DateDeleted")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTimeOffset?>("DateUpdated")
+                    b.Property<DateTime?>("DateUpdated")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("EntryDate")
@@ -119,6 +144,17 @@ namespace Persistance.Migrations
                     b.ToTable("Trade");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Image", b =>
+                {
+                    b.HasOne("Domain.Entities.Trade", "Trade")
+                        .WithMany("Images")
+                        .HasForeignKey("TradeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Trade");
+                });
+
             modelBuilder.Entity("Domain.Entities.Trade", b =>
                 {
                     b.HasOne("Domain.Entities.Strategy", "Strategy")
@@ -128,6 +164,11 @@ namespace Persistance.Migrations
                         .IsRequired();
 
                     b.Navigation("Strategy");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Trade", b =>
+                {
+                    b.Navigation("Images");
                 });
 #pragma warning restore 612, 618
         }
