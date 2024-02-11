@@ -28,8 +28,7 @@ namespace WebApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<GetStrategyDto>> Get(int id)
         {
-            var response=await _strategyService.GetStrategyById(id);
-            return Ok(response);
+            return Ok(await _strategyService.GetStrategyById(id)) ;
         }
 
         // POST api/<StrategyController>

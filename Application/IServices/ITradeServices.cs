@@ -11,7 +11,7 @@ namespace Application.IServices
     {
         Task<List<GetTradeDto>> GetTrades();
 
-        Task<GetTradeDto> AddTrade(AddTradeDto trade);
+        Task<GetTradeDto> AddTrade(AddTradeDto trade,string contentRootPath);
 
         Task<GetTradeDto> GetTradeById(int tradeId);
 

@@ -14,5 +14,7 @@ namespace Application
         IStrategyRepository StrategyRepository { get; }
 
         ITradeRepository TradeRepository { get; }
+        
+        IImageRepository ImageRepository { get; }
     }
 }

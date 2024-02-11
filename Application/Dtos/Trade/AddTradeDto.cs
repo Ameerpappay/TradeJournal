@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Application.Dtos.Image;
 using Domain.Common;
+using Microsoft.AspNetCore.Http;
 
 namespace Application.Dtos.Trade
 {
@@ -22,5 +24,13 @@ namespace Application.Dtos.Trade
         public int StrategyId { get; set; }
 
         public string? Narration { get; set; }    
-    }   
+
+        public List<UploadImageDto> Images { get; set; }
+    }
+    
+    public class UploadImageDto
+    {
+        public IFormFile Image { get; set; }
+        public ImageTagDto ImageTag { get; set; }
+    }
 }
