@@ -2,12 +2,15 @@ using Application;
 using Application.IRepositories;
 using Application.IServices;
 using Application.Services;
+using Domain.Entities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Persistance.Context;
 using Persistance.Repositories;
 using Persistance.UnitOfWork;
+using System.Text;
 
 namespace WebApi
 {
@@ -36,10 +39,35 @@ namespace WebApi
             builder.Services.AddScoped<IStrategyService, StrategyService>();
             builder.Services.AddScoped<ITradeServices, TradeServices>();
             builder.Services.AddScoped<IImageService, Imageservice>();
+            builder.Services.AddScoped<IUserAccountService, UserAccountService>();
+
             builder.Services.AddDbContext<TradeJournalDataContext>(options =>    
             options.UseNpgsql(builder.Configuration.GetConnectionString("tradejournal")));
 
-            builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<TradeJournalDataContext>();
+            builder.Services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<TradeJournalDataContext>();
+
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.SaveToken = true;
+                options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidAudience = builder.Configuration["JWT:ValidAudience"],
+                    ValidIssuer = builder.Configuration["JWT:ValidIssuer" ],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]))
+                };
+
+            });
+
+
             var app = builder.Build();
             
             // Configure the HTTP request pipeline.
@@ -51,9 +79,7 @@ namespace WebApi
 
             app.UseHttpsRedirection();
             app.UseAuthentication();
-
             app.UseAuthorization();
-
 
             app.MapControllers();
 

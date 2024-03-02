@@ -11,13 +11,13 @@ using System.Threading.Tasks;
 
 namespace Persistance.Context
 {
-    public class TradeJournalDataContext :IdentityDbContext<IdentityUser,IdentityRole,string>
+    public class TradeJournalDataContext : IdentityDbContext<IdentityUser, IdentityRole, string>
     {
-        public TradeJournalDataContext(DbContextOptions<TradeJournalDataContext> options) : base(options) 
-        { 
+        public TradeJournalDataContext(DbContextOptions<TradeJournalDataContext> options) : base(options)
+        {
 
         }
-
+        DbSet<User> Users { get; set; }
         DbSet<Strategy> Strategies { get; set; }
 
         DbSet<Trade> Trade { get; set; }
@@ -26,7 +26,7 @@ namespace Persistance.Context
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Strategy>().HasData(new Strategy { Id = 1, Name = "Seed Data 1" ,Description="None"});
+            modelBuilder.Entity<Strategy>().HasData(new Strategy { Id = 1, Name = "Seed Data 1", Description = "None" });
         }
     }
 }
