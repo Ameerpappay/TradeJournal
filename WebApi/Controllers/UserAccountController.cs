@@ -2,6 +2,8 @@
 using Application.IServices;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Common;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
@@ -9,7 +11,7 @@ namespace WebApi.Controllers
 {
     [Route("api/user-accounts")]
     [ApiController]
-    public class UserAccountController:ControllerBase
+    public class UserAccountController : ControllerBase
     {
         private readonly IUserAccountService _userAccountService;
         public UserAccountController(IUserAccountService userAccountService)
@@ -30,11 +32,11 @@ namespace WebApi.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequest)
         {
-            var response = _userAccountService.Login(loginRequest);
+            var response = await _userAccountService.Login(loginRequest);
 
             if (response == null) return BadRequest("Invalid User");
 
-            return Ok(response);
+            return Ok(new{token = new JwtSecurityTokenHandler().WriteToken(response)});
         }
     }
 }

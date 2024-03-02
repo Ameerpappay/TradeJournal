@@ -26,7 +26,9 @@ namespace Persistance.Context
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Strategy>().HasData(new Strategy { Id = 1, Name = "Seed Data 1", Description = "None" });
+            modelBuilder.Entity<IdentityUser>().Ignore(c => c.UserName);
+
+           modelBuilder.Entity<Strategy>().HasData(new Strategy { Id = 1, Name = "Seed Data 1", Description = "None" });
         }
     }
 }

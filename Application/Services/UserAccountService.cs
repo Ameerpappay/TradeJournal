@@ -28,33 +28,33 @@ namespace Application.Services
 
         public async Task<bool> CreateUser(CreateUserDto createUserRequest)
         {
-            var userExists = await _userManager.FindByNameAsync(createUserRequest.UserName);
+            var userExists = await _userManager.FindByEmailAsync(createUserRequest.Email);
 
             if (userExists != null) return false;
 
             User user = new User()
             {
+                UserName = createUserRequest.Email,
                 Email = createUserRequest.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = createUserRequest.UserName
             };
 
             var result = await _userManager.CreateAsync(user, createUserRequest.Password);
-
+            var iscorrect = await _userManager.CheckPasswordAsync(user, createUserRequest.Password);
             return result.Succeeded;
         }
 
         public async Task<JwtSecurityToken> Login(LoginRequestDto loginRequest)
         {
-            var user = await _userManager.FindByNameAsync(loginRequest.UserName);
+            var user = await _userManager.FindByEmailAsync(loginRequest.UserName);
 
-            if (user == null || await _userManager.CheckPasswordAsync(user, loginRequest.Password)) return null;
+            if (user == null || !(await _userManager.CheckPasswordAsync(user, loginRequest.Password))) return null;
 
             var userRoles = await _userManager.GetRolesAsync(user);
 
             var authClaims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(ClaimTypes.Name, user.Email),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 };
 
