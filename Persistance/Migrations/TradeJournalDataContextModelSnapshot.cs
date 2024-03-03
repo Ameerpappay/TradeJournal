@@ -92,16 +92,6 @@ namespace Persistance.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Strategies");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            DateCreated = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Description = "None",
-                            IsDeleted = false,
-                            Name = "Seed Data 1"
-                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.Trade", b =>
@@ -256,6 +246,10 @@ namespace Persistance.Migrations
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("boolean");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.HasKey("Id");
 

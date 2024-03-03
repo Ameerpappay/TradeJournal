@@ -25,10 +25,6 @@ namespace Persistance.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Entity<IdentityUser>().Ignore(c => c.UserName);
-
-            modelBuilder.Entity<Strategy>().HasData(new Strategy { Id = 1, Name = "Seed Data 1", Description = "None" });
         }
     }
 }

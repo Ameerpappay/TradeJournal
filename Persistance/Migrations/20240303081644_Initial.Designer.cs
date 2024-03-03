@@ -12,8 +12,8 @@ using Persistance.Context;
 namespace Persistance.Migrations
 {
     [DbContext(typeof(TradeJournalDataContext))]
-    [Migration("20240302142855_User dbset")]
-    partial class Userdbset
+    [Migration("20240303081644_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -95,16 +95,6 @@ namespace Persistance.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Strategies");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            DateCreated = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Description = "None",
-                            IsDeleted = false,
-                            Name = "Seed Data 1"
-                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.Trade", b =>
