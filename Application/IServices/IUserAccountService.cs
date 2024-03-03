@@ -10,6 +10,9 @@ namespace Application.IServices
 {
     public interface IUserAccountService
     {
+
+        Task<bool> CreateRole (string roleName);
+
         Task<bool> CreateUser (CreateUserDto createUserRequest);
 
         Task<JwtSecurityToken> Login (LoginRequestDto loginRequest);

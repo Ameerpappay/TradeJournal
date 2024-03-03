@@ -26,6 +26,18 @@ namespace Application.Services
             _configuration = configuration;
         }
 
+        public async Task<bool> CreateRole(string roleName)
+        {
+            var result = await _roleManager.CreateAsync(
+                new IdentityRole 
+                {
+                    Name = roleName,
+                    ConcurrencyStamp = Guid.NewGuid().ToString(),
+            });
+
+            return result.Succeeded;
+        }
+
         public async Task<bool> CreateUser(CreateUserDto createUserRequest)
         {
             var userExists = await _userManager.FindByEmailAsync(createUserRequest.Email);

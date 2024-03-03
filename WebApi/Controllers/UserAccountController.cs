@@ -19,6 +19,16 @@ namespace WebApi.Controllers
             _userAccountService = userAccountService;
         }
 
+        [HttpPost("role")]
+        public async Task<IActionResult> CreateRole (string RoleName)
+        {
+            var response = await _userAccountService.CreateRole(RoleName);
+
+            if (response) return Ok("User role created successfully");
+
+            return BadRequest("Failed creating user role");
+        }
+
         [HttpPost("create")]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserDto createUserRequest)
         {
