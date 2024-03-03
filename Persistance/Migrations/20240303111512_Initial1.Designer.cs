@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Persistance.Context;
@@ -11,9 +12,11 @@ using Persistance.Context;
 namespace Persistance.Migrations
 {
     [DbContext(typeof(TradeJournalDataContext))]
-    partial class TradeJournalDataContextModelSnapshot : ModelSnapshot
+    [Migration("20240303111512_Initial1")]
+    partial class Initial1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -172,17 +175,15 @@ namespace Persistance.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "e75dd866-e22b-4376-9fe8-8304db44038a",
-                            ConcurrencyStamp = "9aa43226-c0eb-472d-9e5d-b1d16a2ac432",
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
+                            Id = "c88c4318-f2b4-43d6-978b-71ccc21707bc",
+                            ConcurrencyStamp = "146f2620-9a5b-4fec-a704-86535c25f712",
+                            Name = "Admin"
                         },
                         new
                         {
-                            Id = "0e4929cd-f3a4-41b8-b7d7-ee4050f2d0eb",
-                            ConcurrencyStamp = "b5eb2d26-4491-4f37-99f1-73f9f3778c71",
-                            Name = "Trader",
-                            NormalizedName = "TRADER"
+                            Id = "92682c1e-5a05-47a4-b346-c45bb814d41b",
+                            ConcurrencyStamp = "f9af6019-d6c2-43bc-bf3d-a17d99a4ae0c",
+                            Name = "Trader"
                         });
                 });
 

@@ -1,5 +1,7 @@
 ﻿using Application.Dtos;
 using Application.IServices;
+using Domain.Enum;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NuGet.Common;
@@ -19,25 +21,28 @@ namespace WebApi.Controllers
             _userAccountService = userAccountService;
         }
 
-        [HttpPost("role")]
-        public async Task<IActionResult> CreateRole (string RoleName)
+        [HttpPost("trader")]
+        public async Task<IActionResult> CreateTrader([FromBody] CreateUserDto createUserRequest)
         {
-            var response = await _userAccountService.CreateRole(RoleName);
-
-            if (response) return Ok("User role created successfully");
-
-            return BadRequest("Failed creating user role");
-        }
-
-        [HttpPost("create")]
-        public async Task<IActionResult> CreateUser([FromBody] CreateUserDto createUserRequest)
-        {
-            var response = await _userAccountService.CreateUser(createUserRequest);
+            var response = await _userAccountService.CreateTrader(createUserRequest);
 
             if (response) return Ok("User Created Successfully");
 
             return BadRequest("Either user creation failed or user already exists");
         }
+
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("admin")]
+        public async Task<IActionResult> CreateAdmin([FromBody] CreateUserDto createUserRequest)
+        {
+            var response = await _userAccountService.CreateAdmin(createUserRequest);
+
+            if (response) return Ok("User Created Successfully");
+
+            return BadRequest("Either user creation failed or user already exists");
+        }
+
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequest)

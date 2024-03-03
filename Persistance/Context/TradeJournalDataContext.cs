@@ -27,6 +27,9 @@ namespace Persistance.Context
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Strategy>(options => options.HasKey(m => m.Name));
+
+            modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole { Name = "Admin",ConcurrencyStamp = Guid.NewGuid().ToString(),NormalizedName="ADMIN"});
+            modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole { Name = "Trader", ConcurrencyStamp = Guid.NewGuid().ToString(),NormalizedName ="TRADER" });
         }
     }
 }

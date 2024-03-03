@@ -10,10 +10,9 @@ namespace Application.IServices
 {
     public interface IUserAccountService
     {
+        Task<bool> CreateAdmin(CreateUserDto createUserDto);
 
-        Task<bool> CreateRole (string roleName);
-
-        Task<bool> CreateUser (CreateUserDto createUserRequest);
+        Task<bool> CreateTrader (CreateUserDto createUserRequest);
 
         Task<JwtSecurityToken> Login (LoginRequestDto loginRequest);
     }

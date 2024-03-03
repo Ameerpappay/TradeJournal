@@ -1,59 +1,26 @@
 ﻿using Application.Dtos;
 using Application.IServices;
 using Domain.Entities;
+using Domain.Enum;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Services
 {
     public class UserAccountService : IUserAccountService
     {
         private readonly UserManager<User> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+
+
         private readonly IConfiguration _configuration;
-        public UserAccountService(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+        public UserAccountService(UserManager<User> userManager, IConfiguration configuration)
         {
             _userManager = userManager;
-            _roleManager = roleManager;
             _configuration = configuration;
-        }
-
-        public async Task<bool> CreateRole(string roleName)
-        {
-            var result = await _roleManager.CreateAsync(
-                new IdentityRole 
-                {
-                    Name = roleName,
-                    ConcurrencyStamp = Guid.NewGuid().ToString(),
-            });
-
-            return result.Succeeded;
-        }
-
-        public async Task<bool> CreateUser(CreateUserDto createUserRequest)
-        {
-            var userExists = await _userManager.FindByEmailAsync(createUserRequest.Email);
-
-            if (userExists != null) return false;
-
-            User user = new User()
-            {
-                UserName = createUserRequest.Email,
-                Email = createUserRequest.Email,
-                SecurityStamp = Guid.NewGuid().ToString(),
-            };
-
-            var result = await _userManager.CreateAsync(user, createUserRequest.Password);
-            var iscorrect = await _userManager.CheckPasswordAsync(user, createUserRequest.Password);
-            return result.Succeeded;
         }
 
         public async Task<JwtSecurityToken> Login(LoginRequestDto loginRequest)
@@ -86,6 +53,54 @@ namespace Application.Services
                 );
 
             return token;
+        }
+
+
+        public async Task<bool> CreateAdmin(CreateUserDto createUserRequest)
+        {
+            var isUserAdded = await AddUser(createUserRequest);
+
+            if (!isUserAdded) return false;
+
+            await AddRoleToUser(createUserRequest.Email, Role.Admin);
+
+            return isUserAdded;
+        }
+
+        public async Task<bool> CreateTrader(CreateUserDto createUserRequest)
+        {
+            var isUserAdded = await AddUser(createUserRequest);
+
+            if(!isUserAdded) return false;
+
+            await AddRoleToUser(createUserRequest.Email,Role.Trader);
+
+            return isUserAdded;
+        }
+
+        private async Task<bool> AddUser(CreateUserDto createUserRequest)
+        {
+            var existingUser = await _userManager.FindByEmailAsync(createUserRequest.Email);
+
+            if (existingUser != null) return false;
+
+            User user = new User()
+            {
+                UserName = createUserRequest.Email,
+                Email = createUserRequest.Email,
+                SecurityStamp = Guid.NewGuid().ToString(),
+            };
+
+            var result = await _userManager.CreateAsync(user, createUserRequest.Password);
+
+            return result.Succeeded;
+        }
+
+        private async Task AddRoleToUser(string emailId, Role role)
+        {
+            var addedUser = await _userManager.FindByEmailAsync(emailId);
+
+            await _userManager.AddToRoleAsync(addedUser, role.ToString());
         }
     }
 }
