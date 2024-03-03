@@ -31,7 +31,6 @@ namespace Persistance.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("DateCreated")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTimeOffset?>("DateDeleted")
@@ -62,14 +61,10 @@ namespace Persistance.Migrations
 
             modelBuilder.Entity("Domain.Entities.Strategy", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
 
                     b.Property<DateTimeOffset>("DateCreated")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTimeOffset?>("DateDeleted")
@@ -82,14 +77,16 @@ namespace Persistance.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
+                    b.HasKey("Name");
 
                     b.ToTable("Strategies");
                 });
@@ -107,7 +104,6 @@ namespace Persistance.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTimeOffset>("DateCreated")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTimeOffset?>("DateDeleted")
@@ -137,9 +133,13 @@ namespace Persistance.Migrations
                     b.Property<int>("StrategyId")
                         .HasColumnType("integer");
 
+                    b.Property<string>("StrategyName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("StrategyId");
+                    b.HasIndex("StrategyName");
 
                     b.ToTable("Trade");
                 });
@@ -370,7 +370,7 @@ namespace Persistance.Migrations
                 {
                     b.HasOne("Domain.Entities.Strategy", "Strategy")
                         .WithMany()
-                        .HasForeignKey("StrategyId")
+                        .HasForeignKey("StrategyName")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -56,10 +56,10 @@ namespace Persistance.Migrations
                 name: "Strategies",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     DateCreated = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     DateUpdated = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     DateDeleted = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
@@ -67,7 +67,7 @@ namespace Persistance.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Strategies", x => x.Id);
+                    table.PrimaryKey("PK_Strategies", x => x.Name);
                 });
 
             migrationBuilder.CreateTable(
@@ -188,6 +188,7 @@ namespace Persistance.Migrations
                     Quantity = table.Column<decimal>(type: "numeric", nullable: false),
                     StopLoss = table.Column<decimal>(type: "numeric", nullable: false),
                     StrategyId = table.Column<int>(type: "integer", nullable: false),
+                    StrategyName = table.Column<string>(type: "text", nullable: false),
                     Narration = table.Column<string>(type: "text", nullable: true),
                     DateCreated = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     DateUpdated = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
@@ -198,10 +199,10 @@ namespace Persistance.Migrations
                 {
                     table.PrimaryKey("PK_Trade", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Trade_Strategies_StrategyId",
-                        column: x => x.StrategyId,
+                        name: "FK_Trade_Strategies_StrategyName",
+                        column: x => x.StrategyName,
                         principalTable: "Strategies",
-                        principalColumn: "Id",
+                        principalColumn: "Name",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -273,9 +274,9 @@ namespace Persistance.Migrations
                 column: "TradeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Trade_StrategyId",
+                name: "IX_Trade_StrategyName",
                 table: "Trade",
-                column: "StrategyId");
+                column: "StrategyName");
         }
 
         /// <inheritdoc />

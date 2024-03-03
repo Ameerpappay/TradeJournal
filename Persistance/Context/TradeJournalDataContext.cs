@@ -25,6 +25,8 @@ namespace Persistance.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Strategy>(options => options.HasKey(m => m.Name));
         }
     }
 }
