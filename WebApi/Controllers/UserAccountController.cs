@@ -32,7 +32,6 @@ namespace WebApi.Controllers
         }
 
 
-        [Authorize(Roles = "Admin")]
         [HttpPost("admin")]
         public async Task<IActionResult> CreateAdmin([FromBody] CreateUserDto createUserRequest)
         {

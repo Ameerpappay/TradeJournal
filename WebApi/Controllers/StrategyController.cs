@@ -8,7 +8,7 @@ namespace WebApi.Controllers
 {
     [Route("api/strategies")]
     [ApiController]
-    [Authorize(Roles ="Admin,Trader")]
+    [Authorize(Roles = "Admin,Trader")]
     public class StrategyController : ControllerBase
     {
         private IStrategyService _strategyService;
@@ -33,23 +33,25 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<GetStrategyDto>> Add(AddStrategyDto requestBody )
+        public async Task<ActionResult<GetStrategyDto>> Create(AddStrategyDto requestBody)
         {
-            return Ok(await _strategyService.AddStrategy(requestBody));
+            var userId = User.Claims.FirstOrDefault(c => c.Type == "userIdentifier")?.Value;
+
+            return Ok(await _strategyService.AddStrategy(requestBody, userId));
         }
 
 
         [HttpPut("{id}")]
-        public async Task PutAsync(int id, [FromBody] UpdateStrategyDto requestBody)
-        {      
-            await _strategyService.UpdateStrategy(id,requestBody);
+        public async Task Update(int id, [FromBody] UpdateStrategyDto requestBody)
+        {
+            await _strategyService.UpdateStrategy(id, requestBody);
         }
 
 
         [HttpDelete("{id}")]
-        public async Task  Delete(int id)
+        public async Task Delete(int id)
         {
-           await  _strategyService.DeleteStrategyById(id);
+            await _strategyService.DeleteStrategyById(id);
         }
     }
 }

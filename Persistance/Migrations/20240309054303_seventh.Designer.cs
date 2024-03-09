@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Persistance.Context;
@@ -11,9 +12,11 @@ using Persistance.Context;
 namespace Persistance.Migrations
 {
     [DbContext(typeof(TradeJournalDataContext))]
-    partial class TradeJournalDataContextModelSnapshot : ModelSnapshot
+    [Migration("20240309054303_seventh")]
+    partial class seventh
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,7 +34,6 @@ namespace Persistance.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CreatedById")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("CreatedByUserId")
@@ -408,9 +410,7 @@ namespace Persistance.Migrations
                 {
                     b.HasOne("Domain.Entities.User", "CreatedBy")
                         .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CreatedById");
 
                     b.HasOne("Domain.Entities.Trade", "Trade")
                         .WithMany("Images")

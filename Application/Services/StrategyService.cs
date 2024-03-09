@@ -20,20 +20,23 @@ namespace Application.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<GetStrategyDto> AddStrategy(AddStrategyDto strategy)
+        public async Task<GetStrategyDto> AddStrategy(AddStrategyDto strategy,string addedBy)
         {
             var newStrategy = new Strategy()
             {
                 Name = strategy.Name,
                 Description = strategy.Description,
+                CreatedByUserId = addedBy,
             };
+
             var addedStrategy = await _unitOfWork.StrategyRepository.Add(newStrategy);
             await _unitOfWork.SaveChangesAsync();
+
             return new GetStrategyDto()
             {
                 Description = addedStrategy.Description,
                 Name = addedStrategy.Name,
-                Id = addedStrategy.Id
+                Id = addedStrategy.Identifier.ToString(),
             };
         }
 
@@ -48,7 +51,7 @@ namespace Application.Services
             var result = await _unitOfWork.StrategyRepository.Get();
             var strategies = result.Select(s => new GetStrategyDto
             {
-                Id = s.Id,
+                Id = s.Identifier.ToString(),
                 Name = s.Name,
                 Description = s.Description,
             }).ToList();
@@ -60,7 +63,7 @@ namespace Application.Services
         {
             var result = await _unitOfWork.StrategyRepository.Get(strategyId);
             var strategy = new GetStrategyDto();
-            strategy.Id = result.Id;
+            strategy.Id = result.Identifier.ToString();
             strategy.Name = result.Name;
             strategy.Description = result.Description;
             return strategy;

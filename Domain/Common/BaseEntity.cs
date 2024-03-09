@@ -15,12 +15,17 @@ namespace Domain.Common
         public BaseEntity()
         {
             DateCreated = DateTime.UtcNow;
+            Identifier = Guid.NewGuid();
         }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public int Id { get; set; }
 
+        [Required]
+        public Guid Identifier { get; set; }
+
+        [Required]
         public DateTimeOffset DateCreated { get; set; }
 
         public DateTimeOffset? DateUpdated { get; set; }
@@ -29,7 +34,13 @@ namespace Domain.Common
 
         public bool IsDeleted { get; set; }
 
+        [Required]
+        public string CreatedByUserId { get; set; }
+
+        [Required]
         public User CreatedBy { get; set; }
+
+        public string? UpdatedByUserId { get; set; }
 
         public User UpdatedBy { get; set;}
     }

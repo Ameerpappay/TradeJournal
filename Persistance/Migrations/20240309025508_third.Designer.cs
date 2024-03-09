@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Persistance.Context;
@@ -11,9 +12,11 @@ using Persistance.Context;
 namespace Persistance.Migrations
 {
     [DbContext(typeof(TradeJournalDataContext))]
-    partial class TradeJournalDataContextModelSnapshot : ModelSnapshot
+    [Migration("20240309025508_third")]
+    partial class third
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,11 +34,6 @@ namespace Persistance.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CreatedById")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("CreatedByUserId")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTimeOffset>("DateCreated")
@@ -66,9 +64,6 @@ namespace Persistance.Migrations
                     b.Property<string>("UpdatedById")
                         .HasColumnType("text");
 
-                    b.Property<string>("UpdatedByUserId")
-                        .HasColumnType("text");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedById");
@@ -85,8 +80,7 @@ namespace Persistance.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<string>("CreatedByUserId")
-                        .IsRequired()
+                    b.Property<string>("CreatedById")
                         .HasColumnType("text");
 
                     b.Property<DateTimeOffset>("DateCreated")
@@ -114,14 +108,14 @@ namespace Persistance.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("UpdatedByUserId")
+                    b.Property<string>("UpdatedById")
                         .HasColumnType("text");
 
                     b.HasKey("Name");
 
-                    b.HasIndex("CreatedByUserId");
+                    b.HasIndex("CreatedById");
 
-                    b.HasIndex("UpdatedByUserId");
+                    b.HasIndex("UpdatedById");
 
                     b.ToTable("Strategies");
                 });
@@ -138,8 +132,7 @@ namespace Persistance.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("CreatedByUserId")
-                        .IsRequired()
+                    b.Property<string>("CreatedById")
                         .HasColumnType("text");
 
                     b.Property<DateTimeOffset>("DateCreated")
@@ -179,16 +172,16 @@ namespace Persistance.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("UpdatedByUserId")
+                    b.Property<string>("UpdatedById")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedByUserId");
+                    b.HasIndex("CreatedById");
 
                     b.HasIndex("StrategyName");
 
-                    b.HasIndex("UpdatedByUserId");
+                    b.HasIndex("UpdatedById");
 
                     b.ToTable("Trade");
                 });
@@ -408,9 +401,7 @@ namespace Persistance.Migrations
                 {
                     b.HasOne("Domain.Entities.User", "CreatedBy")
                         .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CreatedById");
 
                     b.HasOne("Domain.Entities.Trade", "Trade")
                         .WithMany("Images")
@@ -433,14 +424,11 @@ namespace Persistance.Migrations
                 {
                     b.HasOne("Domain.Entities.User", "CreatedBy")
                         .WithMany()
-                        .HasForeignKey("CreatedByUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("CreatedById");
 
                     b.HasOne("Domain.Entities.User", "UpdatedBy")
                         .WithMany()
-                        .HasForeignKey("UpdatedByUserId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("UpdatedById");
 
                     b.Navigation("CreatedBy");
 
@@ -451,9 +439,7 @@ namespace Persistance.Migrations
                 {
                     b.HasOne("Domain.Entities.User", "CreatedBy")
                         .WithMany()
-                        .HasForeignKey("CreatedByUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("CreatedById");
 
                     b.HasOne("Domain.Entities.Strategy", "Strategy")
                         .WithMany()
@@ -463,8 +449,7 @@ namespace Persistance.Migrations
 
                     b.HasOne("Domain.Entities.User", "UpdatedBy")
                         .WithMany()
-                        .HasForeignKey("UpdatedByUserId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("UpdatedById");
 
                     b.Navigation("CreatedBy");
 

@@ -12,7 +12,7 @@ namespace Application.IServices
     {
         Task<List<GetStrategyDto>> GetStrategies();
 
-        Task<GetStrategyDto> AddStrategy(AddStrategyDto strategy);
+        Task<GetStrategyDto> AddStrategy(AddStrategyDto strategy,string addedBy);
 
         Task<GetStrategyDto> GetStrategyById(int strategyId);
 

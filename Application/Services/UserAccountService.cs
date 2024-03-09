@@ -32,10 +32,11 @@ namespace Application.Services
             var userRoles = await _userManager.GetRolesAsync(user);
 
             var authClaims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name, user.Email),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                };
+            {
+                new Claim("userIdentifier",user.Id),
+                new Claim("emailId", user.Email),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            };
 
             foreach (var userRole in userRoles)
             {
@@ -71,9 +72,9 @@ namespace Application.Services
         {
             var isUserAdded = await AddUser(createUserRequest);
 
-            if(!isUserAdded) return false;
+            if (!isUserAdded) return false;
 
-            await AddRoleToUser(createUserRequest.Email,Role.Trader);
+            await AddRoleToUser(createUserRequest.Email, Role.Trader);
 
             return isUserAdded;
         }

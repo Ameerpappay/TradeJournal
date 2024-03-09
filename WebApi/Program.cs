@@ -48,6 +48,8 @@ namespace WebApi
 
             var app = builder.Build();
 
+            app.AddMigrations();
+
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
