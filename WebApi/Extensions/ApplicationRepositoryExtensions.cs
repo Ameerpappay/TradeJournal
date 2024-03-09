@@ -10,6 +10,7 @@ namespace WebApi.Extensions
             services.AddScoped<IStrategyRepository, StrategyRepository>();
             services.AddScoped<ITradeRepository, TradeRepository>();
             services.AddScoped<IImageRepository, ImageRepository>();
+            services.AddScoped<IPortfolioRepository, PortfolioRepository>();
         }
     }
 }

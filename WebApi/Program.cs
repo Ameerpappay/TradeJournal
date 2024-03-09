@@ -6,6 +6,8 @@ using Domain.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Persistance.Context;
@@ -13,6 +15,8 @@ using Persistance.Repositories;
 using Persistance.UnitOfWork;
 using System.Text;
 using WebApi.BuilderServices;
+using WebApi.Error;
+using WebApi.ExceptionHandler;
 using WebApi.Extensions;
 
 namespace WebApi
@@ -56,6 +60,7 @@ namespace WebApi
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+            app.UseMiddleware<ApiExceptionHandler>();
 
             app.UseHttpsRedirection();
             app.UseAuthentication();

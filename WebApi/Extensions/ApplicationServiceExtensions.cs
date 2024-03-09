@@ -11,6 +11,7 @@ namespace WebApi.Extensions
             services.AddScoped<ITradeServices, TradeServices>();
             services.AddScoped<IImageService, Imageservice>();
             services.AddScoped<IUserAccountService, UserAccountService>();
+            services.AddScoped<IPortfolioServices, PortfolioService>();
         }
     }
 }

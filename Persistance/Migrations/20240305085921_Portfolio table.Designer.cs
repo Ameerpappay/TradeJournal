@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Persistance.Context;
@@ -11,9 +12,11 @@ using Persistance.Context;
 namespace Persistance.Migrations
 {
     [DbContext(typeof(TradeJournalDataContext))]
-    partial class TradeJournalDataContextModelSnapshot : ModelSnapshot
+    [Migration("20240305085921_Portfolio table")]
+    partial class Portfoliotable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,14 +33,6 @@ namespace Persistance.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("CreatedById")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("CreatedByUserId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<DateTimeOffset>("DateCreated")
                         .HasColumnType("timestamp with time zone");
 
@@ -58,17 +53,9 @@ namespace Persistance.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("UpdatedById")
-                        .HasColumnType("text");
-
-                    b.Property<string>("UpdatedByUserId")
-                        .HasColumnType("text");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("TradeId");
-
-                    b.ToTable("Image");
+                    b.ToTable("Portfolio");
                 });
 
             modelBuilder.Entity("Domain.Entities.Strategy", b =>
@@ -76,10 +63,6 @@ namespace Persistance.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<string>("CreatedByUserId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<DateTimeOffset>("DateCreated")
                         .HasColumnType("timestamp with time zone");
 
@@ -99,75 +82,12 @@ namespace Persistance.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<Guid>("Identifier")
-                        .HasColumnType("uuid");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
-
-                    b.Property<string>("UpdatedByUserId")
-                        .HasColumnType("text");
 
                     b.HasKey("Name");
 
-                    b.HasIndex("CreatedByUserId");
-
-                    b.HasIndex("UpdatedByUserId");
-
                     b.ToTable("Strategies");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Trade", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTimeOffset>("DateCreated")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTimeOffset?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTimeOffset?>("DateUpdated")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime>("EntryDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Narration")
-                        .HasColumnType("text");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal>("Quantity")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal>("StopLoss")
-                        .HasColumnType("numeric");
-
-                    b.Property<int>("StrategyId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("StrategyName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("StrategyName");
-
-                    b.ToTable("Trade");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -198,15 +118,15 @@ namespace Persistance.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "e75dd866-e22b-4376-9fe8-8304db44038a",
-                            ConcurrencyStamp = "9aa43226-c0eb-472d-9e5d-b1d16a2ac432",
+                            Id = "3a7437a2-0231-451a-ac16-c4422c05578b",
+                            ConcurrencyStamp = "1057164a-729c-4d33-a22e-b1d85fe66670",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "0e4929cd-f3a4-41b8-b7d7-ee4050f2d0eb",
-                            ConcurrencyStamp = "b5eb2d26-4491-4f37-99f1-73f9f3778c71",
+                            Id = "c6a5fa93-d7db-4f87-8400-cb50c87cd2db",
+                            ConcurrencyStamp = "72a5c12e-9713-471c-8afe-18350603ea3c",
                             Name = "Trader",
                             NormalizedName = "TRADER"
                         });
@@ -395,28 +315,6 @@ namespace Persistance.Migrations
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
                     b.HasDiscriminator().HasValue("User");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Image", b =>
-                {
-                    b.HasOne("Domain.Entities.Trade", "Trade")
-                        .WithMany("Images")
-                        .HasForeignKey("TradeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Trade");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Trade", b =>
-                {
-                    b.HasOne("Domain.Entities.Strategy", "Strategy")
-                        .WithMany()
-                        .HasForeignKey("StrategyName")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Strategy");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
