@@ -20,7 +20,7 @@ namespace Persistance.Context
         }
         DbSet<User> Users { get; set; }
         DbSet<Strategy> Strategies { get; set; }
-        DbSet<Trade> Trade { get; set; }
+        DbSet<Portfolio> Portfolio { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

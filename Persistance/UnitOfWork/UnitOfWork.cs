@@ -19,12 +19,18 @@ namespace Persistance.UnitOfWork
         public ITradeRepository TradeRepository { get; set; }
 
         public IImageRepository ImageRepository { get; set; }
-        public UnitOfWork(TradeJournalDataContext context, IStrategyRepository strategyRepository, ITradeRepository tradeRepository,IImageRepository imageRepository)
+
+        public IPortfolioRepository PortfolioRepository { get; set; }
+
+        //public IPortfolioRepository portfolioRepository { get; set; }
+        public UnitOfWork(TradeJournalDataContext context, IStrategyRepository strategyRepository, ITradeRepository tradeRepository,IImageRepository imageRepository,IPortfolioRepository portfolioRepository)
         {
             _dbContext = context;
             StrategyRepository = strategyRepository;
             TradeRepository = tradeRepository;
             ImageRepository = imageRepository;
+            PortfolioRepository = portfolioRepository;
+
         }
 
         public Task SaveChangesAsync()

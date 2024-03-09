@@ -82,7 +82,11 @@ namespace Application.Services
         {
             var existingUser = await _userManager.FindByEmailAsync(createUserRequest.Email);
 
-            if (existingUser != null) return false;
+            if (existingUser != null)
+            {
+                //throw new InvalidOperationException();
+                return false;
+            }
 
             User user = new User()
             {
