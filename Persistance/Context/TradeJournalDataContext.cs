@@ -30,13 +30,6 @@ namespace Persistance.Context
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Strategy>(options => options.HasKey(m => m.Name));
-
-            // Get all DbSet properties in your DbContext
-            var dbSetProperties = GetType().GetProperties()
-                                            .Where(p => p.PropertyType.IsGenericType
-                                                    && p.PropertyType.GetGenericTypeDefinition() == typeof(DbSet<>));
-
-            // Iterate over DbSet properties
         }
     }
 }
