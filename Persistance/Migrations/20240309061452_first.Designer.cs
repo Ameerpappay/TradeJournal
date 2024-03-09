@@ -12,8 +12,8 @@ using Persistance.Context;
 namespace Persistance.Migrations
 {
     [DbContext(typeof(TradeJournalDataContext))]
-    [Migration("20240303084017_Initial")]
-    partial class Initial
+    [Migration("20240309061452_first")]
+    partial class first
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,6 +33,14 @@ namespace Persistance.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("CreatedById")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("CreatedByUserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<DateTimeOffset>("DateCreated")
                         .HasColumnType("timestamp with time zone");
 
@@ -41,6 +49,9 @@ namespace Persistance.Migrations
 
                     b.Property<DateTimeOffset?>("DateUpdated")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("Identifier")
+                        .HasColumnType("uuid");
 
                     b.Property<int>("ImageTag")
                         .HasColumnType("integer");
@@ -55,9 +66,19 @@ namespace Persistance.Migrations
                     b.Property<int>("TradeId")
                         .HasColumnType("integer");
 
+                    b.Property<string>("UpdatedById")
+                        .HasColumnType("text");
+
+                    b.Property<string>("UpdatedByUserId")
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("CreatedById");
+
                     b.HasIndex("TradeId");
+
+                    b.HasIndex("UpdatedById");
 
                     b.ToTable("Image");
                 });
@@ -65,6 +86,10 @@ namespace Persistance.Migrations
             modelBuilder.Entity("Domain.Entities.Strategy", b =>
                 {
                     b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CreatedByUserId")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTimeOffset>("DateCreated")
@@ -86,10 +111,20 @@ namespace Persistance.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<Guid>("Identifier")
+                        .HasColumnType("uuid");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
+                    b.Property<string>("UpdatedByUserId")
+                        .HasColumnType("text");
+
                     b.HasKey("Name");
+
+                    b.HasIndex("CreatedByUserId");
+
+                    b.HasIndex("UpdatedByUserId");
 
                     b.ToTable("Strategies");
                 });
@@ -106,6 +141,10 @@ namespace Persistance.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("CreatedByUserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<DateTimeOffset>("DateCreated")
                         .HasColumnType("timestamp with time zone");
 
@@ -117,6 +156,9 @@ namespace Persistance.Migrations
 
                     b.Property<DateTime>("EntryDate")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("Identifier")
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
@@ -140,9 +182,16 @@ namespace Persistance.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("UpdatedByUserId")
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("CreatedByUserId");
+
                     b.HasIndex("StrategyName");
+
+                    b.HasIndex("UpdatedByUserId");
 
                     b.ToTable("Trade");
                 });
@@ -360,24 +409,71 @@ namespace Persistance.Migrations
 
             modelBuilder.Entity("Domain.Entities.Image", b =>
                 {
+                    b.HasOne("Domain.Entities.User", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.Trade", "Trade")
                         .WithMany("Images")
                         .HasForeignKey("TradeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.User", "UpdatedBy")
+                        .WithMany()
+                        .HasForeignKey("UpdatedById");
+
+                    b.Navigation("CreatedBy");
+
                     b.Navigation("Trade");
+
+                    b.Navigation("UpdatedBy");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Strategy", b =>
+                {
+                    b.HasOne("Domain.Entities.User", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.User", "UpdatedBy")
+                        .WithMany()
+                        .HasForeignKey("UpdatedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("UpdatedBy");
                 });
 
             modelBuilder.Entity("Domain.Entities.Trade", b =>
                 {
+                    b.HasOne("Domain.Entities.User", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.Strategy", "Strategy")
                         .WithMany()
                         .HasForeignKey("StrategyName")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.User", "UpdatedBy")
+                        .WithMany()
+                        .HasForeignKey("UpdatedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("CreatedBy");
+
                     b.Navigation("Strategy");
+
+                    b.Navigation("UpdatedBy");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

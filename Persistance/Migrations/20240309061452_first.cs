@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Persistance.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class first : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -50,24 +50,6 @@ namespace Persistance.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Strategies",
-                columns: table => new
-                {
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: false),
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    DateCreated = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    DateUpdated = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
-                    DateDeleted = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Strategies", x => x.Name);
                 });
 
             migrationBuilder.CreateTable(
@@ -177,6 +159,39 @@ namespace Persistance.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Strategies",
+                columns: table => new
+                {
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Identifier = table.Column<Guid>(type: "uuid", nullable: false),
+                    DateCreated = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    DateUpdated = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    DateDeleted = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedByUserId = table.Column<string>(type: "text", nullable: false),
+                    UpdatedByUserId = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Strategies", x => x.Name);
+                    table.ForeignKey(
+                        name: "FK_Strategies_AspNetUsers_CreatedByUserId",
+                        column: x => x.CreatedByUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Strategies_AspNetUsers_UpdatedByUserId",
+                        column: x => x.UpdatedByUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Trade",
                 columns: table => new
                 {
@@ -190,14 +205,29 @@ namespace Persistance.Migrations
                     StrategyId = table.Column<int>(type: "integer", nullable: false),
                     StrategyName = table.Column<string>(type: "text", nullable: false),
                     Narration = table.Column<string>(type: "text", nullable: true),
+                    Identifier = table.Column<Guid>(type: "uuid", nullable: false),
                     DateCreated = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     DateUpdated = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     DateDeleted = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedByUserId = table.Column<string>(type: "text", nullable: false),
+                    UpdatedByUserId = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Trade", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Trade_AspNetUsers_CreatedByUserId",
+                        column: x => x.CreatedByUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Trade_AspNetUsers_UpdatedByUserId",
+                        column: x => x.UpdatedByUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Trade_Strategies_StrategyName",
                         column: x => x.StrategyName,
@@ -215,14 +245,30 @@ namespace Persistance.Migrations
                     TradeId = table.Column<int>(type: "integer", nullable: false),
                     ImageUrl = table.Column<string>(type: "text", nullable: false),
                     ImageTag = table.Column<int>(type: "integer", nullable: false),
+                    Identifier = table.Column<Guid>(type: "uuid", nullable: false),
                     DateCreated = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     DateUpdated = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     DateDeleted = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedByUserId = table.Column<string>(type: "text", nullable: false),
+                    CreatedById = table.Column<string>(type: "text", nullable: false),
+                    UpdatedByUserId = table.Column<string>(type: "text", nullable: true),
+                    UpdatedById = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Image", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Image_AspNetUsers_CreatedById",
+                        column: x => x.CreatedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Image_AspNetUsers_UpdatedById",
+                        column: x => x.UpdatedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Image_Trade_TradeId",
                         column: x => x.TradeId,
@@ -269,14 +315,44 @@ namespace Persistance.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Image_CreatedById",
+                table: "Image",
+                column: "CreatedById");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Image_TradeId",
                 table: "Image",
                 column: "TradeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Image_UpdatedById",
+                table: "Image",
+                column: "UpdatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Strategies_CreatedByUserId",
+                table: "Strategies",
+                column: "CreatedByUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Strategies_UpdatedByUserId",
+                table: "Strategies",
+                column: "UpdatedByUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Trade_CreatedByUserId",
+                table: "Trade",
+                column: "CreatedByUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Trade_StrategyName",
                 table: "Trade",
                 column: "StrategyName");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Trade_UpdatedByUserId",
+                table: "Trade",
+                column: "UpdatedByUserId");
         }
 
         /// <inheritdoc />
@@ -304,13 +380,13 @@ namespace Persistance.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
                 name: "Trade");
 
             migrationBuilder.DropTable(
                 name: "Strategies");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
         }
     }
 }
