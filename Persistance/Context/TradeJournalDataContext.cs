@@ -37,41 +37,6 @@ namespace Persistance.Context
                                                     && p.PropertyType.GetGenericTypeDefinition() == typeof(DbSet<>));
 
             // Iterate over DbSet properties
-            foreach (var dbSetProperty in dbSetProperties)
-            {
-                var entityType = dbSetProperty.PropertyType.GetGenericArguments().First();
-
-                // Check if the entity inherits from BaseEntity
-                if (typeof(BaseEntity).IsAssignableFrom(entityType))
-                {
-                    // Get CreatedBy and UpdatedBy navigation properties
-                    var createdByProperty = entityType.GetProperty("CreatedBy");
-                    var updatedByProperty = entityType.GetProperty("UpdatedBy");
-
-                    // Configure relationships if navigation properties exist
-                    if (createdByProperty != null && updatedByProperty != null)
-                    {
-                        modelBuilder.Entity(entityType)
-                            .HasOne(createdByProperty.PropertyType, "CreatedBy")
-                            .WithMany()
-                            .HasForeignKey("CreatedByUserId")
-                            .OnDelete(DeleteBehavior.Restrict);
-
-                        modelBuilder.Entity(entityType)
-                            .HasOne(updatedByProperty.PropertyType, "UpdatedBy")
-                            .WithMany()
-                            .HasForeignKey("UpdatedByUserId")
-                            .OnDelete(DeleteBehavior.Restrict);
-
-                        // Set foreign key property names to match navigation property names
-                        modelBuilder.Entity(entityType)
-                            .HasIndex("CreatedByUserId");
-
-                        modelBuilder.Entity(entityType)
-                            .HasIndex("UpdatedByUserId");
-                    }
-                }
-            }
         }
     }
 }

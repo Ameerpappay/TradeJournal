@@ -171,21 +171,21 @@ namespace Persistance.Migrations
                     DateUpdated = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     DateDeleted = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    CreatedById = table.Column<string>(type: "text", nullable: false),
-                    UpdatedById = table.Column<string>(type: "text", nullable: true)
+                    CreatedByUserId = table.Column<string>(type: "text", nullable: false),
+                    UpdatedByUserId = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Portfolio", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Portfolio_AspNetUsers_CreatedById",
-                        column: x => x.CreatedById,
+                        name: "FK_Portfolio_AspNetUsers_CreatedByUserId",
+                        column: x => x.CreatedByUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Portfolio_AspNetUsers_UpdatedById",
-                        column: x => x.UpdatedById,
+                        name: "FK_Portfolio_AspNetUsers_UpdatedByUserId",
+                        column: x => x.UpdatedByUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                 });
@@ -203,21 +203,21 @@ namespace Persistance.Migrations
                     DateUpdated = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     DateDeleted = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    CreatedById = table.Column<string>(type: "text", nullable: false),
-                    UpdatedById = table.Column<string>(type: "text", nullable: true)
+                    CreatedByUserId = table.Column<string>(type: "text", nullable: false),
+                    UpdatedByUserId = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Strategies", x => x.Name);
                     table.ForeignKey(
-                        name: "FK_Strategies_AspNetUsers_CreatedById",
-                        column: x => x.CreatedById,
+                        name: "FK_Strategies_AspNetUsers_CreatedByUserId",
+                        column: x => x.CreatedByUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Strategies_AspNetUsers_UpdatedById",
-                        column: x => x.UpdatedById,
+                        name: "FK_Strategies_AspNetUsers_UpdatedByUserId",
+                        column: x => x.UpdatedByUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                 });
@@ -241,21 +241,21 @@ namespace Persistance.Migrations
                     DateUpdated = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     DateDeleted = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    CreatedById = table.Column<string>(type: "text", nullable: false),
-                    UpdatedById = table.Column<string>(type: "text", nullable: true)
+                    CreatedByUserId = table.Column<string>(type: "text", nullable: false),
+                    UpdatedByUserId = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Trade", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Trade_AspNetUsers_CreatedById",
-                        column: x => x.CreatedById,
+                        name: "FK_Trade_AspNetUsers_CreatedByUserId",
+                        column: x => x.CreatedByUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Trade_AspNetUsers_UpdatedById",
-                        column: x => x.UpdatedById,
+                        name: "FK_Trade_AspNetUsers_UpdatedByUserId",
+                        column: x => x.UpdatedByUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
@@ -280,21 +280,21 @@ namespace Persistance.Migrations
                     DateUpdated = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     DateDeleted = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    CreatedById = table.Column<string>(type: "text", nullable: false),
-                    UpdatedById = table.Column<string>(type: "text", nullable: true)
+                    CreatedByUserId = table.Column<string>(type: "text", nullable: false),
+                    UpdatedByUserId = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Image", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Image_AspNetUsers_CreatedById",
-                        column: x => x.CreatedById,
+                        name: "FK_Image_AspNetUsers_CreatedByUserId",
+                        column: x => x.CreatedByUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Image_AspNetUsers_UpdatedById",
-                        column: x => x.UpdatedById,
+                        name: "FK_Image_AspNetUsers_UpdatedByUserId",
+                        column: x => x.UpdatedByUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
@@ -343,9 +343,9 @@ namespace Persistance.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Image_CreatedById",
+                name: "IX_Image_CreatedByUserId",
                 table: "Image",
-                column: "CreatedById");
+                column: "CreatedByUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Image_TradeId",
@@ -353,34 +353,34 @@ namespace Persistance.Migrations
                 column: "TradeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Image_UpdatedById",
+                name: "IX_Image_UpdatedByUserId",
                 table: "Image",
-                column: "UpdatedById");
+                column: "UpdatedByUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Portfolio_CreatedById",
+                name: "IX_Portfolio_CreatedByUserId",
                 table: "Portfolio",
-                column: "CreatedById");
+                column: "CreatedByUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Portfolio_UpdatedById",
+                name: "IX_Portfolio_UpdatedByUserId",
                 table: "Portfolio",
-                column: "UpdatedById");
+                column: "UpdatedByUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Strategies_CreatedById",
+                name: "IX_Strategies_CreatedByUserId",
                 table: "Strategies",
-                column: "CreatedById");
+                column: "CreatedByUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Strategies_UpdatedById",
+                name: "IX_Strategies_UpdatedByUserId",
                 table: "Strategies",
-                column: "UpdatedById");
+                column: "UpdatedByUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Trade_CreatedById",
+                name: "IX_Trade_CreatedByUserId",
                 table: "Trade",
-                column: "CreatedById");
+                column: "CreatedByUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Trade_StrategyName",
@@ -388,9 +388,9 @@ namespace Persistance.Migrations
                 column: "StrategyName");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Trade_UpdatedById",
+                name: "IX_Trade_UpdatedByUserId",
                 table: "Trade",
-                column: "UpdatedById");
+                column: "UpdatedByUserId");
         }
 
         /// <inheritdoc />
