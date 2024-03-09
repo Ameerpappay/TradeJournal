@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Persistance.Migrations
 {
     /// <inheritdoc />
-    public partial class First : Migration
+    public partial class first : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -171,9 +171,7 @@ namespace Persistance.Migrations
                     DateUpdated = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     DateDeleted = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    CreatedByUserId = table.Column<string>(type: "text", nullable: false),
                     CreatedById = table.Column<string>(type: "text", nullable: false),
-                    UpdatedByUserId = table.Column<string>(type: "text", nullable: true),
                     UpdatedById = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
@@ -205,9 +203,7 @@ namespace Persistance.Migrations
                     DateUpdated = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     DateDeleted = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    CreatedByUserId = table.Column<string>(type: "text", nullable: false),
                     CreatedById = table.Column<string>(type: "text", nullable: false),
-                    UpdatedByUserId = table.Column<string>(type: "text", nullable: true),
                     UpdatedById = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
@@ -245,24 +241,23 @@ namespace Persistance.Migrations
                     DateUpdated = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     DateDeleted = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    CreatedByUserId = table.Column<string>(type: "text", nullable: false),
-                    UpdatedByUserId = table.Column<string>(type: "text", nullable: true)
+                    CreatedById = table.Column<string>(type: "text", nullable: false),
+                    UpdatedById = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Trade", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Trade_AspNetUsers_CreatedByUserId",
-                        column: x => x.CreatedByUserId,
+                        name: "FK_Trade_AspNetUsers_CreatedById",
+                        column: x => x.CreatedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Trade_AspNetUsers_UpdatedByUserId",
-                        column: x => x.UpdatedByUserId,
+                        name: "FK_Trade_AspNetUsers_UpdatedById",
+                        column: x => x.UpdatedById,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Trade_Strategies_StrategyName",
                         column: x => x.StrategyName,
@@ -285,9 +280,7 @@ namespace Persistance.Migrations
                     DateUpdated = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     DateDeleted = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    CreatedByUserId = table.Column<string>(type: "text", nullable: false),
                     CreatedById = table.Column<string>(type: "text", nullable: false),
-                    UpdatedByUserId = table.Column<string>(type: "text", nullable: true),
                     UpdatedById = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
@@ -385,9 +378,9 @@ namespace Persistance.Migrations
                 column: "UpdatedById");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Trade_CreatedByUserId",
+                name: "IX_Trade_CreatedById",
                 table: "Trade",
-                column: "CreatedByUserId");
+                column: "CreatedById");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Trade_StrategyName",
@@ -395,9 +388,9 @@ namespace Persistance.Migrations
                 column: "StrategyName");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Trade_UpdatedByUserId",
+                name: "IX_Trade_UpdatedById",
                 table: "Trade",
-                column: "UpdatedByUserId");
+                column: "UpdatedById");
         }
 
         /// <inheritdoc />

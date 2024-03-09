@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 //using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +30,6 @@ namespace Persistance.Context
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Strategy>(options => options.HasKey(m => m.Name));
-
 
             // Get all DbSet properties in your DbContext
             var dbSetProperties = GetType().GetProperties()
@@ -62,6 +62,13 @@ namespace Persistance.Context
                             .WithMany()
                             .HasForeignKey("UpdatedByUserId")
                             .OnDelete(DeleteBehavior.Restrict);
+
+                        // Set foreign key property names to match navigation property names
+                        modelBuilder.Entity(entityType)
+                            .HasIndex("CreatedByUserId");
+
+                        modelBuilder.Entity(entityType)
+                            .HasIndex("UpdatedByUserId");
                     }
                 }
             }

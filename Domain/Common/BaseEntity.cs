@@ -37,11 +37,10 @@ namespace Domain.Common
         [Required]
         public string CreatedByUserId { get; set; }
 
-        [Required]
-        public User CreatedBy { get; set; }
+        public virtual User CreatedByUser { get; set; }
 
         public string? UpdatedByUserId { get; set; }
 
-        public User UpdatedBy { get; set;}
+        public virtual User UpdatedByUser { get; set;}
     }
 }
