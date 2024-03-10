@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Newtonsoft.Json;
 using System.Drawing.Text;
 using System.Net;
 
@@ -7,9 +8,12 @@ namespace WebApi.ExceptionHandler
     public class ApiExceptionHandler
     {
         private readonly RequestDelegate _next;
-        public ApiExceptionHandler(RequestDelegate next)
+        private readonly ILogger<ApiExceptionHandler> _logger; // Injected logger
+
+        public ApiExceptionHandler(RequestDelegate next, ILogger<ApiExceptionHandler> logger)
         {
             _next = next;
+            _logger = logger;
         }
         public async Task Invoke(HttpContext context)
         {
@@ -22,14 +26,15 @@ namespace WebApi.ExceptionHandler
                 HandleExceptionAsync(context, ex);
             }
         }
-        private static Task HandleExceptionAsync(HttpContext context, Exception exception)
+        private Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             var code = HttpStatusCode.InternalServerError;
             var result = JsonConvert.SerializeObject(new { Error = "hai something wrong" });
             context.Response.StatusCode = (int)code;
+            _logger.LogError(exception, "An error occurred");
+
             return context.Response.WriteAsync(result);
 
         }
-
     }
 }

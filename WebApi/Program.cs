@@ -47,6 +47,10 @@ namespace WebApi
             options.UseNpgsql(builder.Configuration.GetConnectionString("tradejournal")));
 
             builder.Services.AddCustomIdentity();
+            builder.Services.AddLogging(logging => {
+                logging.ClearProviders();
+                //logging.add
+                });
 
             builder.Services.AddJwtAuthentication(builder.Configuration);
 

@@ -10,14 +10,14 @@ namespace Application.IServices
 {
     public interface IStrategyService
     {
-        Task<List<GetStrategyDto>> GetStrategies();
+        Task<List<GetStrategyDto>> GetStrategies(string userId);
 
         Task<GetStrategyDto> AddStrategy(AddStrategyDto strategy,string addedBy);
 
-        Task<GetStrategyDto> GetStrategyById(int strategyId);
+        Task<GetStrategyDto> GetStrategyById(int strategyId, string userId);
 
-        Task UpdateStrategy(int Id, UpdateStrategyDto updateStrategyDto);
+        Task UpdateStrategy(int Id, UpdateStrategyDto updateStrategyDto, string userId);
 
-        Task DeleteStrategyById(int strategyId);
+        Task DeleteStrategyById(int strategyId, string userId);
     }
 }

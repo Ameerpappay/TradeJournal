@@ -10,15 +10,15 @@ namespace Application.IServices
 {
     public interface IImageService
     {
-        Task<List<GetImageDto>> GetImage();
+        Task<List<GetImageDto>> GetImage(string userId);
 
         Task  AddImage(AddImageDto image);
 
-        Task<GetImageDto> GetImageById(int ImageId);
+        Task<GetImageDto> GetImageById(int ImageId, string userId);
 
-        Task UpdateImage(int Id, UpdateImageDto updateImageDto);
+        Task UpdateImage(int Id, UpdateImageDto updateImageDto, string userId);
 
-        Task DeleteImageById(int imageId);
+        Task DeleteImageById(int imageId, string userId);
 
         Task<string> UploadImage(IFormFile formFileImage, string contentRootPath);
     }

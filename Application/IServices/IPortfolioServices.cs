@@ -11,14 +11,14 @@ namespace Application.IServices
 {
     public interface IPortfolioServices
     {
-        Task<List<GetPortfolioDto>> GetPortfolio();
+        Task<List<GetPortfolioDto>> GetPortfolio(string userId);
 
         Task<GetPortfolioDto> AddPortfolio(AddPortfolioDto portfolio);
 
-        Task<GetPortfolioDto> GetPortfolioById(int portfolioId);
+        Task<GetPortfolioDto> GetPortfolioById(int portfolioId, string userId);
 
-        Task UpdatePortfolio(int Id, UpdatePortfolioDto updatePortfolioDto);
+        Task UpdatePortfolio(int Id, UpdatePortfolioDto updatePortfolioDto, string userId);
 
-        Task DeletePortfolioById(int portfolioId);
+        Task DeletePortfolioById(int portfolioId, string userId);
     }
 }

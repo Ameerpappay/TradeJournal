@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Persistance.Migrations
 {
     /// <inheritdoc />
-    public partial class first : Migration
+    public partial class Fst : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -236,6 +236,7 @@ namespace Persistance.Migrations
                     StrategyId = table.Column<int>(type: "integer", nullable: false),
                     StrategyName = table.Column<string>(type: "text", nullable: false),
                     Narration = table.Column<string>(type: "text", nullable: true),
+                    PortfolioId = table.Column<int>(type: "integer", nullable: false),
                     Identifier = table.Column<Guid>(type: "uuid", nullable: false),
                     DateCreated = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     DateUpdated = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
@@ -258,6 +259,12 @@ namespace Persistance.Migrations
                         column: x => x.UpdatedByUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Trade_Portfolio_PortfolioId",
+                        column: x => x.PortfolioId,
+                        principalTable: "Portfolio",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Trade_Strategies_StrategyName",
                         column: x => x.StrategyName,
@@ -383,6 +390,11 @@ namespace Persistance.Migrations
                 column: "CreatedByUserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Trade_PortfolioId",
+                table: "Trade",
+                column: "PortfolioId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Trade_StrategyName",
                 table: "Trade",
                 column: "StrategyName");
@@ -415,13 +427,13 @@ namespace Persistance.Migrations
                 name: "Image");
 
             migrationBuilder.DropTable(
-                name: "Portfolio");
-
-            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "Trade");
+
+            migrationBuilder.DropTable(
+                name: "Portfolio");
 
             migrationBuilder.DropTable(
                 name: "Strategies");

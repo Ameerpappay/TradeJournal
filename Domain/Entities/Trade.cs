@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class Trade:BaseEntity
+    public class Trade : BaseEntity
     {
         public String Code { get; set; }
 
@@ -26,5 +26,9 @@ namespace Domain.Entities
         public string? Narration { get; set; }
 
         public List<Image> Images { get; set; }
+
+        public int PortfolioId { get; set; }
+
+        public Portfolio Portfolio { get; set; }
     }
 }

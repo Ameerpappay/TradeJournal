@@ -23,6 +23,31 @@ namespace Persistance.Context
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Strategy>(options => options.HasKey(m => m.Name));
+
+            // Get all DbSet properties in your DbContext
+            var dbSetProperties = GetType().GetProperties()
+                                            .Where(p => p.PropertyType.IsGenericType
+                                                    && p.PropertyType.GetGenericTypeDefinition() == typeof(DbSet<>));
+
+            // Iterate over DbSet properties
+            foreach (var dbSetProperty in dbSetProperties)
+            {
+                var entityType = dbSetProperty.PropertyType.GetGenericArguments().First();
+
+                // Check if the entity inherits from BaseEntity
+                if (typeof(BaseEntity).IsAssignableFrom(entityType))
+                {
+                    // Get CreatedBy and UpdatedBy navigation properties
+                    var identifierProperty = entityType.GetProperty("Identifier");
+
+                    // Configure relationships if navigation properties exist
+                    if (identifierProperty != null)
+                    {
+                        modelBuilder.Entity(entityType).HasKey("Identifier");
+                     
+                    }
+                }
+            }
         }
     }
 }

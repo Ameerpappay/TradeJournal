@@ -1,6 +1,7 @@
 ﻿using Application.Dtos.Image;
 using Application.Dtos.Trade;
 using Application.IServices;
+using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
@@ -23,7 +24,8 @@ namespace WebApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetTradeDto>>> GetAll()
         {
-            var response = await _services.GetTrades();
+            var userId = User.Claims.FirstOrDefault(c => c.Type == "userIdentifier")?.Value;
+            var response = await _services.GetTrades(userId);
             return Ok(response);
         }
 
@@ -31,7 +33,8 @@ namespace WebApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<GetTradeDto>> Get(int id)
         {
-            return Ok(await _services.GetTradeById(id));
+            var userId = User.Claims.FirstOrDefault(c => c.Type == "userIdentifier")?.Value;
+            return Ok(await _services.GetTradeById(id,userId));
         }
 
         // POST api/<TradeController>
@@ -46,14 +49,16 @@ namespace WebApi.Controllers
         [HttpPut("{id}")]
         public async Task PutAsync(int id, [FromBody] UpdateTradeDto requestBody)
         {
-            await _services.UpdateTrade(id, requestBody);
+            var userId = User.Claims.FirstOrDefault(c => c.Type == "userIdentifier")?.Value;
+            await _services.UpdateTrade(id, requestBody,userId);
         }
 
         // DELETE api/<StrategyController>/5
         [HttpDelete("{id}")]
         public async Task Delete(int id)
         {
-            await _services.DeleteTradeById(id);
+            var userId = User.Claims.FirstOrDefault(c => c.Type == "userIdentifier")?.Value;
+            await _services.DeleteTradeById(id,userId);
         }
     }
 }

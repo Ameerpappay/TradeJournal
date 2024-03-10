@@ -25,6 +25,7 @@ namespace Domain.Common
         [Required]
         public Guid Identifier { get; set; }
 
+
         [Required]
         public DateTimeOffset DateCreated { get; set; }
 

@@ -55,15 +55,15 @@ namespace Application.Services
             };
         }
 
-        public async Task DeleteTradeById(int tradeId)
+        public async Task DeleteTradeById(int tradeId, string userId)
         {
-            await _unitOfWork.TradeRepository.Delete(tradeId);
+            await _unitOfWork.TradeRepository.Delete(tradeId, userId);
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task<GetTradeDto> GetTradeById(int tradeId)
+        public async Task<GetTradeDto> GetTradeById(int tradeId, string userID)
         {
-            var result = await _unitOfWork.TradeRepository.Get(tradeId);
+            var result = await _unitOfWork.TradeRepository.Get(tradeId,userID);
 
             var trade = new GetTradeDto();
             trade.Id = result.Id;
@@ -78,9 +78,9 @@ namespace Application.Services
             return trade;
         }
 
-        public async Task<List<GetTradeDto>> GetTrades()
+        public async Task<List<GetTradeDto>> GetTrades(string userId)
         {
-            var result = await _unitOfWork.TradeRepository.Get();
+            var result = await _unitOfWork.TradeRepository.Get(userId);
 
             var trades = result.Select(t => new GetTradeDto
             {
@@ -97,9 +97,9 @@ namespace Application.Services
             return trades;
         }
 
-        public async Task UpdateTrade(int Id, UpdateTradeDto trade)
+        public async Task UpdateTrade(int Id, UpdateTradeDto trade, string userId)
         {
-            var result = await _unitOfWork.TradeRepository.Get(Id);
+            var result = await _unitOfWork.TradeRepository.Get(Id,userId);
             result.Code = trade.Code;
             result.StopLoss = trade.StopLoss;
             trade.Quantity = trade.Quantity;

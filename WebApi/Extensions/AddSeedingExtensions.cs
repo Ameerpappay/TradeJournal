@@ -21,7 +21,7 @@ namespace WebApi.Extensions
             if (!context.Roles.Any(item => item.Name == "Trader"))
             {
                 context.Roles.Add(new IdentityRole { Name = "Trader", ConcurrencyStamp = Guid.NewGuid().ToString(), NormalizedName = "TRADER" });
-                context.SaveChangesAsync();
+               await  context.SaveChangesAsync();
             }
 
             if (!context.Users.Any(item => item.Email == "admin@admin.com"))

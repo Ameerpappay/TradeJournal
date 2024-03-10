@@ -12,8 +12,8 @@ using Persistance.Context;
 namespace Persistance.Migrations
 {
     [DbContext(typeof(TradeJournalDataContext))]
-    [Migration("20240309074540_first")]
-    partial class first
+    [Migration("20240310120411_Fst")]
+    partial class Fst
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -206,6 +206,9 @@ namespace Persistance.Migrations
                     b.Property<string>("Narration")
                         .HasColumnType("text");
 
+                    b.Property<int>("PortfolioId")
+                        .HasColumnType("integer");
+
                     b.Property<decimal>("Price")
                         .HasColumnType("numeric");
 
@@ -228,6 +231,8 @@ namespace Persistance.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedByUserId");
+
+                    b.HasIndex("PortfolioId");
 
                     b.HasIndex("StrategyName");
 
@@ -514,6 +519,12 @@ namespace Persistance.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.Portfolio", "Portfolio")
+                        .WithMany("Trades")
+                        .HasForeignKey("PortfolioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.Strategy", "Strategy")
                         .WithMany()
                         .HasForeignKey("StrategyName")
@@ -525,6 +536,8 @@ namespace Persistance.Migrations
                         .HasForeignKey("UpdatedByUserId");
 
                     b.Navigation("CreatedByUser");
+
+                    b.Navigation("Portfolio");
 
                     b.Navigation("Strategy");
 
@@ -580,6 +593,11 @@ namespace Persistance.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Entities.Portfolio", b =>
+                {
+                    b.Navigation("Trades");
                 });
 
             modelBuilder.Entity("Domain.Entities.Trade", b =>
