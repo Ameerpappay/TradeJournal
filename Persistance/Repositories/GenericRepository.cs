@@ -21,19 +21,19 @@ namespace Persistance.Repositories
             return result.Entity;
         }
 
-        public async Task Delete(int id, string createdById)
+        public async Task Delete(string id, string createdById)
         {
             //var record = await _context.Set<T>().FindAsync(id);
-            var record = await _context.Set<T>().FirstOrDefaultAsync(x => x.Id == id && x.CreatedByUserId == createdById);
+            var record = await _context.Set<T>().FirstOrDefaultAsync(x => x.Identifier.ToString() == id && x.CreatedByUserId == createdById);
 
             if (record == null) throw new Exception("Not found");
 
             record.IsDeleted = true;
         }
 
-        public virtual async Task<T> Get(int id, string createdById)
+        public virtual async Task<T> Get(string id, string createdById)
         {
-            var record= await _context.Set<T>().FirstOrDefaultAsync(x => x.Id == id && x.CreatedByUserId == createdById);
+            var record= await _context.Set<T>().FirstOrDefaultAsync(x => x.Identifier.ToString() == id && x.CreatedByUserId == createdById);
             return record;
         }
 

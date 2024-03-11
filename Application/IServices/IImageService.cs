@@ -14,11 +14,11 @@ namespace Application.IServices
 
         Task  AddImage(AddImageDto image);
 
-        Task<GetImageDto> GetImageById(int ImageId, string userId);
+        Task<GetImageDto> GetImageById(string ImageId, string userId);
 
-        Task UpdateImage(int Id, UpdateImageDto updateImageDto, string userId);
+        Task UpdateImage(string Id, UpdateImageDto updateImageDto, string userId);
 
-        Task DeleteImageById(int imageId, string userId);
+        Task DeleteImageById(string imageId, string userId);
 
         Task<string> UploadImage(IFormFile formFileImage, string contentRootPath);
     }

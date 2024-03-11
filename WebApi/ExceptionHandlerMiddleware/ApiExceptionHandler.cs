@@ -31,10 +31,37 @@ namespace WebApi.ExceptionHandler
             var code = HttpStatusCode.InternalServerError;
             var result = JsonConvert.SerializeObject(new { Error = "hai something wrong" });
             context.Response.StatusCode = (int)code;
-            _logger.LogError(exception, "An error occurred");
+            ////_logger.LogError(exception, "An error occurred");
+            LogExceptionToFile(exception);
 
             return context.Response.WriteAsync(result);
-
         }
+
+        private void LogExceptionToFile(Exception exception)
+        {
+            try
+            {
+                string relativePath = @".\ErrorLog.txt"; // .\ represents the current directory
+                string fullPath = Path.Combine(Environment.CurrentDirectory, relativePath);
+                var logMessage = $"[{DateTime.Now}] Exception: {exception.Message}\nStackTrace: {exception.StackTrace}\n";
+
+                if (File.Exists(fullPath))
+                {
+                    using (var fileStream = new StreamWriter(fullPath, true)) 
+                    {
+                        fileStream.WriteLine(logMessage);
+                    }
+                }
+                else
+                {
+                    File.AppendAllText(fullPath, logMessage);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions related to logging (e.g., disk full, permissions, etc.)
+            }
+        }
+
     }
 }

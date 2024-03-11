@@ -31,7 +31,7 @@ namespace WebApi.Controllers
 
         // GET api/<TradeController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<GetTradeDto>> Get(int id)
+        public async Task<ActionResult<GetTradeDto>> Get(string id)
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == "userIdentifier")?.Value;
             return Ok(await _services.GetTradeById(id,userId));
@@ -41,13 +41,14 @@ namespace WebApi.Controllers
         [HttpPost]
         public async Task<ActionResult<GetTradeDto>> Add([FromForm]AddTradeDto requestBody)
         {
+            var userId = User.Claims.FirstOrDefault(c => c.Type == "userIdentifier")?.Value;
             //var response = await _imageService.AddImage(AddImageDto);
-            return Ok(await _services.AddTrade(requestBody,_environment.ContentRootPath));
+            return Ok(await _services.AddTrade(requestBody,_environment.ContentRootPath,userId));
         }
 
         // PUT api/<TradeController>/5
         [HttpPut("{id}")]
-        public async Task PutAsync(int id, [FromBody] UpdateTradeDto requestBody)
+        public async Task PutAsync(string id, [FromBody] UpdateTradeDto requestBody)
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == "userIdentifier")?.Value;
             await _services.UpdateTrade(id, requestBody,userId);
@@ -55,7 +56,7 @@ namespace WebApi.Controllers
 
         // DELETE api/<StrategyController>/5
         [HttpDelete("{id}")]
-        public async Task Delete(int id)
+        public async Task Delete(string id)
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == "userIdentifier")?.Value;
             await _services.DeleteTradeById(id,userId);

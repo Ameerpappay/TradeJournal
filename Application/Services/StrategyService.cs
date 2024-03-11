@@ -40,7 +40,7 @@ namespace Application.Services
             };
         }
 
-        public async Task DeleteStrategyById(int strategyId, string userId)
+        public async Task DeleteStrategyById(string strategyId, string userId)
         {
             await _unitOfWork.StrategyRepository.Delete(strategyId,userId);
             await _unitOfWork.SaveChangesAsync();
@@ -59,7 +59,7 @@ namespace Application.Services
             return strategies;
         }
 
-        public async Task<GetStrategyDto> GetStrategyById(int strategyId, string userId)
+        public async Task<GetStrategyDto> GetStrategyById(string strategyId, string userId)
         {
             var result = await _unitOfWork.StrategyRepository.Get(strategyId,userId);
             var strategy = new GetStrategyDto();
@@ -69,7 +69,7 @@ namespace Application.Services
             return strategy;
         }
 
-        public async Task UpdateStrategy(int Id, UpdateStrategyDto strategy, string userId)
+        public async Task UpdateStrategy(string Id, UpdateStrategyDto strategy, string userId)
         {
             var result = await _unitOfWork.StrategyRepository.Get(Id, userId);
             result.Description = strategy.Description;

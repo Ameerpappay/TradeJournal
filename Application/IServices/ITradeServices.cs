@@ -11,12 +11,12 @@ namespace Application.IServices
     {
         Task<List<GetTradeDto>> GetTrades(string userId);
 
-        Task<GetTradeDto> AddTrade(AddTradeDto trade,string contentRootPath);
+        Task<GetTradeDto> AddTrade(AddTradeDto trade,string contentRootPath,string userId);
 
-        Task<GetTradeDto> GetTradeById(int tradeId,string userId);
+        Task<GetTradeDto> GetTradeById(string tradeId,string userId);
 
-        Task UpdateTrade(int Id, UpdateTradeDto updateTradeDto, string userId);
+        Task UpdateTrade(string tradeId, UpdateTradeDto updateTradeDto, string userId);
 
-        Task DeleteTradeById(int tradeId, string userId);
+        Task DeleteTradeById(string tradeId, string userId);
     }
 }

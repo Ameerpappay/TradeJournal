@@ -15,7 +15,7 @@ namespace Application.Services
             _unitOfWork = unitOfWork;
             _imageService = imageService;
         }
-        public async Task<GetTradeDto> AddTrade(AddTradeDto trade, string contentRoot)
+        public async Task<GetTradeDto> AddTrade(AddTradeDto trade, string contentRoot,string userId)
         {
             var newTrade = new Trade()
             {
@@ -26,6 +26,7 @@ namespace Application.Services
                 StopLoss = trade.StopLoss,
                 StrategyId = trade.StrategyId,
                 Narration = trade.Narration,
+                CreatedByUserId=userId,
             };
 
             foreach (var image in trade.Images)
@@ -55,13 +56,13 @@ namespace Application.Services
             };
         }
 
-        public async Task DeleteTradeById(int tradeId, string userId)
+        public async Task DeleteTradeById(string tradeId, string userId)
         {
             await _unitOfWork.TradeRepository.Delete(tradeId, userId);
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task<GetTradeDto> GetTradeById(int tradeId, string userID)
+        public async Task<GetTradeDto> GetTradeById(string tradeId, string userID)
         {
             var result = await _unitOfWork.TradeRepository.Get(tradeId,userID);
 
@@ -97,7 +98,7 @@ namespace Application.Services
             return trades;
         }
 
-        public async Task UpdateTrade(int Id, UpdateTradeDto trade, string userId)
+        public async Task UpdateTrade(string Id, UpdateTradeDto trade, string userId)
         {
             var result = await _unitOfWork.TradeRepository.Get(Id,userId);
             result.Code = trade.Code;

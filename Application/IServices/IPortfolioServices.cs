@@ -13,12 +13,12 @@ namespace Application.IServices
     {
         Task<List<GetPortfolioDto>> GetPortfolio(string userId);
 
-        Task<GetPortfolioDto> AddPortfolio(AddPortfolioDto portfolio);
+        Task<GetPortfolioDto> AddPortfolio(AddPortfolioDto portfolio,string UserId);
 
-        Task<GetPortfolioDto> GetPortfolioById(int portfolioId, string userId);
+        Task<GetPortfolioDto> GetPortfolioById(string portfolioId, string userId);
 
-        Task UpdatePortfolio(int Id, UpdatePortfolioDto updatePortfolioDto, string userId);
+        Task UpdatePortfolio(string Id, UpdatePortfolioDto updatePortfolioDto, string userId);
 
-        Task DeletePortfolioById(int portfolioId, string userId);
+        Task DeletePortfolioById(string portfolioId, string userId);
     }
 }

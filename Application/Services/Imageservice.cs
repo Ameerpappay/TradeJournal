@@ -31,7 +31,7 @@ namespace Application.Services
 
         }
 
-        public async Task DeleteImageById(int imageId, string userId)
+        public async Task DeleteImageById(string imageId, string userId)
         {
             await _unitOfWork.ImageRepository.Delete(imageId, userId);
             await _unitOfWork.SaveChangesAsync();
@@ -42,7 +42,7 @@ namespace Application.Services
             throw new NotImplementedException();
         }
 
-        public Task<GetImageDto> GetImageById(int ImageId, string userId)
+        public Task<GetImageDto> GetImageById(string ImageId, string userId)
         {
             var response = _unitOfWork.ImageRepository.Get(ImageId,userId);
             var image = new GetImageDto();
@@ -54,14 +54,13 @@ namespace Application.Services
             throw new NotImplementedException();
         }
 
-        public Task UpdateImage(int Id, UpdateImageDto updateImageDto, string userId)
+        public Task UpdateImage(string Id, UpdateImageDto updateImageDto, string userId)
         {
             var result = _unitOfWork.ImageRepository.Get(Id,userId);
             //result.
 
             throw new NotImplementedException();
         }
-
 
         public async Task<string> UploadImage(IFormFile formFileImage, string contentRootPath)
         {

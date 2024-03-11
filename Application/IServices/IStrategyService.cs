@@ -14,10 +14,10 @@ namespace Application.IServices
 
         Task<GetStrategyDto> AddStrategy(AddStrategyDto strategy,string addedBy);
 
-        Task<GetStrategyDto> GetStrategyById(int strategyId, string userId);
+        Task<GetStrategyDto> GetStrategyById(string strategyId, string userId);
 
-        Task UpdateStrategy(int Id, UpdateStrategyDto updateStrategyDto, string userId);
+        Task UpdateStrategy(string Id, UpdateStrategyDto updateStrategyDto, string userId);
 
-        Task DeleteStrategyById(int strategyId, string userId);
+        Task DeleteStrategyById(string strategyId, string userId);
     }
 }

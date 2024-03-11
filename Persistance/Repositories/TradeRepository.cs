@@ -20,9 +20,9 @@ namespace Persistance.Repositories
             _dbSet = _dbContext.Set<Trade>();
         }
 
-        public async override Task<Trade> Get(int id, string createdById)
+        public async override Task<Trade> Get(string id, string createdById)
         {
-            var result = await _dbSet.Include(i=>i.Strategy).FirstOrDefaultAsync(x=>x.Id==id);
+            var result = await _dbSet.Include(i=>i.Strategy).FirstOrDefaultAsync(x=>x.Identifier.ToString()==id);
 
             return result;
         }

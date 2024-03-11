@@ -17,12 +17,13 @@ namespace Application.Services
         {
             _unitOfWork = unitOfWork;
         }
-        public async Task<GetPortfolioDto> AddPortfolio(AddPortfolioDto portfolio)
+        public async Task<GetPortfolioDto> AddPortfolio(AddPortfolioDto portfolio ,string addedBy)
         {
             var newPortfolio = new Portfolio()
             {
                 Description = portfolio.Description,
-                Name = portfolio.Name
+                Name = portfolio.Name,
+                CreatedByUserId=addedBy,
             };
 
             var addedPortfolio = await _unitOfWork.PortfolioRepository.Add(newPortfolio);
@@ -36,7 +37,7 @@ namespace Application.Services
 
         }
 
-        public async Task DeletePortfolioById(int portfolioId, string userId)
+        public async Task DeletePortfolioById(string portfolioId, string userId)
         {
             await _unitOfWork.PortfolioRepository.Delete(portfolioId, userId);
             await _unitOfWork.SaveChangesAsync();
@@ -55,7 +56,7 @@ namespace Application.Services
             return portfolio;
         }
 
-        public async Task<GetPortfolioDto> GetPortfolioById(int portfolioId, string userId)
+        public async Task<GetPortfolioDto> GetPortfolioById(string portfolioId, string userId)
         {
             var result = await _unitOfWork.PortfolioRepository.Get(portfolioId,userId);
             var portfolio = new GetPortfolioDto();
@@ -65,7 +66,7 @@ namespace Application.Services
             return portfolio;
         }
 
-        public async Task UpdatePortfolio(int Id, UpdatePortfolioDto updatePortfolioDto, string userId)
+        public async Task UpdatePortfolio(string Id, UpdatePortfolioDto updatePortfolioDto, string userId)
         {
             var result = await _unitOfWork.PortfolioRepository.Get(Id, userId);
             result.Description = updatePortfolioDto.Description;
