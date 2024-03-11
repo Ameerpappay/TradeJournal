@@ -4,6 +4,7 @@ using Application.Dtos.Trade;
 using Application.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Extensions;
 
 namespace WebApi.Controllers
 {
@@ -21,7 +22,7 @@ namespace WebApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetStrategyDto>>> GetAll()
         {
-            var userId = User.Claims.FirstOrDefault(c => c.Type == "userIdentifier")?.Value;
+            var userId = User.GetUserId();
             var response = await _strategyService.GetStrategies(userId);
             return Ok(response);
         }
@@ -30,7 +31,7 @@ namespace WebApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<GetStrategyDto>> Get(string id)
         {
-            var userId = User.Claims.FirstOrDefault(c => c.Type == "userIdentifier")?.Value;
+            var userId = User.GetUserId();
             return Ok(await _strategyService.GetStrategyById(id, userId));
         } 
 
@@ -38,8 +39,7 @@ namespace WebApi.Controllers
         [HttpPost]
         public async Task<ActionResult<GetStrategyDto>> Create(AddStrategyDto requestBody)
         {
-            var userId = User.Claims.FirstOrDefault(c => c.Type == "userIdentifier")?.Value;
-            //throw new NotImplementedException();
+            var userId = User.GetUserId();
             return Ok(await _strategyService.AddStrategy(requestBody, userId));
         }
 
@@ -47,7 +47,7 @@ namespace WebApi.Controllers
         [HttpPut("{id}")]
         public async Task Update(string id, [FromBody] UpdateStrategyDto requestBody)
         {
-            var userId = User.Claims.FirstOrDefault(c => c.Type == "userIdentifier")?.Value;
+            var userId = User.GetUserId();
             await _strategyService.UpdateStrategy(id, requestBody,userId);
         }
 
@@ -55,7 +55,7 @@ namespace WebApi.Controllers
         [HttpDelete("{id}")]
         public async Task Delete(string id)
         {
-            var userId = User.Claims.FirstOrDefault(c => c.Type == "userIdentifier")?.Value;
+            var userId = User.GetUserId();
             await _strategyService.DeleteStrategyById(id,userId);
         }
     }

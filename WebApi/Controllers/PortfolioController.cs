@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Application.Dtos.Portfolio;
 using Application.Dtos.Trade;
+using WebApi.Extensions;
 
 namespace WebApi.Controllers
 {
@@ -24,8 +25,7 @@ namespace WebApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetPortfolioDto>>> GetAll()
         {
-            //var user=GetUser();
-            var userId = User.Claims.FirstOrDefault(c => c.Type == "userIdentifier")?.Value;
+            var userId = User.GetUserId();
             var response = await _portfolioServices.GetPortfolio(userId);
             return Ok(response);
         }
@@ -33,14 +33,14 @@ namespace WebApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<GetPortfolioDto>> Get(string id)
         {
-            var userId = User.Claims.FirstOrDefault(c => c.Type == "userIdentifier")?.Value;
+            var userId = User.GetUserId();
             return Ok(await _portfolioServices.GetPortfolioById(id, userId));
         }     
 
         [HttpPost]
         public async Task<ActionResult<GetPortfolioDto>> Add(AddPortfolioDto requestBody)
         {
-            var userId = User.Claims.FirstOrDefault(c => c.Type == "userIdentifier")?.Value;
+            var userId = User.GetUserId();
             return Ok(await _portfolioServices.AddPortfolio(requestBody,userId));
         }
 
@@ -48,14 +48,14 @@ namespace WebApi.Controllers
         [HttpPut("{id}")]
         public async Task PutAsync(string id, [FromBody] UpdatePortfolioDto requestBody)
         {
-            var userId = User.Claims.FirstOrDefault(c => c.Type == "userIdentifier")?.Value;
+            var userId = User.GetUserId();
             await _portfolioServices.UpdatePortfolio(id, requestBody,userId);
         }
 
         [HttpDelete("{id}")]
         public async Task Delete(string id)
         {
-            var userId = User.Claims.FirstOrDefault(c => c.Type == "userIdentifier")?.Value;
+            var userId = User.GetUserId();
             await _portfolioServices.DeletePortfolioById(id,userId);
         }
     }
