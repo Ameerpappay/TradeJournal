@@ -12,6 +12,9 @@ namespace Domain.Entities
         public string Name { get; set; }
 
         public string Description { get; set; }
-        public List<Trade> Trades { get; set; }
+
+        public List<Trade> Trades { get; set; } //noneed
+
+        //listof holding
     }
 }

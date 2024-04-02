@@ -1,5 +1,6 @@
 ﻿using Application;
 using Application.IRepositories;
+using Application.IServices;
 using Persistance.Context;
 using Persistance.Repositories;
 using System;
@@ -22,15 +23,18 @@ namespace Persistance.UnitOfWork
 
         public IPortfolioRepository PortfolioRepository { get; set; }
 
+        public IHoldingsRepository HoldingsRepository { get; set; }
+
+
         //public IPortfolioRepository portfolioRepository { get; set; }
-        public UnitOfWork(TradeJournalDataContext context, IStrategyRepository strategyRepository, ITradeRepository tradeRepository,IImageRepository imageRepository,IPortfolioRepository portfolioRepository)
+        public UnitOfWork(TradeJournalDataContext context, IStrategyRepository strategyRepository, ITradeRepository tradeRepository,IImageRepository imageRepository,IPortfolioRepository portfolioRepository,IHoldingsRepository holdingsRepository)
         {
             _dbContext = context;
             StrategyRepository = strategyRepository;
             TradeRepository = tradeRepository;
             ImageRepository = imageRepository;
             PortfolioRepository = portfolioRepository;
-
+            HoldingsRepository = holdingsRepository;
         }
 
         public Task SaveChangesAsync()

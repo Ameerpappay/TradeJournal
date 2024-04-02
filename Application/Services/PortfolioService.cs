@@ -27,6 +27,7 @@ namespace Application.Services
             };
 
             var addedPortfolio = await _unitOfWork.PortfolioRepository.Add(newPortfolio);
+
             await _unitOfWork.SaveChangesAsync();
             return new GetPortfolioDto()
             {
@@ -34,9 +35,7 @@ namespace Application.Services
                 Name = addedPortfolio.Name,
                 Id = addedPortfolio.Id
             };
-
         }
-
         public async Task DeletePortfolioById(string portfolioId, string userId)
         {
             await _unitOfWork.PortfolioRepository.Delete(portfolioId, userId);
