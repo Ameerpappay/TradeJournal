@@ -9,8 +9,8 @@ namespace Domain.Entities
 {
     public class Trade : BaseEntity
     {
-        //holdinh id
-        public String Code { get; set; } //no need
+        public int HoldingsId { get; set; }
+        //public String Code { get; set; } //no need
 
         public Decimal Price { get; set; }
 
@@ -28,8 +28,8 @@ namespace Domain.Entities
 
         public List<Image> Images { get; set; }
 
-        public int PortfolioId { get; set; }//no need
+        //public int PortfolioId { get; set; }//no need
 
-        public Portfolio Portfolio { get; set; }//noneed
+        //public Portfolio Portfolio { get; set; }//noneed
     }
 }

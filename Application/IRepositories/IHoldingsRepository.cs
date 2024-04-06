@@ -9,5 +9,6 @@ namespace Application.IRepositories
 {
     public interface IHoldingsRepository:IGenericRepository<Holdings>
     {
+        public Holdings GetExistingHolding(string code,string portfolioId);
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Persistance.Context;
@@ -11,9 +12,11 @@ using Persistance.Context;
 namespace Persistance.Migrations
 {
     [DbContext(typeof(TradeJournalDataContext))]
-    partial class TradeJournalDataContextModelSnapshot : ModelSnapshot
+    [Migration("20240402165610_Editsintrade-table")]
+    partial class Editsintradetable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -267,6 +270,9 @@ namespace Persistance.Migrations
                     b.Property<string>("Narration")
                         .HasColumnType("text");
 
+                    b.Property<int?>("PortfolioId")
+                        .HasColumnType("integer");
+
                     b.Property<decimal>("Price")
                         .HasColumnType("numeric");
 
@@ -291,6 +297,8 @@ namespace Persistance.Migrations
                     b.HasIndex("CreatedByUserId");
 
                     b.HasIndex("HoldingsIdentifier");
+
+                    b.HasIndex("PortfolioId");
 
                     b.HasIndex("StrategyName");
 
@@ -519,7 +527,7 @@ namespace Persistance.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.Portfolio", "Portfolio")
-                        .WithMany("Holdings")
+                        .WithMany()
                         .HasForeignKey("PortfolioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -608,6 +616,10 @@ namespace Persistance.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.Portfolio", null)
+                        .WithMany("Trades")
+                        .HasForeignKey("PortfolioId");
+
                     b.HasOne("Domain.Entities.Strategy", "Strategy")
                         .WithMany()
                         .HasForeignKey("StrategyName")
@@ -683,7 +695,7 @@ namespace Persistance.Migrations
 
             modelBuilder.Entity("Domain.Entities.Portfolio", b =>
                 {
-                    b.Navigation("Holdings");
+                    b.Navigation("Trades");
                 });
 
             modelBuilder.Entity("Domain.Entities.Trade", b =>

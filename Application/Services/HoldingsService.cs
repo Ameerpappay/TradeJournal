@@ -8,38 +8,71 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace Application.Services
 {
     public class HoldingsService : IHoldingsServices
     {
         private readonly IUnitOfWork _unitOfWork;
-        public HoldingsService(IUnitOfWork unitOfWork)
+        private readonly IPortfolioServices _portfolioServices;
+        public HoldingsService(IUnitOfWork unitOfWork , IPortfolioServices portfolioServices)
         {
             _unitOfWork = unitOfWork;
+            _portfolioServices = portfolioServices;
         }
 
         public async Task<GetHoldingsDto> AddHoldings(AddHoldingsDto AddHoldingDto, string UserId)
         {
-            var newHoldings = new Holdings()
-            {
-                Code = AddHoldingDto.Code,
-                BuyPrice = AddHoldingDto.BuyPrice,
-                TrailingStoploss = AddHoldingDto.TrailingStoploss,
-                Quantity = AddHoldingDto.Quantity,
-                PortfolioId = AddHoldingDto.PortfolioId,
-            };
+            Holdings availTrade = this._unitOfWork.HoldingsRepository.GetExistingHolding(AddHoldingDto.Code, AddHoldingDto.PortfolioId);
 
-            var addedHoldings = await _unitOfWork.HoldingsRepository.Add(newHoldings);
+            GetPortfolioDto portfolio = await this._portfolioServices.GetPortfolioById(AddHoldingDto.PortfolioId, UserId);
 
-            await _unitOfWork.SaveChangesAsync();
-            return new GetHoldingsDto()
+            if(availTrade == null )
             {
-                Code = addedHoldings.Code,
-                Quantity = addedHoldings.Quantity,
-                BuyPrice = addedHoldings.BuyPrice,
-                TrailingStoploss = addedHoldings.TrailingStoploss,
-                PortfolioId = addedHoldings.PortfolioId,
-            };
+                var newHoldings = new Holdings()
+                {
+                    Code = AddHoldingDto.Code,
+                    BuyPrice = AddHoldingDto.BuyPrice,
+                    TrailingStoploss = AddHoldingDto.TrailingStoploss,
+                    Quantity = AddHoldingDto.Quantity,
+                    PortfolioId = portfolio.Id,
+                };
+
+                var addedHoldings = await _unitOfWork.HoldingsRepository.Add(newHoldings);
+                await _unitOfWork.SaveChangesAsync();
+                return new GetHoldingsDto()
+                {
+                    Id = addedHoldings.Id,
+                    Code = addedHoldings.Code,
+                    Quantity = addedHoldings.Quantity,
+                    BuyPrice = addedHoldings.BuyPrice,
+                    TrailingStoploss = addedHoldings.TrailingStoploss,
+                    PortfolioId = addedHoldings.PortfolioId,
+                };
+            }
+            else
+            {
+                var updateHoldings = new Holdings()
+                {
+                    BuyPrice = AddHoldingDto.BuyPrice,
+                    TrailingStoploss = AddHoldingDto.TrailingStoploss,
+                    Quantity = AddHoldingDto.Quantity,
+                    PortfolioId = portfolio.Id,
+                };
+                var addedHoldings = await _unitOfWork.HoldingsRepository.Update(updateHoldings);
+
+                await _unitOfWork.SaveChangesAsync();
+
+                return new GetHoldingsDto()
+                {
+                    Id = addedHoldings.Id,
+                    Code = addedHoldings.Code,
+                    Quantity = addedHoldings.Quantity,
+                    BuyPrice = addedHoldings.BuyPrice,
+                    TrailingStoploss = addedHoldings.TrailingStoploss,
+                    PortfolioId = addedHoldings.PortfolioId,
+                };
+            }                 
         }
 
         public async Task DeleteHoldingsById(string holdingId, string userId)

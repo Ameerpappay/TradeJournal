@@ -8,7 +8,9 @@ namespace Application.Dtos.Trade
 {
     public class DeleteTradeDto
     {
-        public String Code { get; set; }
+        public int Id { get; set; }
+
+        public int HoldingsId { get; set; }
 
         public Decimal Price { get; set; }
 

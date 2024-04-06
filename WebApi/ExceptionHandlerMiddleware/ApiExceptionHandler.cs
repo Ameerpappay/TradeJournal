@@ -29,7 +29,7 @@ namespace WebApi.ExceptionHandler
         private Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             var code = HttpStatusCode.InternalServerError;
-            var result = JsonConvert.SerializeObject(new { Error = "hai something wrong" });
+            var result = JsonConvert.SerializeObject(new { Error = "Something wrong" });
             context.Response.StatusCode = (int)code;
             ////_logger.LogError(exception, "An error occurred");
             LogExceptionToFile(exception);

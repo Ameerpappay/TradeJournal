@@ -11,7 +11,9 @@ namespace Application.Dtos.Trade
 {
     public class AddTradeDto
     {
-        public String Code { get; set; }
+        public int HoldingsId { get; set; }
+
+        public string Code {  get; set; }
 
         public Decimal Price { get; set; }
 
@@ -26,6 +28,8 @@ namespace Application.Dtos.Trade
         public string? Narration { get; set; }    
 
         public List<UploadImageDto> Images { get; set; }
+
+        public int PortfolioId {  get; set; }
     }
     
     public class UploadImageDto
