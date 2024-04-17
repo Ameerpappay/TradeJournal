@@ -16,7 +16,7 @@ namespace Application.Dtos.Holdings
 
         public decimal TrailingStoploss { get; set; }
 
-        public string PortfolioId { get; set; }
+        public int PortfolioId { get; set; }
 
     }
 }

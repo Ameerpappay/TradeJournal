@@ -12,31 +12,39 @@ namespace Application.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IImageService _imageService;
         private IHoldingsServices _holdingsService;
-        public TradeServices(IUnitOfWork unitOfWork, IImageService imageService,IHoldingsServices holdingsServices )
+        IPortfolioServices _portfolioService;
+            public TradeServices(IUnitOfWork unitOfWork, IImageService imageService,IHoldingsServices holdingsServices,IPortfolioServices portfolioService )
         {
             _unitOfWork = unitOfWork;
             _imageService = imageService;
             _holdingsService = holdingsServices;
+            _portfolioService = portfolioService;
         }
         public async Task<GetTradeDto> AddTrade(AddTradeDto trade, string contentRoot,string userId)
         {
+            int portfolioId = await this._portfolioService.GetPortfolioId(trade.PortfolioId, userId);
+
             AddHoldingsDto addHoldingsDto = new AddHoldingsDto
             {
                 Code = trade.Code,
                 BuyPrice=trade.Price,
                 TrailingStoploss=trade.StopLoss,
                 Quantity=trade.Quantity,
+                PortfolioId=portfolioId
             };
 
-           GetHoldingsDto getHoldingsDto= await _holdingsService.AddHoldings(addHoldingsDto, userId);
+            GetHoldingsDto getHoldingsDto= await _holdingsService.AddHoldings(addHoldingsDto, userId);
 
+
+            DateTime localDateTime = DateTime.SpecifyKind(trade.EntryDate, DateTimeKind.Local);
+            DateTime utcDateTime = localDateTime.ToUniversalTime();
 
             var newTrade = new Trade()
             {
-                HoldingsId= getHoldingsDto.Id,
+                HoldingsId = getHoldingsDto.Id,
                 Price = trade.Price,
-                EntryDate = trade.EntryDate,
-                Quantity = trade.Quantity,
+                EntryDate = utcDateTime,
+            Quantity = trade.Quantity,
                 StopLoss = trade.StopLoss,
                 StrategyId = trade.StrategyId,
                 Narration = trade.Narration,

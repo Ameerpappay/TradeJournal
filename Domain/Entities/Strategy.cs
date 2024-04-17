@@ -11,8 +11,11 @@ namespace Domain.Entities
 {
     public class Strategy : BaseEntity
     {
+        [Required]
         public string Name { get; set; }
 
         public string Description { get; set; }
+
+        public List<Trade> Trades { get; set;}
     }
 }

@@ -39,7 +39,7 @@ namespace Persistance.Repositories
 
         public virtual async Task<IEnumerable<T>> Get(string createdById)
         {
-            var result = await _context.Set<T>().Where(i => i.CreatedByUserId == createdById).ToListAsync();
+            var result = await _context.Set<T>().Where(i => i.CreatedByUserId == createdById && ! i.IsDeleted).ToListAsync();
 
             return result;
         }

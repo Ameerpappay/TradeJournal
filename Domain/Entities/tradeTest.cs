@@ -7,11 +7,9 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class Trade : BaseEntity
+    public class tradeTest:BaseEntity
     {
-        public int HoldingsId { get; set; }
 
-        public Holdings Holdings { get; set; }
 
         public Decimal Price { get; set; }
 
@@ -23,12 +21,9 @@ namespace Domain.Entities
 
         public int StrategyId { get; set; }
 
-        public Strategy Strategy { get; set; }
-
+public Strategy Strategy { get; set; }
         public string? Narration { get; set; }
 
         public List<Image> Images { get; set; }
-
-       
     }
 }

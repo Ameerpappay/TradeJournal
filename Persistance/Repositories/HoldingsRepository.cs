@@ -1,5 +1,6 @@
 ﻿using Application.IRepositories;
 using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Persistance.Context;
 using System;
 using System.Collections.Generic;
@@ -17,11 +18,10 @@ namespace Persistance.Repositories
             _dbContext = context;
         }
 
-        public Holdings GetExistingHolding(string code, string portfolioId)
+        public async Task<Holdings> GetExistingHolding(string code, int portfolioId)
         {
-            Holdings availTrade = this._dbContext.Holdings.SingleOrDefault(item => item.Code == code && item.Quantity > 0 && item.Identifier.ToString() == portfolioId);
-
-            return availTrade;
+            Holdings availTrade =await this._dbContext.Holdings.SingleOrDefaultAsync(item => item.Code == code && item.Quantity > 0 && item.Id == portfolioId);
+                return availTrade;
         }
     }
 }

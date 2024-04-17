@@ -23,11 +23,9 @@ namespace Application.Services
 
         public async Task<GetHoldingsDto> AddHoldings(AddHoldingsDto AddHoldingDto, string UserId)
         {
-            Holdings availTrade = this._unitOfWork.HoldingsRepository.GetExistingHolding(AddHoldingDto.Code, AddHoldingDto.PortfolioId);
+            Holdings availTrade = await _unitOfWork.HoldingsRepository.GetExistingHolding(AddHoldingDto.Code,AddHoldingDto.PortfolioId);
 
-            GetPortfolioDto portfolio = await this._portfolioServices.GetPortfolioById(AddHoldingDto.PortfolioId, UserId);
-
-            if(availTrade == null )
+            if (availTrade == null )
             {
                 var newHoldings = new Holdings()
                 {
@@ -35,7 +33,9 @@ namespace Application.Services
                     BuyPrice = AddHoldingDto.BuyPrice,
                     TrailingStoploss = AddHoldingDto.TrailingStoploss,
                     Quantity = AddHoldingDto.Quantity,
-                    PortfolioId = portfolio.Id,
+                    PortfolioId = AddHoldingDto.PortfolioId,
+                    CreatedByUserId = UserId,
+
                 };
 
                 var addedHoldings = await _unitOfWork.HoldingsRepository.Add(newHoldings);
@@ -48,6 +48,7 @@ namespace Application.Services
                     BuyPrice = addedHoldings.BuyPrice,
                     TrailingStoploss = addedHoldings.TrailingStoploss,
                     PortfolioId = addedHoldings.PortfolioId,
+
                 };
             }
             else
@@ -57,7 +58,9 @@ namespace Application.Services
                     BuyPrice = AddHoldingDto.BuyPrice,
                     TrailingStoploss = AddHoldingDto.TrailingStoploss,
                     Quantity = AddHoldingDto.Quantity,
-                    PortfolioId = portfolio.Id,
+                    PortfolioId = AddHoldingDto.PortfolioId,
+                    CreatedByUserId = UserId,
+
                 };
                 var addedHoldings = await _unitOfWork.HoldingsRepository.Update(updateHoldings);
 
@@ -79,6 +82,13 @@ namespace Application.Services
         {
             await _unitOfWork.HoldingsRepository.Delete(holdingId, userId);
             await _unitOfWork.SaveChangesAsync();
+        }
+
+      
+
+        public Holdings GetExistingHolding(string code, int portfolioId)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<GetHoldingsDto> GetHoldingByID(string HoldingId, string userId)

@@ -1,5 +1,6 @@
 ﻿using Application.Dtos.Holdings;
 using Application.Dtos.Portfolio;
+using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,5 +21,7 @@ namespace Application.IServices
         Task UpdateHoldings(string Id, UpdateHoldingsDto updateHoldingsDto, string userId);
 
         Task DeleteHoldingsById(string holdingId, string userId);
+        //public Holdings GetExistingHolding(string code, int portfolioId);
+
     }
 }

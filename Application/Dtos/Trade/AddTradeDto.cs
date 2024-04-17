@@ -11,7 +11,7 @@ namespace Application.Dtos.Trade
 {
     public class AddTradeDto
     {
-        public int HoldingsId { get; set; }
+        //public int HoldingsId { get; set; }
 
         public string Code {  get; set; }
 
@@ -29,7 +29,7 @@ namespace Application.Dtos.Trade
 
         public List<UploadImageDto> Images { get; set; }
 
-        public int PortfolioId {  get; set; }
+        public string PortfolioId {  get; set; }
     }
     
     public class UploadImageDto
