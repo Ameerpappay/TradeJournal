@@ -16,6 +16,9 @@ namespace Application
         ITradeRepository TradeRepository { get; }
         
         IImageRepository ImageRepository { get; }
+
         IPortfolioRepository PortfolioRepository { get; }
+
+        IHoldingsRepository HoldingsRepository { get; }
     }
 }

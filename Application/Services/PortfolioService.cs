@@ -32,11 +32,9 @@ namespace Application.Services
             {
                 Description = addedPortfolio.Description,
                 Name = addedPortfolio.Name,
-                Id = addedPortfolio.Id
+                Id = addedPortfolio.Identifier.ToString()
             };
-
         }
-
         public async Task DeletePortfolioById(string portfolioId, string userId)
         {
             await _unitOfWork.PortfolioRepository.Delete(portfolioId, userId);
@@ -48,7 +46,7 @@ namespace Application.Services
             var result = await _unitOfWork.PortfolioRepository.Get(userId);
             var portfolio = result.Select(s => new GetPortfolioDto
             {
-                Id = s.Id,
+                Id = s.Identifier.ToString(),
                 Name = s.Name,
                 Description = s.Description,
             }).ToList();
@@ -60,10 +58,16 @@ namespace Application.Services
         {
             var result = await _unitOfWork.PortfolioRepository.Get(portfolioId,userId);
             var portfolio = new GetPortfolioDto();
-            portfolio.Id = result.Id;
+            portfolio.Id = result.Identifier.ToString();
             portfolio.Name = result.Name;
             portfolio.Description = result.Description;
             return portfolio;
+        }
+
+        public async Task<int> GetPortfolioId(string portfolioId, string userId)
+        {
+            var result = await _unitOfWork.PortfolioRepository.Get(portfolioId, userId);
+            return result.Id;
         }
 
         public async Task UpdatePortfolio(string Id, UpdatePortfolioDto updatePortfolioDto, string userId)

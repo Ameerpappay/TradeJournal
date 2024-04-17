@@ -26,10 +26,10 @@ namespace WebApi.ExceptionHandler
                 HandleExceptionAsync(context, ex);
             }
         }
-        private Task HandleExceptionAsync(HttpContext context, Exception exception)
+        private Task HandleExceptionAsync(HttpContext context, Exception exception)        
         {
             var code = HttpStatusCode.InternalServerError;
-            var result = JsonConvert.SerializeObject(new { Error = "hai something wrong" });
+            var result = JsonConvert.SerializeObject(new { Error = "Something wrong" });
             context.Response.StatusCode = (int)code;
             ////_logger.LogError(exception, "An error occurred");
             LogExceptionToFile(exception);
@@ -43,7 +43,7 @@ namespace WebApi.ExceptionHandler
             {
                 string relativePath = @".\ErrorLog.txt"; // .\ represents the current directory
                 string fullPath = Path.Combine(Environment.CurrentDirectory, relativePath);
-                var logMessage = $"[{DateTime.Now}] Exception: {exception.Message}\nStackTrace: {exception.StackTrace}\n";
+                var logMessage = $"[{DateTime.Now}] Exception: {exception.Message}\nStackTrace: {exception.StackTrace}\n innerException:{exception.InnerException}";
 
                 if (File.Exists(fullPath))
                 {

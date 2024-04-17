@@ -40,7 +40,8 @@ namespace WebApi.Controllers
         public async Task<ActionResult<GetStrategyDto>> Create(AddStrategyDto requestBody)
         {
             var userId = User.GetUserId();
-            return Ok(await _strategyService.AddStrategy(requestBody, userId));
+            var response = await _strategyService.AddStrategy(requestBody, userId);
+            return Ok(response);
         }
 
 

@@ -53,8 +53,9 @@ namespace WebApi
                 });
 
             builder.Services.AddJwtAuthentication(builder.Configuration);
-
+            builder.Services.AddCors(options => { options.AddPolicy("myPolicy", policy => { policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader(); }); } );
             var app = builder.Build();
+            app.UseCors("myPolicy");
 
             app.AddMigrations();
 

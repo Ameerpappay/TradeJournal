@@ -9,7 +9,7 @@ namespace Application.Dtos.Trade
     public class GetTradeDto
     {
         public int Id { get; set; }
-        public String Code { get; set; }
+        public int HoldingsId { get; set; }
 
         public Decimal Price { get; set; }
 

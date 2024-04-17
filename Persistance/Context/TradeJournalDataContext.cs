@@ -17,12 +17,14 @@ namespace Persistance.Context
         DbSet<Strategy> Strategies { get; set; }
         DbSet<Portfolio> Portfolio { get; set; }      
         public DbSet<Trade> Trade { get; set; }
+        public DbSet<Holdings> Holdings { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Strategy>(options => options.HasKey(m => m.Name));
+            modelBuilder.Entity<Strategy>(options => options.HasIndex(m=> m.Name ).IsUnique());
 
             // Get all DbSet properties in your DbContext
             var dbSetProperties = GetType().GetProperties()
@@ -43,8 +45,7 @@ namespace Persistance.Context
                     // Configure relationships if navigation properties exist
                     if (identifierProperty != null)
                     {
-                        modelBuilder.Entity(entityType).HasKey("Identifier");
-                     
+                        modelBuilder.Entity(entityType).HasIndex("Identifier").IsUnique();                     
                     }
                 }
             }

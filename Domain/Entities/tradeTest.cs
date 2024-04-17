@@ -1,16 +1,15 @@
-﻿using System;
+﻿using Domain.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Dtos.Trade
+namespace Domain.Entities
 {
-    public class DeleteTradeDto
+    public class tradeTest:BaseEntity
     {
-        public int Id { get; set; }
 
-        public int HoldingsId { get; set; }
 
         public Decimal Price { get; set; }
 
@@ -22,6 +21,9 @@ namespace Application.Dtos.Trade
 
         public int StrategyId { get; set; }
 
+public Strategy Strategy { get; set; }
         public string? Narration { get; set; }
+
+        public List<Image> Images { get; set; }
     }
 }
