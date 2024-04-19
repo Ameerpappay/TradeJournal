@@ -1,13 +1,13 @@
-﻿using Domain.Entities;
+﻿using Application.Dtos.UserAccount;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.IRepositories
+namespace Application.Dtos
 {
-    public interface IImageRepository : IGenericRepository<TradeImage>
+    public class CreateTraderDto:CreateUserDto
     {
     }
 }

@@ -22,7 +22,6 @@ namespace Persistance.Repositories
 
         public async override Task<Trade> Get(string id, string createdById)
         {
-         //   var result = await _dbSet.Include(i=>i.Strategy).FirstOrDefaultAsync(x=>x.Identifier.ToString()==id);
             var result = await _dbSet.FirstOrDefaultAsync(x => x.Identifier.ToString() == id);
 
             return result;
@@ -31,7 +30,6 @@ namespace Persistance.Repositories
         public  override async Task<IEnumerable<Trade>> Get(string createdById)
         {
             var result = await _dbSet.ToListAsync();
-            //var result = await _dbSet.Include(i => i.Strategy).ToListAsync();
 
             return result;
 

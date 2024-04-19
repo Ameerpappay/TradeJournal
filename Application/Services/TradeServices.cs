@@ -47,17 +47,17 @@ namespace Application.Services
             Quantity = trade.Quantity,
                 StopLoss = trade.StopLoss,
                 StrategyId = trade.StrategyId,
-                Narration = trade.Narration,
+                Description = trade.Narration,
                 CreatedByUserId=userId,
             };
 
             foreach (var image in trade.Images)
             {
                 var imageUrl =await  _imageService.UploadImage(image.Image, contentRoot);
-                newTrade.Images.Add(new Image
+                newTrade.Images.Add(new TradeImage
                 {
                     ImageTag =(ImageTag) image.ImageTag,
-                    ImageUrl = imageUrl
+                    Url = imageUrl
                 });
             }
 
@@ -73,7 +73,7 @@ namespace Application.Services
                 Quantity = addedTrade.Quantity,
                 StopLoss = addedTrade.StopLoss,
                 StrategyId = addedTrade.StrategyId,
-                Narration = addedTrade.Narration,
+                Narration = addedTrade.Description,
             };
         }
 
@@ -93,7 +93,7 @@ namespace Application.Services
             trade.EntryDate = result.EntryDate;
             trade.Quantity = result.Quantity;
             trade.Price = result.Price;
-            trade.Narration = result.Narration;
+            trade.Narration = result.Description;
             trade.StopLoss = result.StopLoss;
             trade.StrategyId = result.StrategyId;
 
@@ -112,7 +112,7 @@ namespace Application.Services
                 StopLoss = t.StopLoss,
                 Quantity = t.Quantity,
                 Price = t.Price,
-                Narration = t.Narration,
+                Narration = t.Description,
                 StrategyId = t.StrategyId,
             }).ToList();
 
@@ -127,10 +127,10 @@ namespace Application.Services
             trade.Quantity = trade.Quantity;
             trade.EntryDate = trade.EntryDate;
             result.Price = trade.Price;
-            result.Narration = trade.Narration;
+            result.Description = trade.Narration;
             result.StrategyId = trade.StrategyId;
 
-            await _unitOfWork.TradeRepository.Update(result);
+            _unitOfWork.TradeRepository.Update(result);
             await _unitOfWork.SaveChangesAsync();
         }
     }

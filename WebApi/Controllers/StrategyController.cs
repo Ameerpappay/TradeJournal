@@ -37,7 +37,7 @@ namespace WebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<GetStrategyDto>> Create(AddStrategyDto requestBody)
+        public async Task<ActionResult<GetStrategyDto>> Add(AddStrategyDto requestBody)
         {
             var userId = User.GetUserId();
             var response = await _strategyService.AddStrategy(requestBody, userId);

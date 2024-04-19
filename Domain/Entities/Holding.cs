@@ -1,15 +1,17 @@
 ﻿using Domain.Common;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class Holdings:BaseEntity
+    public class Holding:BaseEntity
     {
-        public string Code { get; set; }
+        [Required]
+        public string StockCode { get; set; }
 
         public decimal Quantity { get; set; }
 
@@ -17,11 +19,12 @@ namespace Domain.Entities
 
         public decimal TrailingStoploss { get; set; }
 
+        [Required]
         public int PortfolioId { get; set; }
 
-        public Portfolio Portfolio { get; set; }
+        public Portfolio? Portfolio { get; set; }
         
-        public List<Trade> Trades { get; set; } 
+        public List<Trade>? Trades { get; set; } 
 
     }
 }

@@ -10,7 +10,7 @@ namespace Application.IRepositories
 
         Task<T> Add(T entity);
 
-        Task<T> Update(T entity);
+        T Update(T entity);
 
         Task Delete(string id, string createdById);
     }

@@ -23,7 +23,6 @@ namespace Persistance.Repositories
 
         public async Task Delete(string id, string createdById)
         {
-            //var record = await _context.Set<T>().FindAsync(id);
             var record = await _context.Set<T>().FirstOrDefaultAsync(x => x.Identifier.ToString() == id && x.CreatedByUserId == createdById);
 
             if (record == null) throw new Exception("Not found");
@@ -33,18 +32,19 @@ namespace Persistance.Repositories
 
         public virtual async Task<T> Get(string id, string createdById)
         {
-            var record= await _context.Set<T>().FirstOrDefaultAsync(x => x.Identifier.ToString() == id && x.CreatedByUserId == createdById);
+            var record = await _context.Set<T>().FirstOrDefaultAsync(x => x.Identifier.ToString() == id && x.CreatedByUserId == createdById);
+
             return record;
         }
 
         public virtual async Task<IEnumerable<T>> Get(string createdById)
         {
-            var result = await _context.Set<T>().Where(i => i.CreatedByUserId == createdById && ! i.IsDeleted).ToListAsync();
+            var result = await _context.Set<T>().Where(i => i.CreatedByUserId == createdById && !i.IsDeleted).ToListAsync();
 
             return result;
         }
 
-        public async Task<T> Update(T entity)
+        public T Update(T entity)
         {
             var result = _context.Update(entity);
 

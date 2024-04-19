@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Persistance.Repositories
 {
-    public class HoldingsRepository : GenericRepository<Holdings>, IHoldingsRepository
+    public class HoldingsRepository : GenericRepository<Holding>, IHoldingsRepository
     {
         TradeJournalDataContext _dbContext;
         public HoldingsRepository(TradeJournalDataContext context) : base(context)
@@ -18,10 +18,10 @@ namespace Persistance.Repositories
             _dbContext = context;
         }
 
-        public async Task<Holdings> GetExistingHolding(string code, int portfolioId)
+        public async Task<Holding> GetExistingHolding(string code, int portfolioId)
         {
-            Holdings availTrade =await this._dbContext.Holdings.SingleOrDefaultAsync(item => item.Code == code && item.Quantity > 0 && item.Id == portfolioId);
-                return availTrade;
+            Holding availTrade = await this._dbContext.Holdings.SingleOrDefaultAsync(item => item.StockCode == code && item.Quantity > 0 && item.Id == portfolioId);
+            return availTrade;
         }
     }
 }

@@ -11,6 +11,12 @@ namespace Application
     {
         Task SaveChangesAsync();
 
+        Task BeginTransactionAsync();
+
+        Task CommitAsync();
+
+        Task RollbackAsync();
+
         IStrategyRepository StrategyRepository { get; }
 
         ITradeRepository TradeRepository { get; }

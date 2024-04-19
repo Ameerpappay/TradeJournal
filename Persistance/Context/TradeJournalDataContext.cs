@@ -9,22 +9,20 @@ namespace Persistance.Context
 {
     public class TradeJournalDataContext : IdentityDbContext<IdentityUser, IdentityRole, string>
     {
-        public TradeJournalDataContext(DbContextOptions<TradeJournalDataContext> options) : base(options)
-        {
-
-        }
+        public TradeJournalDataContext(DbContextOptions<TradeJournalDataContext> options) : base(options){}
         DbSet<User> Users { get; set; }
         DbSet<Strategy> Strategies { get; set; }
-        DbSet<Portfolio> Portfolio { get; set; }      
-        public DbSet<Trade> Trade { get; set; }
-        public DbSet<Holdings> Holdings { get; set; }
+        DbSet<Portfolio> Portfolios { get; set; }      
+        public DbSet<Trade> Trades { get; set; }
+        public DbSet<Holding> Holdings { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Strategy>(options => options.HasIndex(m=> m.Name ).IsUnique());
+            modelBuilder.Entity<Strategy>(options => options.HasIndex(m=> new { m.Name ,m.CreatedByUserId} ).IsUnique());
+            modelBuilder.Entity<Portfolio>(options => options.HasIndex(m => new { m.Name, m.CreatedByUserId }).IsUnique());
 
             // Get all DbSet properties in your DbContext
             var dbSetProperties = GetType().GetProperties()

@@ -12,8 +12,8 @@ using Persistance.Context;
 namespace Persistance.Migrations
 {
     [DbContext(typeof(TradeJournalDataContext))]
-    [Migration("20240415103535_fscd")]
-    partial class fscd
+    [Migration("20240419143122_first")]
+    partial class first
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace Persistance.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Domain.Entities.Holdings", b =>
+            modelBuilder.Entity("Domain.Entities.Holding", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -36,21 +36,11 @@ namespace Persistance.Migrations
                     b.Property<decimal>("BuyPrice")
                         .HasColumnType("numeric");
 
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("CreatedByUserId")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTimeOffset>("DateCreated")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTimeOffset?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTimeOffset?>("DateUpdated")
+                    b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("Identifier")
@@ -65,11 +55,18 @@ namespace Persistance.Migrations
                     b.Property<decimal>("Quantity")
                         .HasColumnType("numeric");
 
+                    b.Property<string>("StockCode")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<decimal>("TrailingStoploss")
                         .HasColumnType("numeric");
 
                     b.Property<string>("UpdatedByUserId")
                         .HasColumnType("text");
+
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
@@ -85,57 +82,6 @@ namespace Persistance.Migrations
                     b.ToTable("Holdings");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Image", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CreatedByUserId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTimeOffset>("DateCreated")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTimeOffset?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTimeOffset?>("DateUpdated")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("Identifier")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("ImageTag")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<int>("TradeId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("UpdatedByUserId")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatedByUserId");
-
-                    b.HasIndex("TradeId");
-
-                    b.HasIndex("UpdatedByUserId");
-
-                    b.ToTable("Image");
-                });
-
             modelBuilder.Entity("Domain.Entities.Portfolio", b =>
                 {
                     b.Property<int>("Id")
@@ -148,13 +94,7 @@ namespace Persistance.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTimeOffset>("DateCreated")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTimeOffset?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTimeOffset?>("DateUpdated")
+                    b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
@@ -174,13 +114,19 @@ namespace Persistance.Migrations
                     b.Property<string>("UpdatedByUserId")
                         .HasColumnType("text");
 
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedByUserId");
 
                     b.HasIndex("UpdatedByUserId");
 
-                    b.ToTable("Portfolio");
+                    b.HasIndex("Name", "CreatedByUserId")
+                        .IsUnique();
+
+                    b.ToTable("Portfolios");
                 });
 
             modelBuilder.Entity("Domain.Entities.Strategy", b =>
@@ -195,13 +141,7 @@ namespace Persistance.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTimeOffset>("DateCreated")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTimeOffset?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTimeOffset?>("DateUpdated")
+                    b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
@@ -221,14 +161,17 @@ namespace Persistance.Migrations
                     b.Property<string>("UpdatedByUserId")
                         .HasColumnType("text");
 
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedByUserId");
 
-                    b.HasIndex("Name")
-                        .IsUnique();
-
                     b.HasIndex("UpdatedByUserId");
+
+                    b.HasIndex("Name", "CreatedByUserId")
+                        .IsUnique();
 
                     b.ToTable("Strategies");
                 });
@@ -245,14 +188,11 @@ namespace Persistance.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTimeOffset>("DateCreated")
+                    b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTimeOffset?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTimeOffset?>("DateUpdated")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("EntryDate")
                         .HasColumnType("timestamp with time zone");
@@ -265,9 +205,6 @@ namespace Persistance.Migrations
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
-
-                    b.Property<string>("Narration")
-                        .HasColumnType("text");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("numeric");
@@ -284,6 +221,9 @@ namespace Persistance.Migrations
                     b.Property<string>("UpdatedByUserId")
                         .HasColumnType("text");
 
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedByUserId");
@@ -297,7 +237,55 @@ namespace Persistance.Migrations
 
                     b.HasIndex("UpdatedByUserId");
 
-                    b.ToTable("Trade");
+                    b.ToTable("Trades");
+                });
+
+            modelBuilder.Entity("Domain.Entities.TradeImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedByUserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("Identifier")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("ImageTag")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("TradeId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("UpdatedByUserId")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedByUserId");
+
+                    b.HasIndex("TradeId");
+
+                    b.HasIndex("UpdatedByUserId");
+
+                    b.ToTable("TradeImage");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -511,7 +499,7 @@ namespace Persistance.Migrations
                     b.HasDiscriminator().HasValue("User");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Holdings", b =>
+            modelBuilder.Entity("Domain.Entities.Holding", b =>
                 {
                     b.HasOne("Domain.Entities.User", "CreatedByUser")
                         .WithMany()
@@ -532,31 +520,6 @@ namespace Persistance.Migrations
                     b.Navigation("CreatedByUser");
 
                     b.Navigation("Portfolio");
-
-                    b.Navigation("UpdatedByUser");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Image", b =>
-                {
-                    b.HasOne("Domain.Entities.User", "CreatedByUser")
-                        .WithMany()
-                        .HasForeignKey("CreatedByUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.Trade", "Trade")
-                        .WithMany("Images")
-                        .HasForeignKey("TradeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.User", "UpdatedByUser")
-                        .WithMany()
-                        .HasForeignKey("UpdatedByUserId");
-
-                    b.Navigation("CreatedByUser");
-
-                    b.Navigation("Trade");
 
                     b.Navigation("UpdatedByUser");
                 });
@@ -603,7 +566,7 @@ namespace Persistance.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.Holdings", "Holdings")
+                    b.HasOne("Domain.Entities.Holding", "Holdings")
                         .WithMany("Trades")
                         .HasForeignKey("HoldingsId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -624,6 +587,31 @@ namespace Persistance.Migrations
                     b.Navigation("Holdings");
 
                     b.Navigation("Strategy");
+
+                    b.Navigation("UpdatedByUser");
+                });
+
+            modelBuilder.Entity("Domain.Entities.TradeImage", b =>
+                {
+                    b.HasOne("Domain.Entities.User", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedByUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Trade", "Trade")
+                        .WithMany("Images")
+                        .HasForeignKey("TradeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.User", "UpdatedByUser")
+                        .WithMany()
+                        .HasForeignKey("UpdatedByUserId");
+
+                    b.Navigation("CreatedByUser");
+
+                    b.Navigation("Trade");
 
                     b.Navigation("UpdatedByUser");
                 });
@@ -679,7 +667,7 @@ namespace Persistance.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Domain.Entities.Holdings", b =>
+            modelBuilder.Entity("Domain.Entities.Holding", b =>
                 {
                     b.Navigation("Trades");
                 });

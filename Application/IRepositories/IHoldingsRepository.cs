@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Application.IRepositories
 {
-    public interface IHoldingsRepository:IGenericRepository<Holdings>
+    public interface IHoldingsRepository:IGenericRepository<Holding>
     {
-        public Task< Holdings> GetExistingHolding(string code, int portfolioId);
+        public Task< Holding> GetExistingHolding(string code, int portfolioId);
 
     }
 }

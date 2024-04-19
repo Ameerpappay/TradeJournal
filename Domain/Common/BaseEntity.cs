@@ -14,7 +14,7 @@ namespace Domain.Common
     {
         public BaseEntity()
         {
-            DateCreated = DateTime.UtcNow;
+            CreatedDate = DateTime.UtcNow;
             Identifier = Guid.NewGuid();
         }
 
@@ -25,13 +25,10 @@ namespace Domain.Common
         [Required]
         public Guid Identifier { get; set; }
 
-
         [Required]
-        public DateTimeOffset DateCreated { get; set; }
+        public DateTimeOffset CreatedDate { get; set; }
 
-        public DateTimeOffset? DateUpdated { get; set; }
-
-        public DateTimeOffset? DateDeleted { get; set; }
+        public DateTimeOffset? UpdatedDate { get; set; }
 
         public bool IsDeleted { get; set; }
 
