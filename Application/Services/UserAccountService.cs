@@ -52,7 +52,6 @@ namespace Application.Services
                 claims: authClaims,
                 signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                 );
-
             return token;
         }
 

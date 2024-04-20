@@ -35,6 +35,7 @@ namespace Application.Services
                 Id = addedPortfolio.Identifier.ToString()
             };
         }
+
         public async Task DeletePortfolioById(string portfolioId, string userId)
         {
             await _unitOfWork.PortfolioRepository.Delete(portfolioId, userId);

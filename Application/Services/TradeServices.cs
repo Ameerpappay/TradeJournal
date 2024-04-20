@@ -13,50 +13,52 @@ namespace Application.Services
         private readonly IImageService _imageService;
         private IHoldingsServices _holdingsService;
         IPortfolioServices _portfolioService;
-            public TradeServices(IUnitOfWork unitOfWork, IImageService imageService,IHoldingsServices holdingsServices,IPortfolioServices portfolioService )
+        IStrategyService _strategyService;
+
+        public TradeServices(IUnitOfWork unitOfWork, IImageService imageService, IStrategyService strategyService, IHoldingsServices holdingsServices, IPortfolioServices portfolioService)
         {
             _unitOfWork = unitOfWork;
             _imageService = imageService;
             _holdingsService = holdingsServices;
             _portfolioService = portfolioService;
+            _strategyService = strategyService;
         }
-        public async Task<GetTradeDto> AddTrade(AddTradeDto trade, string contentRoot,string userId)
+        public async Task<GetTradeDto> AddTrade(AddTradeDto trade, string contentRoot, string userId)
         {
             int portfolioId = await this._portfolioService.GetPortfolioId(trade.PortfolioId, userId);
-
             AddHoldingsDto addHoldingsDto = new AddHoldingsDto
             {
                 Code = trade.Code,
-                BuyPrice=trade.Price,
-                TrailingStoploss=trade.StopLoss,
-                Quantity=trade.Quantity,
-                PortfolioId=portfolioId
+                BuyPrice = trade.Price,
+                TrailingStoploss = trade.StopLoss,
+                Quantity = trade.Quantity,
+                PortfolioId = portfolioId
             };
 
-            GetHoldingsDto getHoldingsDto= await _holdingsService.AddHoldings(addHoldingsDto, userId);
-
-
+            GetHoldingsDto getHoldingsDto = await _holdingsService.AddHoldings(addHoldingsDto, userId);
             DateTime localDateTime = DateTime.SpecifyKind(trade.EntryDate, DateTimeKind.Local);
             DateTime utcDateTime = localDateTime.ToUniversalTime();
+
+            int strategyId = await this._strategyService.GetStrategyId(trade.StrategyId, userId);
 
             var newTrade = new Trade()
             {
                 HoldingsId = getHoldingsDto.Id,
                 Price = trade.Price,
                 EntryDate = utcDateTime,
-            Quantity = trade.Quantity,
+                Quantity = trade.Quantity,
                 StopLoss = trade.StopLoss,
-                StrategyId = trade.StrategyId,
+                StrategyId = strategyId,
                 Narration = trade.Narration,
-                CreatedByUserId=userId,
+                CreatedByUserId = userId,
             };
 
             foreach (var image in trade.Images)
             {
-                var imageUrl =await  _imageService.UploadImage(image.Image, contentRoot);
+                var imageUrl = await _imageService.UploadImage(image.ImageFile, contentRoot);
                 newTrade.Images.Add(new Image
                 {
-                    ImageTag =(ImageTag) image.ImageTag,
+                    ImageTag = (ImageTag)image.ImageTag,
                     ImageUrl = imageUrl
                 });
             }
@@ -67,8 +69,8 @@ namespace Application.Services
 
             return new GetTradeDto()
             {
-                Id = addedTrade.Id,
-                HoldingsId= addedTrade.HoldingsId,
+                Id = addedTrade.Identifier.ToString(),
+                HoldingsId = addedTrade.HoldingsId,
                 EntryDate = addedTrade.EntryDate,
                 Quantity = addedTrade.Quantity,
                 StopLoss = addedTrade.StopLoss,
@@ -85,10 +87,10 @@ namespace Application.Services
 
         public async Task<GetTradeDto> GetTradeById(string tradeId, string userID)
         {
-            var result = await _unitOfWork.TradeRepository.Get(tradeId,userID);
+            var result = await _unitOfWork.TradeRepository.Get(tradeId, userID);
 
             var trade = new GetTradeDto();
-            trade.Id = result.Id;
+            trade.Id = result.Identifier.ToString();
             //trade.Code = result.Code;
             trade.EntryDate = result.EntryDate;
             trade.Quantity = result.Quantity;
@@ -103,17 +105,18 @@ namespace Application.Services
         public async Task<List<GetTradeDto>> GetTrades(string userId)
         {
             var result = await _unitOfWork.TradeRepository.Get(userId);
-
             var trades = result.Select(t => new GetTradeDto
             {
-                Id = t.Id,
-                //Code = t.Code,
+                Id = t.Identifier.ToString(),
+                HoldingsId = t.HoldingsId,
                 EntryDate = t.EntryDate,
                 StopLoss = t.StopLoss,
                 Quantity = t.Quantity,
                 Price = t.Price,
                 Narration = t.Narration,
                 StrategyId = t.StrategyId,
+                Code = t.Holdings.Code,
+
             }).ToList();
 
             return trades;
@@ -121,7 +124,7 @@ namespace Application.Services
 
         public async Task UpdateTrade(string Id, UpdateTradeDto trade, string userId)
         {
-            var result = await _unitOfWork.TradeRepository.Get(Id,userId);
+            var result = await _unitOfWork.TradeRepository.Get(Id, userId);
             //result.Code = trade.Code;
             result.StopLoss = trade.StopLoss;
             trade.Quantity = trade.Quantity;

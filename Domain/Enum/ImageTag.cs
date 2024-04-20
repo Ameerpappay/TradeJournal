@@ -8,6 +8,6 @@ namespace Domain.Enum
 {
     public enum ImageTag
     {
-        Hourly,Daily,Weekly,Monthly
+        Hourly=1,Daily,Weekly,Monthly
     }
 }

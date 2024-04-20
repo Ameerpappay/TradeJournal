@@ -4,6 +4,7 @@ using Application.IServices;
 using Domain.Entities;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,12 +35,12 @@ namespace Application.Services
                     TrailingStoploss = AddHoldingDto.TrailingStoploss,
                     Quantity = AddHoldingDto.Quantity,
                     PortfolioId = AddHoldingDto.PortfolioId,
-                    CreatedByUserId = UserId,
-
+                    CreatedByUserId = UserId
                 };
 
                 var addedHoldings = await _unitOfWork.HoldingsRepository.Add(newHoldings);
                 await _unitOfWork.SaveChangesAsync();
+
                 return new GetHoldingsDto()
                 {
                     Id = addedHoldings.Id,
@@ -53,16 +54,11 @@ namespace Application.Services
             }
             else
             {
-                var updateHoldings = new Holdings()
-                {
-                    BuyPrice = AddHoldingDto.BuyPrice,
-                    TrailingStoploss = AddHoldingDto.TrailingStoploss,
-                    Quantity = AddHoldingDto.Quantity,
-                    PortfolioId = AddHoldingDto.PortfolioId,
-                    CreatedByUserId = UserId,
-
-                };
-                var addedHoldings = await _unitOfWork.HoldingsRepository.Update(updateHoldings);
+                var result = await _unitOfWork.HoldingsRepository.Get(availTrade.Identifier.ToString(), UserId);
+                result.Quantity += AddHoldingDto.Quantity;
+                result.BuyPrice =(result.BuyPrice+ AddHoldingDto.BuyPrice)/2;
+       
+                var addedHoldings = await _unitOfWork.HoldingsRepository.Update(result);
 
                 await _unitOfWork.SaveChangesAsync();
 
@@ -82,9 +78,7 @@ namespace Application.Services
         {
             await _unitOfWork.HoldingsRepository.Delete(holdingId, userId);
             await _unitOfWork.SaveChangesAsync();
-        }
-
-      
+        }            
 
         public Holdings GetExistingHolding(string code, int portfolioId)
         {

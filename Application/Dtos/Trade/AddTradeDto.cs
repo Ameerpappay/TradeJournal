@@ -23,18 +23,18 @@ namespace Application.Dtos.Trade
 
         public Decimal StopLoss { get; set; }
 
-        public int StrategyId { get; set; }
+        public string StrategyId { get; set; }
 
         public string? Narration { get; set; }    
 
-        public List<UploadImageDto> Images { get; set; }
+        public List<UploadImageDto>? Images { get; set; }
 
         public string PortfolioId {  get; set; }
     }
     
     public class UploadImageDto
     {
-        public IFormFile Image { get; set; }
+        public IFormFile ImageFile { get; set; }
         public ImageTagDto ImageTag { get; set; }
     }
 }

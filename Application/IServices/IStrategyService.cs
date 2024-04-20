@@ -19,5 +19,8 @@ namespace Application.IServices
         Task UpdateStrategy(string Id, UpdateStrategyDto updateStrategyDto, string userId);
 
         Task DeleteStrategyById(string strategyId, string userId);
+        Task<int> GetStrategyId(string identifier, string userId);
+
+
     }
 }

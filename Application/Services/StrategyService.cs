@@ -78,5 +78,11 @@ namespace Application.Services
             await _unitOfWork.StrategyRepository.Update(result);
             await _unitOfWork.SaveChangesAsync();
         }
+
+        public async Task<int> GetStrategyId(string identifier, string userId)
+        {
+            var result = await _unitOfWork.StrategyRepository.Get(identifier, userId);
+            return result.Id;
+        } 
     }
 }

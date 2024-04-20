@@ -30,7 +30,7 @@ namespace Persistance.Repositories
 
         public  override async Task<IEnumerable<Trade>> Get(string createdById)
         {
-            var result = await _dbSet.ToListAsync();
+            var result = await _dbSet.Include(i=>i.Holdings).ToListAsync();
             //var result = await _dbSet.Include(i => i.Strategy).ToListAsync();
 
             return result;
