@@ -58,7 +58,7 @@ namespace Application.Services
                 result.Quantity += AddHoldingDto.Quantity;
                 result.BuyPrice =(result.BuyPrice+ AddHoldingDto.BuyPrice)/2;
        
-                var addedHoldings = await _unitOfWork.HoldingsRepository.Update(result);
+                var addedHoldings =  _unitOfWork.HoldingsRepository.Update(result);
 
                 await _unitOfWork.SaveChangesAsync();
 
@@ -80,7 +80,7 @@ namespace Application.Services
             await _unitOfWork.SaveChangesAsync();
         }            
 
-        public Holdings GetExistingHolding(string code, int portfolioId)
+        public Holding GetExistingHolding(string code, int portfolioId)
         {
             throw new NotImplementedException();
         }

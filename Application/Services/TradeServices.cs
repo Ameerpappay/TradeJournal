@@ -49,17 +49,17 @@ namespace Application.Services
                 Quantity = trade.Quantity,
                 StopLoss = trade.StopLoss,
                 StrategyId = strategyId,
-                Narration = trade.Narration,
+                Description = trade.Narration,
                 CreatedByUserId = userId,
             };
 
             foreach (var image in trade.Images)
             {
                 var imageUrl = await _imageService.UploadImage(image.ImageFile, contentRoot);
-                newTrade.Images.Add(new Image
+                newTrade.Images.Add(new TradeImage
                 {
                     ImageTag = (ImageTag)image.ImageTag,
-                    ImageUrl = imageUrl
+                    Url = imageUrl
                 });
             }
 
@@ -115,8 +115,7 @@ namespace Application.Services
                 Price = t.Price,
                 Narration = t.Description,
                 StrategyId = t.StrategyId,
-                Code = t.Holdings.Code,
-
+                Code = t.Holdings.StockCode,
             }).ToList();
 
             return trades;

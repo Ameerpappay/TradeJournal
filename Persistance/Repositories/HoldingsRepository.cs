@@ -20,7 +20,7 @@ namespace Persistance.Repositories
 
         public async Task<Holding> GetExistingHolding(string code, int portfolioId)
         {
-            Holdings availTrade =await this._dbContext.Holdings.FirstOrDefaultAsync(item => item.Code == code && item.Quantity > 0 && item.PortfolioId == portfolioId);
+            Holding availTrade =await this._dbContext.Holdings.FirstOrDefaultAsync(item => item.StockCode == code && item.Quantity > 0 && item.PortfolioId == portfolioId);
                 return availTrade;
         }
     }
