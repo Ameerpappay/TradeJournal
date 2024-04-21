@@ -17,8 +17,6 @@ namespace Persistance.UnitOfWork
     {
         private readonly TradeJournalDataContext _dbContext;
 
-        private IDbContextTransaction _transaction;
-
         public IStrategyRepository StrategyRepository { get; set; }
 
         public ITradeRepository TradeRepository { get; set; }
@@ -29,11 +27,9 @@ namespace Persistance.UnitOfWork
 
         public IHoldingsRepository HoldingsRepository { get; set; }
 
-        public UnitOfWork(TradeJournalDataContext context, IStrategyRepository strategyRepository, ITradeRepository tradeRepository, IImageRepository imageRepository, IPortfolioRepository portfolioRepository, IHoldingsRepository holdingsRepository, IDbContextTransaction transaction)
+        public UnitOfWork(TradeJournalDataContext context, IStrategyRepository strategyRepository, ITradeRepository tradeRepository, IImageRepository imageRepository, IPortfolioRepository portfolioRepository, IHoldingsRepository holdingsRepository)
         {
             _dbContext = context;
-            _transaction = transaction;
-
             StrategyRepository = strategyRepository;
             TradeRepository = tradeRepository;
             ImageRepository = imageRepository;
@@ -45,35 +41,6 @@ namespace Persistance.UnitOfWork
         {
             return _dbContext.SaveChangesAsync();
         }
-
-        //public async Task BeginTransactionAsync()
-        //{
-        //    _transaction = await _dbContext.Database.BeginTransactionAsync();
-        //}
-
-        //public async Task CommitAsync()
-        //{
-        //    try
-        //    {
-        //        await _dbContext.SaveChangesAsync();
-        //        await _transaction.CommitAsync();
-        //    }
-        //    catch
-        //    {
-        //        await RollbackAsync();
-        //        throw;
-        //    }
-        //    finally
-        //    {
-        //        _transaction.Dispose();
-        //    }
-        //}
-
-        //public async Task RollbackAsync()
-        //{
-        //    await _transaction.RollbackAsync();
-        //    _transaction.Dispose();
-        //}
 
         public void Dispose()
         {

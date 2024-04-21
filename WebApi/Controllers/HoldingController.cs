@@ -23,7 +23,6 @@ namespace WebApi.Controllers
             return Ok(response);
         }
 
-        // GET api/<TradeController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<GetTradeDto>> Get(string id)
         {

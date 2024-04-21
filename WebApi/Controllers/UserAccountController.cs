@@ -31,7 +31,6 @@ namespace WebApi.Controllers
             return BadRequest("Either user creation failed or user already exists");
         }
 
-
         [HttpPost("admin")]
         public async Task<IActionResult> Add([FromBody] CreateAdminDto createUserRequest)
         {
@@ -41,7 +40,6 @@ namespace WebApi.Controllers
 
             return BadRequest("Either user creation failed or user already exists");
         }
-
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequest)
