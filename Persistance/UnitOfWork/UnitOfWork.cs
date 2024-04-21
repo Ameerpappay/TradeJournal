@@ -46,34 +46,34 @@ namespace Persistance.UnitOfWork
             return _dbContext.SaveChangesAsync();
         }
 
-        public async Task BeginTransactionAsync()
-        {
-            _transaction = await _dbContext.Database.BeginTransactionAsync();
-        }
+        //public async Task BeginTransactionAsync()
+        //{
+        //    _transaction = await _dbContext.Database.BeginTransactionAsync();
+        //}
 
-        public async Task CommitAsync()
-        {
-            try
-            {
-                await _dbContext.SaveChangesAsync();
-                await _transaction.CommitAsync();
-            }
-            catch
-            {
-                await RollbackAsync();
-                throw;
-            }
-            finally
-            {
-                _transaction.Dispose();
-            }
-        }
+        //public async Task CommitAsync()
+        //{
+        //    try
+        //    {
+        //        await _dbContext.SaveChangesAsync();
+        //        await _transaction.CommitAsync();
+        //    }
+        //    catch
+        //    {
+        //        await RollbackAsync();
+        //        throw;
+        //    }
+        //    finally
+        //    {
+        //        _transaction.Dispose();
+        //    }
+        //}
 
-        public async Task RollbackAsync()
-        {
-            await _transaction.RollbackAsync();
-            _transaction.Dispose();
-        }
+        //public async Task RollbackAsync()
+        //{
+        //    await _transaction.RollbackAsync();
+        //    _transaction.Dispose();
+        //}
 
         public void Dispose()
         {

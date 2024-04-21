@@ -11,11 +11,11 @@ namespace Application
     {
         Task SaveChangesAsync();
 
-        Task BeginTransactionAsync();
+        //Task BeginTransactionAsync();
 
-        Task CommitAsync();
+        //Task CommitAsync();
 
-        Task RollbackAsync();
+        //Task RollbackAsync();
 
         IStrategyRepository StrategyRepository { get; }
 
