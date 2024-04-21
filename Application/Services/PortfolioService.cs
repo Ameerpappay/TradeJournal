@@ -77,7 +77,7 @@ namespace Application.Services
             result.Description = updatePortfolioDto.Description;
             result.Name = updatePortfolioDto.Name;
 
-            await _unitOfWork.PortfolioRepository.Update(result);
+            _unitOfWork.PortfolioRepository.Update(result);
             await _unitOfWork.SaveChangesAsync();
         }
     }

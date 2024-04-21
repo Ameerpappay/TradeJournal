@@ -1,4 +1,5 @@
 ﻿using Application.Dtos;
+using Application.Dtos.UserAccount;
 using Application.IServices;
 using Domain.Entities;
 using Domain.Enum;
@@ -14,7 +15,6 @@ namespace Application.Services
     public class UserAccountService : IUserAccountService
     {
         private readonly UserManager<User> _userManager;
-
 
         private readonly IConfiguration _configuration;
         public UserAccountService(UserManager<User> userManager, IConfiguration configuration)
@@ -55,25 +55,24 @@ namespace Application.Services
             return token;
         }
 
-
-        public async Task<bool> CreateAdmin(CreateUserDto createUserRequest)
+        public async Task<bool> Add(CreateAdminDto createUserRequest)
         {
             var isUserAdded = await AddUser(createUserRequest);
 
             if (!isUserAdded) return false;
 
-            await AddRoleToUser(createUserRequest.Email, Role.Admin);
+            await AddRoleToUser(createUserRequest.Email, Domain.Enum.Role.Admin);
 
             return isUserAdded;
         }
 
-        public async Task<bool> CreateTrader(CreateUserDto createUserRequest)
+        public async Task<bool> Add(CreateTraderDto createUserRequest)
         {
             var isUserAdded = await AddUser(createUserRequest);
 
             if (!isUserAdded) return false;
 
-            await AddRoleToUser(createUserRequest.Email, Role.Trader);
+            await AddRoleToUser(createUserRequest.Email, Domain.Enum.Role.Trader);
 
             return isUserAdded;
         }
@@ -100,7 +99,7 @@ namespace Application.Services
             return result.Succeeded;
         }
 
-        private async Task AddRoleToUser(string emailId, Role role)
+        private async Task AddRoleToUser(string emailId, Domain.Enum.Role role)
         {
             var addedUser = await _userManager.FindByEmailAsync(emailId);
 

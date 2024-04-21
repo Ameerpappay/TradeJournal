@@ -75,7 +75,7 @@ namespace Application.Services
             result.Description = strategy.Description;
             result.Name = strategy.Name;
 
-            await _unitOfWork.StrategyRepository.Update(result);
+            _unitOfWork.StrategyRepository.Update(result);
             await _unitOfWork.SaveChangesAsync();
         }
 

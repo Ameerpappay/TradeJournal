@@ -15,7 +15,7 @@ namespace Application.Services
 
         public async Task AddImage(AddImageDto image)
         {
-            var newImage = new Image()
+            var newImage = new TradeImage()
             {
                 ImageTag = image.imageTag,
                 TradeId = image.TradeId

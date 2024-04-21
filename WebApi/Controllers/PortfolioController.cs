@@ -46,7 +46,7 @@ namespace WebApi.Controllers
 
 
         [HttpPut("{id}")]
-        public async Task PutAsync(string id, [FromBody] UpdatePortfolioDto requestBody)
+        public async Task Update(string id, [FromBody] UpdatePortfolioDto requestBody)
         {
             var userId = User.GetUserId();
             await _portfolioServices.UpdatePortfolio(id, requestBody,userId);

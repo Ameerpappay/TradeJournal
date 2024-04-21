@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Dtos
+namespace Application.Dtos.UserAccount
 {
-    public class CreateUserDto
+    public abstract class CreateUserDto
     {
         public string Email { get; set; }
 

@@ -28,7 +28,7 @@ namespace WebApi.Extensions
             {
                 var userAccountService = services.GetRequiredService<IUserAccountService>();
 
-                await userAccountService.CreateAdmin(new CreateUserDto
+                await userAccountService.Add(new CreateTraderDto
                 {
                     Email = "admin@admin.com",
                     Password = "Admin@123"

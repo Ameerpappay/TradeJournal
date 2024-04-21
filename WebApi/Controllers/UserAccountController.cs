@@ -22,9 +22,9 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("trader")]
-        public async Task<IActionResult> CreateTrader([FromBody] CreateUserDto createUserRequest)
+        public async Task<IActionResult> Add([FromBody] CreateTraderDto createUserRequest)
         {
-            var response = await _userAccountService.CreateTrader(createUserRequest);
+            var response = await _userAccountService.Add(createUserRequest);
 
             if (response) return Ok("User Created Successfully");
 
@@ -33,9 +33,9 @@ namespace WebApi.Controllers
 
 
         [HttpPost("admin")]
-        public async Task<IActionResult> CreateAdmin([FromBody] CreateUserDto createUserRequest)
+        public async Task<IActionResult> Add([FromBody] CreateAdminDto createUserRequest)
         {
-            var response = await _userAccountService.CreateAdmin(createUserRequest);
+            var response = await _userAccountService.Add(createUserRequest);
 
             if (response) return Ok("User Created Successfully");
 

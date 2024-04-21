@@ -24,13 +24,13 @@ namespace Application.Services
 
         public async Task<GetHoldingsDto> AddHoldings(AddHoldingsDto AddHoldingDto, string UserId)
         {
-            Holdings availTrade = await _unitOfWork.HoldingsRepository.GetExistingHolding(AddHoldingDto.Code,AddHoldingDto.PortfolioId);
+            Holding availTrade = await _unitOfWork.HoldingsRepository.GetExistingHolding(AddHoldingDto.Code,AddHoldingDto.PortfolioId);
 
             if (availTrade == null )
             {
-                var newHoldings = new Holdings()
+                var newHoldings = new Holding()
                 {
-                    Code = AddHoldingDto.Code,
+                    StockCode = AddHoldingDto.Code,
                     BuyPrice = AddHoldingDto.BuyPrice,
                     TrailingStoploss = AddHoldingDto.TrailingStoploss,
                     Quantity = AddHoldingDto.Quantity,
@@ -44,7 +44,7 @@ namespace Application.Services
                 return new GetHoldingsDto()
                 {
                     Id = addedHoldings.Id,
-                    Code = addedHoldings.Code,
+                    Code = addedHoldings.StockCode,
                     Quantity = addedHoldings.Quantity,
                     BuyPrice = addedHoldings.BuyPrice,
                     TrailingStoploss = addedHoldings.TrailingStoploss,
@@ -65,7 +65,7 @@ namespace Application.Services
                 return new GetHoldingsDto()
                 {
                     Id = addedHoldings.Id,
-                    Code = addedHoldings.Code,
+                    Code = addedHoldings.StockCode,
                     Quantity = addedHoldings.Quantity,
                     BuyPrice = addedHoldings.BuyPrice,
                     TrailingStoploss = addedHoldings.TrailingStoploss,
@@ -90,7 +90,7 @@ namespace Application.Services
             var result = await _unitOfWork.HoldingsRepository.Get(HoldingId, userId);
             var holding = new GetHoldingsDto();
             holding.Id = result.Id;
-            holding.Code = result.Code;
+            holding.Code = result.StockCode;
             holding.Quantity = result.Quantity;
             holding.TrailingStoploss= result.TrailingStoploss;
             holding.BuyPrice= result.BuyPrice;
@@ -104,7 +104,7 @@ namespace Application.Services
             var holding = result.Select(s => new GetHoldingsDto
             {
                 Id = s.Id,
-                Code = s.Code,
+                Code = s.StockCode,
                 BuyPrice= s.BuyPrice,
                 Quantity= s.Quantity,
                 PortfolioId= s.PortfolioId,
@@ -118,12 +118,12 @@ namespace Application.Services
         public async Task UpdateHoldings(string Id, UpdateHoldingsDto updateHoldingsDto, string userId)
         {
             var result = await _unitOfWork.HoldingsRepository.Get(Id, userId);
-            result.Code = updateHoldingsDto.Code;
+            result.StockCode = updateHoldingsDto.Code;
             result.BuyPrice = updateHoldingsDto.BuyPrice;
             result.Quantity = updateHoldingsDto.Quantity;
             result.PortfolioId= updateHoldingsDto.PortfolioId;           
 
-            await _unitOfWork.HoldingsRepository.Update(result);
+            _unitOfWork.HoldingsRepository.Update(result);
             await _unitOfWork.SaveChangesAsync();
         }
     }
