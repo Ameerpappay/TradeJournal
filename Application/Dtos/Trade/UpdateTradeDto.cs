@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Enum;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,9 @@ namespace Application.Dtos.Trade
 {
     public class UpdateTradeDto
     {
-        public int HoldingsId { get; set; }
+        public string HoldingsId { get; set; }
+
+        public string Code {  get; set; }
 
         public Decimal Price { get; set; }
 
@@ -18,8 +21,14 @@ namespace Application.Dtos.Trade
 
         public Decimal StopLoss { get; set; }
 
-        public int StrategyId { get; set; }
+        public TradeAction Action { get; set; }
 
-        public string? Narration { get; set; }
+        public string StrategyId { get; set; }
+
+        public string? Description { get; set; }
+
+        public List<UploadImageDto>? Images { get; set; }
+
+        public string PortfolioId { get; set; }
     }
 }

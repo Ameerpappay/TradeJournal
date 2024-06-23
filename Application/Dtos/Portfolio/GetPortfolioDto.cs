@@ -8,7 +8,8 @@ namespace Application.Dtos.Portfolio
 {
     public class GetPortfolioDto
     {
-        public string Id { get; set; }
+        public int PortfolioId { get; set; }
+        public string Identifier { get; set; }
 
         public string Name { get; set; }
 

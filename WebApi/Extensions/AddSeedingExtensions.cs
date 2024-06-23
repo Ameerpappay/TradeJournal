@@ -1,6 +1,7 @@
 ﻿using Application.Dtos;
 using Application.IServices;
 using Domain.Entities;
+using Domain.Enum;
 using Microsoft.AspNetCore.Identity;
 using Persistance.Context;
 
@@ -21,18 +22,25 @@ namespace WebApi.Extensions
             if (!context.Roles.Any(item => item.Name == "Trader"))
             {
                 context.Roles.Add(new IdentityRole { Name = "Trader", ConcurrencyStamp = Guid.NewGuid().ToString(), NormalizedName = "TRADER" });
-               await  context.SaveChangesAsync();
+                await context.SaveChangesAsync();
             }
 
-            if (!context.Users.Any(item => item.Email == "admin@admin.com"))
-            {
-                var userAccountService = services.GetRequiredService<IUserAccountService>();
+            var adminEmail = "admin@admin.com";
 
-                await userAccountService.Add(new CreateTraderDto
+            if (!context.Users.Any(item => item.Email ==adminEmail ))
+            {
+                var userManager = services.GetRequiredService<UserManager<User>>();
+                var result = await userManager.CreateAsync(new User
                 {
-                    Email = "admin@admin.com",
-                    Password = "Admin@123"
-                });
+                    UserName=adminEmail,
+                    Email = adminEmail,
+                    EmailConfirmed = true,
+                }, "Admin@123"
+                );
+
+                var addedUser = await userManager.FindByEmailAsync(adminEmail);
+
+                await userManager.AddToRoleAsync(addedUser, Domain.Enum.Role.Admin.ToString());
             }
         }
     }

@@ -104,6 +104,9 @@ namespace Persistance.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
+                    b.Property<bool>("IsSelected")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
@@ -120,8 +123,9 @@ namespace Persistance.Migrations
 
                     b.HasIndex("UpdatedByUserId");
 
-                    b.HasIndex("Name", "CreatedByUserId")
-                        .IsUnique();
+                    b.HasIndex("Name", "IsDeleted", "CreatedByUserId")
+                        .IsUnique()
+                        .HasFilter("\"IsDeleted\" = false");
 
                     b.ToTable("Portfolios");
                 });
@@ -167,8 +171,9 @@ namespace Persistance.Migrations
 
                     b.HasIndex("UpdatedByUserId");
 
-                    b.HasIndex("Name", "CreatedByUserId")
-                        .IsUnique();
+                    b.HasIndex("Name", "IsDeleted", "CreatedByUserId")
+                        .IsUnique()
+                        .HasFilter("\"IsDeleted\" = false");
 
                     b.ToTable("Strategies");
                 });
@@ -180,6 +185,9 @@ namespace Persistance.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Action")
+                        .HasColumnType("integer");
 
                     b.Property<string>("CreatedByUserId")
                         .IsRequired()
@@ -492,6 +500,18 @@ namespace Persistance.Migrations
             modelBuilder.Entity("Domain.Entities.User", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Photo")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasDiscriminator().HasValue("User");
                 });

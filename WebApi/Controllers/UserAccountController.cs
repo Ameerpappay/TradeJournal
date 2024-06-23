@@ -16,15 +16,18 @@ namespace WebApi.Controllers
     public class UserAccountController : ControllerBase
     {
         private readonly IUserAccountService _userAccountService;
-        public UserAccountController(IUserAccountService userAccountService)
+        public static IWebHostEnvironment _environment;
+
+        public UserAccountController(IUserAccountService userAccountService,IWebHostEnvironment webHostEnvironment )
         {
             _userAccountService = userAccountService;
+            _environment = webHostEnvironment;
         }
 
         [HttpPost("trader")]
-        public async Task<IActionResult> Add([FromBody] CreateTraderDto createUserRequest)
+        public async Task<IActionResult> Add([FromForm] CreateTraderDto createUserRequest)
         {
-            var response = await _userAccountService.Add(createUserRequest);
+            var response = await _userAccountService.Add(createUserRequest,_environment.ContentRootPath);
 
             if (response) return Ok("User Created Successfully");
 
@@ -50,5 +53,26 @@ namespace WebApi.Controllers
 
             return Ok(new{token = new JwtSecurityTokenHandler().WriteToken(response)});
         }
+
+        [HttpGet("verify-email")]
+        public async Task<IActionResult> VerifyEmail(string token,string userId)
+        {
+           await _userAccountService.VerifyEmailAsync(token, userId);
+            return Ok("Token verified");
+        }
+
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword(string email)
+        {
+            await _userAccountService.ForgotPassword(email);
+            return Ok(email);
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword(string token,string userId,string newPassword)
+        {
+            var isValid= _userAccountService.ResetPassword(token, userId,newPassword);
+            return Ok(isValid);
+        }  
     }
 }

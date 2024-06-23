@@ -1,5 +1,6 @@
 ﻿using Application.Dtos.Holdings;
 using Application.Dtos.Portfolio;
+using Application.Dtos.Trade;
 using Application.IServices;
 using Domain.Entities;
 using System;
@@ -44,12 +45,12 @@ namespace Application.Services
                 return new GetHoldingsDto()
                 {
                     Id = addedHoldings.Id,
+                    Identifier = addedHoldings.Identifier.ToString(),
                     Code = addedHoldings.StockCode,
                     Quantity = addedHoldings.Quantity,
                     BuyPrice = addedHoldings.BuyPrice,
                     TrailingStoploss = addedHoldings.TrailingStoploss,
                     PortfolioId = addedHoldings.PortfolioId,
-
                 };
             }
             else
@@ -64,7 +65,8 @@ namespace Application.Services
 
                 return new GetHoldingsDto()
                 {
-                    Id = addedHoldings.Id,
+                    Id=addedHoldings.Id,
+                    Identifier = addedHoldings.Identifier.ToString(),
                     Code = addedHoldings.StockCode,
                     Quantity = addedHoldings.Quantity,
                     BuyPrice = addedHoldings.BuyPrice,
@@ -87,9 +89,11 @@ namespace Application.Services
 
         public async Task<GetHoldingsDto> GetHoldingByID(string HoldingId, string userId)
         {
+            //GetPortfolioDto selectedPortfolio = await _unitOfWork.PortfolioRepository.SelectedPortfolio(userId);
+
             var result = await _unitOfWork.HoldingsRepository.Get(HoldingId, userId);
             var holding = new GetHoldingsDto();
-            holding.Id = result.Id;
+            holding.Identifier = result.Identifier.ToString();
             holding.Code = result.StockCode;
             holding.Quantity = result.Quantity;
             holding.TrailingStoploss= result.TrailingStoploss;
@@ -100,18 +104,29 @@ namespace Application.Services
 
         public async Task<List<GetHoldingsDto>> GetHoldings(string userId)
         {
-            var result = await _unitOfWork.HoldingsRepository.Get(userId);
+            GetPortfolioDto selectedPortfolio = await _unitOfWork.PortfolioRepository.SelectedPortfolio(userId);
+
+            var result = await _unitOfWork.HoldingsRepository.Get(userId,selectedPortfolio.PortfolioId);
             var holding = result.Select(s => new GetHoldingsDto
             {
-                Id = s.Id,
+                Identifier = s.Identifier.ToString(),
                 Code = s.StockCode,
-                BuyPrice= s.BuyPrice,
-                Quantity= s.Quantity,
-                PortfolioId= s.PortfolioId,
-                TrailingStoploss= s.TrailingStoploss,
-
+                BuyPrice = s.BuyPrice,
+                Quantity = s.Quantity,
+                PortfolioId = s.PortfolioId,
+                TrailingStoploss = s.TrailingStoploss,
+                Trades = s.Trades.Select(x=>new GetTradeDto
+                {
+                    EntryDate = x.EntryDate,
+                    HoldingsId = s.Identifier.ToString(),
+                    Description = x.Description,
+                    Price = x.Price,
+               //     StrategyId = x.StrategyId,
+                    Quantity =x.Quantity,
+                    StopLoss = x.StopLoss,
+                    Id = x.Identifier.ToString()
+                }).ToList(),
             }).ToList();
-
             return holding;
         }
 

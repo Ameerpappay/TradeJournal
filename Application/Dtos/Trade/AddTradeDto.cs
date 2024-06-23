@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Application.Dtos.Image;
 using Domain.Common;
+using Domain.Enum;
 using Microsoft.AspNetCore.Http;
 
 namespace Application.Dtos.Trade
@@ -23,13 +24,15 @@ namespace Application.Dtos.Trade
 
         public Decimal StopLoss { get; set; }
 
+        public TradeAction  Action { get; set; }
+
         public string StrategyId { get; set; }
 
-        public string? Narration { get; set; }    
+        public string? Description { get; set; }    
 
         public List<UploadImageDto>? Images { get; set; }
 
-        public string PortfolioId {  get; set; }
+       // public string PortfolioId {  get; set; }
     }
     
     public class UploadImageDto

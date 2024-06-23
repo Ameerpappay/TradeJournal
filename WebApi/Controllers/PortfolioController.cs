@@ -30,6 +30,22 @@ namespace WebApi.Controllers
             return Ok(response);
         }
 
+        [HttpGet("selectedPortfolio")]
+        public async Task<ActionResult> GetSelectedPortfolioId()
+        {
+            var userId = User.GetUserId();
+            var response = await _portfolioServices.GetSelectedPortfolioId(userId);
+            return Ok(response);
+        }
+
+        [HttpPut("changePortfolio{portfolioId}")]
+        public async Task<ActionResult> SetSelectedPortfolioId(string portfolioId)
+        {
+            var userId = User.GetUserId();
+            var response = await _portfolioServices.SetSelectedPortfolioId(userId, portfolioId);
+            return Ok(response);
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<GetPortfolioDto>> Get(string id)
         {
@@ -43,7 +59,6 @@ namespace WebApi.Controllers
             var userId = User.GetUserId();
             return Ok(await _portfolioServices.AddPortfolio(requestBody,userId));
         }
-
 
         [HttpPut("{id}")]
         public async Task Update(string id, [FromBody] UpdatePortfolioDto requestBody)

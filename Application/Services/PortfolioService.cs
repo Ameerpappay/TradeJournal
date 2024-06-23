@@ -17,14 +17,22 @@ namespace Application.Services
         {
             _unitOfWork = unitOfWork;
         }
-        public async Task<GetPortfolioDto> AddPortfolio(AddPortfolioDto portfolio ,string addedBy)
+
+        public async Task<GetPortfolioDto> AddPortfolio(AddPortfolioDto portfolio, string addedBy)
         {
+
             var newPortfolio = new Portfolio()
             {
                 Description = portfolio.Description,
                 Name = portfolio.Name,
-                CreatedByUserId=addedBy,
+                CreatedByUserId = addedBy,
+                IsDeleted = false,
             };
+            GetPortfolioDto selectedPortfolio = await _unitOfWork.PortfolioRepository.SelectedPortfolio(addedBy);
+            if (selectedPortfolio == null)
+            {
+                newPortfolio.IsSelected = true;
+            }
 
             var addedPortfolio = await _unitOfWork.PortfolioRepository.Add(newPortfolio);
             await _unitOfWork.SaveChangesAsync();
@@ -32,7 +40,7 @@ namespace Application.Services
             {
                 Description = addedPortfolio.Description,
                 Name = addedPortfolio.Name,
-                Id = addedPortfolio.Identifier.ToString()
+                Identifier = addedPortfolio.Identifier.ToString()
             };
         }
 
@@ -47,7 +55,7 @@ namespace Application.Services
             var result = await _unitOfWork.PortfolioRepository.Get(userId);
             var portfolio = result.Select(s => new GetPortfolioDto
             {
-                Id = s.Identifier.ToString(),
+                Identifier = s.Identifier.ToString(),
                 Name = s.Name,
                 Description = s.Description,
             }).ToList();
@@ -57,9 +65,9 @@ namespace Application.Services
 
         public async Task<GetPortfolioDto> GetPortfolioById(string portfolioId, string userId)
         {
-            var result = await _unitOfWork.PortfolioRepository.Get(portfolioId,userId);
+            var result = await _unitOfWork.PortfolioRepository.Get(portfolioId, userId);
             var portfolio = new GetPortfolioDto();
-            portfolio.Id = result.Identifier.ToString();
+            portfolio.Identifier = result.Identifier.ToString();
             portfolio.Name = result.Name;
             portfolio.Description = result.Description;
             return portfolio;
@@ -71,6 +79,18 @@ namespace Application.Services
             return result.Id;
         }
 
+        public async Task<GetPortfolioDto> GetSelectedPortfolioId(string userId)
+        {
+            var result = await _unitOfWork.PortfolioRepository.SelectedPortfolio(userId);
+            return result;
+        }
+
+        public Task<string> SetSelectedPortfolioId(string userId, string porffolioId)
+        {
+            _unitOfWork.PortfolioRepository.SetSelectedPortfolio(userId, porffolioId);
+            return Task.FromResult("success");
+        }
+
         public async Task UpdatePortfolio(string Id, UpdatePortfolioDto updatePortfolioDto, string userId)
         {
             var result = await _unitOfWork.PortfolioRepository.Get(Id, userId);
@@ -80,5 +100,6 @@ namespace Application.Services
             _unitOfWork.PortfolioRepository.Update(result);
             await _unitOfWork.SaveChangesAsync();
         }
+
     }
 }

@@ -12,7 +12,7 @@ namespace WebApi.Extensions
             {
                 options.User.RequireUniqueEmail = true;
             })
-            .AddEntityFrameworkStores<TradeJournalDataContext>();
+            .AddEntityFrameworkStores<TradeJournalDataContext>().AddDefaultTokenProviders();
         }
     }
 }

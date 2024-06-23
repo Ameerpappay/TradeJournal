@@ -1,4 +1,5 @@
 ﻿using Domain.Common;
+using Domain.Enum;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -13,9 +14,13 @@ namespace Domain.Entities
         [Required]
         public int HoldingsId { get; set; }
 
-        public Holding? Holdings { get; set; }
+        public virtual Holding Holdings { get; set; }
+
+        //public string Action {  get; set; }
 
         public Decimal Price { get; set; }
+
+        public TradeAction  Action { get; set; }
 
         public DateTime EntryDate { get; set; }
 
@@ -26,12 +31,10 @@ namespace Domain.Entities
         [Required]
         public int StrategyId { get; set; }
 
-        public Strategy? Strategy { get; set; }
+        public virtual Strategy? Strategy { get; set; }
 
         public string? Description { get; set; }
 
-        public List<TradeImage>? Images { get; set; }
-
-       
+        public virtual List<TradeImage>? Images { get; set; }
     }
 }

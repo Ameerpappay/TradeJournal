@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Application.Dtos.Holdings;
+using Application.Dtos.Image;
+using Domain.Enum;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +15,7 @@ namespace Application.Dtos.Trade
 
         public string Code { get; set; }
 
-        public int HoldingsId { get; set; }
+        public string HoldingsId { get; set; }
 
         public Decimal Price { get; set; }
 
@@ -21,9 +24,14 @@ namespace Application.Dtos.Trade
         public Decimal Quantity { get; set; }
 
         public Decimal StopLoss { get; set; }
+        public TradeAction Action { get; set; }
 
-        public int StrategyId { get; set; }
+        public string StrategyId { get; set; }
 
-        public string? Narration { get; set; }
+        public string? Description { get; set; }
+
+        public GetHoldingsDto holding { get; set; }        
+
+        public List<GetImageDto> Images { get; set; }
     }
 }

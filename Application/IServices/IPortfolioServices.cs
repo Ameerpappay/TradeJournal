@@ -19,6 +19,10 @@ namespace Application.IServices
 
         Task<int> GetPortfolioId(string portfolioId, string userId);
 
+        Task<GetPortfolioDto> GetSelectedPortfolioId( string userId);
+
+        Task<string> SetSelectedPortfolioId(string userId,string porffolioId);
+
         Task UpdatePortfolio(string Id, UpdatePortfolioDto updatePortfolioDto, string userId);
 
         Task DeletePortfolioById(string portfolioId, string userId);

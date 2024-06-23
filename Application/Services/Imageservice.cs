@@ -18,16 +18,17 @@ namespace Application.Services
             var newImage = new TradeImage()
             {
                 ImageTag = image.imageTag,
-                TradeId = image.TradeId
+                //   TradeId = image.TradeId
             };
-            var addedImage = _unitOfWork.ImageRepository.Add(newImage);
+            var addedImage = await _unitOfWork.ImageRepository.Add(newImage);
 
             await _unitOfWork.SaveChangesAsync();
 
             //return new GetImageDto()
             //{
-            //    imageTag = addedImage.
-            //}
+            //    imageTag = addedImage.ImageTag,
+
+            //};
 
         }
 
@@ -37,36 +38,38 @@ namespace Application.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public Task<List<GetImageDto>> GetImage(string userId)
+        public Task<List<GetImageDto>> GetTradeImage(string userId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<GetImageDto> GetImageById(string ImageId, string userId)
+        public async Task<GetImageDto> GetTradeImageById(string ImageId, string userId)
         {
-            var response = _unitOfWork.ImageRepository.Get(ImageId,userId);
+            var result = await _unitOfWork.ImageRepository.Get(ImageId, userId);
             var image = new GetImageDto();
-
-            image.Id = response.Id;
-            image.TradeId = response.Id;
-
-            //return image;
-            throw new NotImplementedException();
+            image.Id = result.Identifier.ToString();
+            image.Url = result.Url;
+            image.imageTag = result.ImageTag;
+            return image;
         }
 
-        public Task UpdateImage(string Id, UpdateImageDto updateImageDto, string userId)
+        public Task<List<GetImageDto>> GetTradeImageByTradeId(string userId, string tradeId)
         {
-            var result = _unitOfWork.ImageRepository.Get(Id,userId);
-            //result.
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateTradeImage(string Id, UpdateImageDto updateImageDto, string userId)
+        {
+            var result = _unitOfWork.ImageRepository.Get(Id, userId);
 
             throw new NotImplementedException();
         }
 
-        public async Task<string> UploadImage(IFormFile formFileImage, string contentRootPath)
+        public async Task<string> UploadTradeImage(IFormFile formFileImage, string contentRootPath)
         {
             try
             {
-                string fileName = DateTime.Now.Ticks+Path.GetFileName(formFileImage.FileName);
+                string fileName = DateTime.Now.Ticks + Path.GetFileName(formFileImage.FileName);
                 string filePath = Path.Combine(contentRootPath, "TradeImages", fileName);
                 using (var fileStream = new FileStream(filePath, FileMode.Create))
                 {
@@ -78,7 +81,24 @@ namespace Application.Services
             {
                 return "";
             };
-
+        }
+        public async Task<string> UploadUserImage(IFormFile formFileImage, string contentRootPath)
+        {
+            try
+            {
+                string fileName = DateTime.Now.Ticks + Path.GetFileName(formFileImage.FileName);
+                string filePath = Path.Combine(contentRootPath, "UserPhotos", fileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await formFileImage.CopyToAsync(fileStream);
+                }
+                return fileName;
+            }
+            catch (Exception ex)
+            {
+                return "";
+            };
         }
     }
+
 }

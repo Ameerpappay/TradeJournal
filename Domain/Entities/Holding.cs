@@ -24,7 +24,7 @@ namespace Domain.Entities
 
         public Portfolio? Portfolio { get; set; }
         
-        public List<Trade>? Trades { get; set; } 
+        public virtual List<Trade> Trades { get; set; } =new List<Trade> { };
 
     }
 }

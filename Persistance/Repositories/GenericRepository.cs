@@ -32,7 +32,7 @@ namespace Persistance.Repositories
 
         public virtual async Task<T> Get(string id, string createdById)
         {
-            var record = await _context.Set<T>().FirstOrDefaultAsync(x => x.Identifier.ToString() == id && x.CreatedByUserId == createdById);
+            var record = await _context.Set<T>().FirstOrDefaultAsync(x => x.Identifier.ToString() == id && x.CreatedByUserId == createdById && !x.IsDeleted);
 
             return record;
         }

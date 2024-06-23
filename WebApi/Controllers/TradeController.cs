@@ -47,7 +47,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task Update(string id, [FromBody] UpdateTradeDto requestBody)
+        public async Task Update(string id, [FromForm] UpdateTradeDto requestBody)
         {
             var userId = User.GetUserId();
             await _services.UpdateTrade(id, requestBody,userId);

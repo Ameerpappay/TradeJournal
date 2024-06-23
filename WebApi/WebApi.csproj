@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="UserPhotos\" />
     <Folder Include="TradeImages\" />
   </ItemGroup>
 

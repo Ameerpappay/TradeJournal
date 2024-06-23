@@ -13,6 +13,8 @@ using Microsoft.OpenApi.Models;
 using Persistance.Context;
 using Persistance.Repositories;
 using Persistance.UnitOfWork;
+using System.Net.Mail;
+using System.Net;
 using System.Text;
 using WebApi.BuilderServices;
 using WebApi.Error;
@@ -27,9 +29,9 @@ namespace WebApi
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-
+            // Add services to the container            
             builder.Services.AddControllers();
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.ConfigureSwagger();
@@ -49,8 +51,26 @@ namespace WebApi
             builder.Services.AddCustomIdentity();
             builder.Services.AddLogging(logging => {
                 logging.ClearProviders();
-                //logging.add
                 });
+
+
+            builder.Services.AddSingleton<SmtpClient>(provider =>
+             {
+                 var smtpSettings = provider.GetRequiredService<IConfiguration>().GetSection("SmtpSettings");
+                 var smtpClient = new SmtpClient(smtpSettings["Host"])
+                 {
+                     Port = int.Parse(smtpSettings["Port"]),
+                     Credentials = new NetworkCredential(smtpSettings["Username"], smtpSettings["Password"]),
+
+                     EnableSsl = bool.Parse(smtpSettings["EnableSsl"]),
+                     //DeliveryMethod=SmtpDeliveryMethod.Network,
+                     //UseDefaultCredentials = false
+
+                 };
+                 return smtpClient;
+             });
+
+           // builder.Services.AddIdentity<User, IdentityRole>().AddDefaultTokenProviders();
 
             builder.Services.AddJwtAuthentication(builder.Configuration);
             builder.Services.AddCors(options => { options.AddPolicy("myPolicy", policy => { policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader(); }); } );

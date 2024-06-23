@@ -18,5 +18,7 @@ namespace Application.IServices
         Task UpdateTrade(string tradeId, UpdateTradeDto updateTradeDto, string userId);
 
         Task DeleteTradeById(string tradeId, string userId);
+        Task<List<GetTradeDto>> GetTradesByHolidingID(string userId,string holdingId);
+
     }
 }

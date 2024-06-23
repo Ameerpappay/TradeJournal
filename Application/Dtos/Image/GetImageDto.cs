@@ -8,9 +8,11 @@ namespace Application.Dtos.Image
 {
     public class GetImageDto
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
 
-        public int TradeId { get; set; }
+        public string TradeId { get; set; }
+        
+        public string Url { get; set; }
 
         public Domain.Enum.ImageTag imageTag { get; set; }
     }

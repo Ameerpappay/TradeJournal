@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Persistance.Migrations
 {
     /// <inheritdoc />
-    public partial class first : Migration
+    public partial class User : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,6 +32,9 @@ namespace Persistance.Migrations
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
                     Discriminator = table.Column<string>(type: "text", nullable: false),
+                    FirstName = table.Column<string>(type: "text", nullable: true),
+                    LastName = table.Column<string>(type: "text", nullable: true),
+                    Photo = table.Column<string>(type: "text", nullable: true),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -166,6 +169,7 @@ namespace Persistance.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
+                    IsSelected = table.Column<bool>(type: "boolean", nullable: false),
                     Identifier = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     UpdatedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
@@ -268,6 +272,7 @@ namespace Persistance.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     HoldingsId = table.Column<int>(type: "integer", nullable: false),
                     Price = table.Column<decimal>(type: "numeric", nullable: false),
+                    Action = table.Column<int>(type: "integer", nullable: false),
                     EntryDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Quantity = table.Column<decimal>(type: "numeric", nullable: false),
                     StopLoss = table.Column<decimal>(type: "numeric", nullable: false),
@@ -410,10 +415,11 @@ namespace Persistance.Migrations
                 column: "CreatedByUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Portfolios_Name_CreatedByUserId",
+                name: "IX_Portfolios_Name_IsDeleted_CreatedByUserId",
                 table: "Portfolios",
-                columns: new[] { "Name", "CreatedByUserId" },
-                unique: true);
+                columns: new[] { "Name", "IsDeleted", "CreatedByUserId" },
+                unique: true,
+                filter: "\"IsDeleted\" = false");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Portfolios_UpdatedByUserId",
@@ -426,10 +432,11 @@ namespace Persistance.Migrations
                 column: "CreatedByUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Strategies_Name_CreatedByUserId",
+                name: "IX_Strategies_Name_IsDeleted_CreatedByUserId",
                 table: "Strategies",
-                columns: new[] { "Name", "CreatedByUserId" },
-                unique: true);
+                columns: new[] { "Name", "IsDeleted", "CreatedByUserId" },
+                unique: true,
+                filter: "\"IsDeleted\" = false");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Strategies_UpdatedByUserId",
