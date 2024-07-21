@@ -16,14 +16,16 @@ namespace Application.Services
         private IHoldingsServices _holdingsService;
         IPortfolioServices _portfolioService;
         IStrategyService _strategyService;
+        IStockPriceManager _stockPriceManager;
 
-        public TradeServices(IUnitOfWork unitOfWork, IImageService imageService, IStrategyService strategyService, IHoldingsServices holdingsServices, IPortfolioServices portfolioService)
+        public TradeServices(IUnitOfWork unitOfWork, IImageService imageService, IStrategyService strategyService, IHoldingsServices holdingsServices, IPortfolioServices portfolioService, IStockPriceManager stockPriceManager)
         {
             _unitOfWork = unitOfWork;
             _imageService = imageService;
             _holdingsService = holdingsServices;
             _portfolioService = portfolioService;
             _strategyService = strategyService;
+            _stockPriceManager = stockPriceManager;
         }
         public async Task<GetTradeDto> AddTrade(AddTradeDto trade, string contentRoot, string userId)
         {
@@ -143,6 +145,8 @@ namespace Application.Services
 
         public async Task<List<GetTradeDto>> GetTrades(string userId)
         {
+
+            _stockPriceManager.ReadStockEntries();
             GetPortfolioDto selectedPortfolio = await _unitOfWork.PortfolioRepository.SelectedPortfolio(userId);
 
             var result = await _unitOfWork.TradeRepository.Get(userId,selectedPortfolio.PortfolioId);

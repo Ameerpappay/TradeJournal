@@ -18,9 +18,7 @@ namespace WebApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetTradeDto>>> GetAll()
         {
-            //var userId = User.Claims.FirstOrDefault(c => c.Type == "userIdentifier")?.Value;
             var userId = User.GetUserId();
-
             var response = await _holdingsServices.GetHoldings(userId);
             return Ok(response);
         }

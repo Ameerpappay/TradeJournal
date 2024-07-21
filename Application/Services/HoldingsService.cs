@@ -1,5 +1,6 @@
 ﻿using Application.Dtos.Holdings;
 using Application.Dtos.Portfolio;
+using Application.Dtos.StockPrice;
 using Application.Dtos.Trade;
 using Application.IServices;
 using Domain.Entities;
@@ -17,10 +18,12 @@ namespace Application.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IPortfolioServices _portfolioServices;
-        public HoldingsService(IUnitOfWork unitOfWork , IPortfolioServices portfolioServices)
+        private readonly IStockPriceManager _stockPriceManager;
+        public HoldingsService(IUnitOfWork unitOfWork , IPortfolioServices portfolioServices , IStockPriceManager stockPriceManager)
         {
             _unitOfWork = unitOfWork;
             _portfolioServices = portfolioServices;
+            _stockPriceManager = stockPriceManager;
         }
 
         public async Task<GetHoldingsDto> AddHoldings(AddHoldingsDto AddHoldingDto, string UserId)
@@ -104,9 +107,12 @@ namespace Application.Services
 
         public async Task<List<GetHoldingsDto>> GetHoldings(string userId)
         {
-            GetPortfolioDto selectedPortfolio = await _unitOfWork.PortfolioRepository.SelectedPortfolio(userId);
 
+            _stockPriceManager.ReadStockEntries();
+
+            GetPortfolioDto selectedPortfolio = await _unitOfWork.PortfolioRepository.SelectedPortfolio(userId);
             var result = await _unitOfWork.HoldingsRepository.Get(userId,selectedPortfolio.PortfolioId);
+ 
             var holding = result.Select(s => new GetHoldingsDto
             {
                 Identifier = s.Identifier.ToString(),
@@ -115,18 +121,24 @@ namespace Application.Services
                 Quantity = s.Quantity,
                 PortfolioId = s.PortfolioId,
                 TrailingStoploss = s.TrailingStoploss,
-                Trades = s.Trades.Select(x=>new GetTradeDto
+                Trades = s.Trades.Select(x => new GetTradeDto
                 {
                     EntryDate = x.EntryDate,
                     HoldingsId = s.Identifier.ToString(),
                     Description = x.Description,
                     Price = x.Price,
-               //     StrategyId = x.StrategyId,
-                    Quantity =x.Quantity,
+                    Quantity = x.Quantity,
                     StopLoss = x.StopLoss,
                     Id = x.Identifier.ToString()
                 }).ToList(),
             }).ToList();
+
+            //foreach (GetHoldingsDto hold in holding)              
+            //{
+            //    GetStockPriceDto getStockPriceDto = _stockPriceManager.GetStockPrice(hold.Code.ToString());
+            //    hold.CurrentPrice =decimal.Parse( getStockPriceDto.StockPrice.ToString());
+            //}
+
             return holding;
         }
 

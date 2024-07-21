@@ -33,5 +33,8 @@ namespace Application.Dtos.Trade
         public GetHoldingsDto holding { get; set; }        
 
         public List<GetImageDto> Images { get; set; }
+
+       // public decimal CurrentPrice { get; set; }
+
     }
 }

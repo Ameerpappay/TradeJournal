@@ -41,6 +41,7 @@ namespace WebApi
 
             //unitofwork
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<IGoogleSheetRepository, GoogleSheetRepository>();
 
             //Services
             builder.Services.AddApplicationServices();
@@ -49,9 +50,10 @@ namespace WebApi
             options.UseNpgsql(builder.Configuration.GetConnectionString("tradejournal")));
 
             builder.Services.AddCustomIdentity();
-            builder.Services.AddLogging(logging => {
+            builder.Services.AddLogging(logging =>
+            {
                 logging.ClearProviders();
-                });
+            });
 
 
             builder.Services.AddSingleton<SmtpClient>(provider =>
@@ -70,10 +72,10 @@ namespace WebApi
                  return smtpClient;
              });
 
-           // builder.Services.AddIdentity<User, IdentityRole>().AddDefaultTokenProviders();
+            // builder.Services.AddIdentity<User, IdentityRole>().AddDefaultTokenProviders();
 
             builder.Services.AddJwtAuthentication(builder.Configuration);
-            builder.Services.AddCors(options => { options.AddPolicy("myPolicy", policy => { policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader(); }); } );
+            builder.Services.AddCors(options => { options.AddPolicy("myPolicy", policy => { policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader(); }); });
             var app = builder.Build();
             app.UseCors("myPolicy");
 

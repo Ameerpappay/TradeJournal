@@ -10,6 +10,8 @@ namespace Application.IServices
     public  interface IStockPriceManager
     {
         public GetStockPriceDto GetStockPrice(string stockCode);
+        public void ReadStockEntries();
+
 
         public List<GetStockPriceDto> GetStocksPrice { get; set; }
     }

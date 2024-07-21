@@ -1,4 +1,6 @@
 ﻿using Application.IRepositories;
+using Application.IServices;
+using Application.Services;
 using Persistance.Repositories;
 
 namespace WebApi.Extensions
@@ -12,6 +14,7 @@ namespace WebApi.Extensions
             services.AddScoped<IImageRepository, ImageRepository>();
             services.AddScoped<IPortfolioRepository, PortfolioRepository>();
             services.AddScoped<IHoldingsRepository, HoldingsRepository>();
+            services.AddScoped<IGoogleSheetRepository, GoogleSheetRepository>(); 
         }
     }
 }

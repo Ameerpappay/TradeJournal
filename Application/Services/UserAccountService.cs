@@ -164,7 +164,7 @@ namespace Application.Services
             {
                 return false;
             }
-        }
+         }
 
         private async Task AddRoleToUser(string emailId, Domain.Enum.Role role)
         {

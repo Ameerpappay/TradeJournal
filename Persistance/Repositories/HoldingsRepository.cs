@@ -24,25 +24,19 @@ namespace Persistance.Repositories
 
         public override async Task<IEnumerable<Holding>> Get(string createdById)
         {
-            //GetPortfolioDto selectedPortfolio = await _unitOfWork.PortfolioRepository.SelectedPortfolio(userId);
-
             var result = await _dbContext.Holdings.Include(i => i.Trades).ToListAsync();
             return result;
         }
 
         public async Task<IEnumerable<Holding>> Get( string userId,int portfolioId)
         {
-            //GetPortfolioDto selectedPortfolio = await _unitOfWork.PortfolioRepository.SelectedPortfolio(userId);
-
             var result = await _dbContext.Holdings.Include(i => i.Trades).Where(h => h.PortfolioId == portfolioId).ToListAsync();
-
             return result;
-           // throw new NotImplementedException();
         }
 
         public async Task<Holding> GetExistingHolding(string code, int portfolioId)
         {
-            Holding availTrade =await this._dbContext.Holdings.FirstOrDefaultAsync(item => item.StockCode == code && item.Quantity > 0 && item.PortfolioId == portfolioId);
+            Holding availTrade =await  _dbContext.Holdings.FirstOrDefaultAsync(item => item.StockCode == code && item.Quantity > 0 && item.PortfolioId == portfolioId);
                 return availTrade;
         }
     }
