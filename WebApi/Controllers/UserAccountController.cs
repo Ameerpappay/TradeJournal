@@ -1,13 +1,7 @@
 ﻿using Application.Dtos;
 using Application.IServices;
-using Domain.Enum;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using NuGet.Common;
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace WebApi.Controllers
 {
@@ -18,7 +12,7 @@ namespace WebApi.Controllers
         private readonly IUserAccountService _userAccountService;
         public static IWebHostEnvironment _environment;
 
-        public UserAccountController(IUserAccountService userAccountService,IWebHostEnvironment webHostEnvironment )
+        public UserAccountController(IUserAccountService userAccountService, IWebHostEnvironment webHostEnvironment)
         {
             _userAccountService = userAccountService;
             _environment = webHostEnvironment;
@@ -27,7 +21,7 @@ namespace WebApi.Controllers
         [HttpPost("trader")]
         public async Task<IActionResult> Add([FromForm] CreateTraderDto createUserRequest)
         {
-            var response = await _userAccountService.Add(createUserRequest,_environment.ContentRootPath);
+            var response = await _userAccountService.Add(createUserRequest, _environment.ContentRootPath);
 
             if (response) return Ok("User Created Successfully");
 
@@ -51,13 +45,13 @@ namespace WebApi.Controllers
 
             if (response == null) return BadRequest("Invalid User");
 
-            return Ok(new{token = new JwtSecurityTokenHandler().WriteToken(response)});
+            return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(response) });
         }
 
         [HttpGet("verify-email")]
-        public async Task<IActionResult> VerifyEmail(string token,string userId)
+        public async Task<IActionResult> VerifyEmail(string token, string userId)
         {
-           await _userAccountService.VerifyEmailAsync(token, userId);
+            await _userAccountService.VerifyEmailAsync(token, userId);
             return Ok("Token verified");
         }
 
@@ -69,10 +63,10 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("reset-password")]
-        public async Task<IActionResult> ResetPassword(string token,string userId,string newPassword)
+        public async Task<IActionResult> ResetPassword(string token, string userId, string newPassword)
         {
-            var isValid= _userAccountService.ResetPassword(token, userId,newPassword);
+            var isValid = _userAccountService.ResetPassword(token, userId, newPassword);
             return Ok(isValid);
-        }  
+        }
     }
 }

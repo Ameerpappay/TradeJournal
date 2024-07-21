@@ -2,18 +2,14 @@
 using Application.Dtos.UserAccount;
 using Application.IServices;
 using Domain.Entities;
-using Domain.Enum;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Net.Mail;
 using System.Net;
+using System.Net.Mail;
 using System.Security.Claims;
 using System.Text;
-using Castle.Core.Smtp;
-using System.Security.Policy;
-using System.Diagnostics;
 
 namespace Application.Services
 {
@@ -36,10 +32,10 @@ namespace Application.Services
         {
             var user = await _userManager.FindByEmailAsync(loginRequest.UserName);
 
-            if (user == null ||! user.EmailConfirmed|| !(await _userManager.CheckPasswordAsync(user, loginRequest.Password)))
+            if (user == null || !user.EmailConfirmed || !(await _userManager.CheckPasswordAsync(user, loginRequest.Password)))
             {
                 throw new Exception("User not valid");
-            } 
+            }
 
             var userRoles = await _userManager.GetRolesAsync(user);
 
@@ -80,7 +76,7 @@ namespace Application.Services
 
         public async Task<bool> Add(CreateTraderDto createTraderRequest, string contentRoot)
         {
-            var isUserAdded = await AddUser(createTraderRequest,contentRoot);
+            var isUserAdded = await AddUser(createTraderRequest, contentRoot);
             if (!isUserAdded) return false;
             await AddRoleToUser(createTraderRequest.Email, Domain.Enum.Role.Trader);
             return isUserAdded;
@@ -119,10 +115,10 @@ namespace Application.Services
             {
                 return false;
             }
-           // return result.Succeeded;
+            // return result.Succeeded;
         }
 
-        private async Task<bool> AddUser(CreateTraderDto createTraderDto,string contentRoot)
+        private async Task<bool> AddUser(CreateTraderDto createTraderDto, string contentRoot)
         {
             var existingUser = await _userManager.FindByEmailAsync(createTraderDto.Email);
 
@@ -139,12 +135,12 @@ namespace Application.Services
 
             User user = new User()
             {
-                FirstName= createTraderDto.FirstName,
-                LastName= createTraderDto.LastName,
-                PhoneNumber=createTraderDto.Phone,
+                FirstName = createTraderDto.FirstName,
+                LastName = createTraderDto.LastName,
+                PhoneNumber = createTraderDto.Phone,
                 UserName = createTraderDto.Email,
                 Email = createTraderDto.Email,
-               Photo=imageUrl,
+                Photo = imageUrl,
                 SecurityStamp = Guid.NewGuid().ToString(),
             };
 
@@ -164,7 +160,7 @@ namespace Application.Services
             {
                 return false;
             }
-         }
+        }
 
         private async Task AddRoleToUser(string emailId, Domain.Enum.Role role)
         {
@@ -175,28 +171,28 @@ namespace Application.Services
 
         public async Task SendEmailAsync(string email, string subject, string body)
         {
-            var mailMessage = new  MailMessage(from: _configuration["SmtpSettings:Username"].ToString(),to:email)
+            var mailMessage = new MailMessage(from: _configuration["SmtpSettings:Username"].ToString(), to: email)
             {
                 IsBodyHtml = true,
                 Subject = subject,
-                Body = body             
+                Body = body
             };
-         
+
             await _smtpClient.SendMailAsync(mailMessage);
         }
 
-        public async Task VerifyEmailAsync(string token ,string userId)
+        public async Task VerifyEmailAsync(string token, string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
             {
                 throw new Exception("user not found");
             }
-       
-            var isTokenValid= await _userManager.VerifyUserTokenAsync(user,TokenOptions.DefaultProvider,UserManager<User>.ConfirmEmailTokenPurpose, token);
-            if(isTokenValid)
+
+            var isTokenValid = await _userManager.VerifyUserTokenAsync(user, TokenOptions.DefaultProvider, UserManager<User>.ConfirmEmailTokenPurpose, token);
+            if (isTokenValid)
             {
-               await  _userManager.ConfirmEmailAsync(user, token);
+                await _userManager.ConfirmEmailAsync(user, token);
             }
             else
             {
@@ -221,7 +217,7 @@ namespace Application.Services
             return true;
         }
 
-        public async Task<bool> ResetPassword(string token, string userId,string newPassword)
+        public async Task<bool> ResetPassword(string token, string userId, string newPassword)
         {
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
@@ -230,9 +226,9 @@ namespace Application.Services
             }
             await _userManager.ResetPasswordAsync(user, token, newPassword);
             return true;
-        }        
+        }
     }
-    }
+}
 
 
 

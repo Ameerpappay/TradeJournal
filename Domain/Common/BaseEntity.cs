@@ -1,12 +1,6 @@
 ﻿using Domain.Entities;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Domain.Common
 {
@@ -39,6 +33,6 @@ namespace Domain.Common
 
         public string? UpdatedByUserId { get; set; }
 
-        public virtual User UpdatedByUser { get; set;}
+        public virtual User UpdatedByUser { get; set; }
     }
 }

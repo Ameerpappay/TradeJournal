@@ -1,13 +1,7 @@
-﻿using Application.Dtos.Portfolio;
-using Application.IRepositories;
+﻿using Application.IRepositories;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Persistance.Context;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Persistance.Repositories
 {
@@ -24,20 +18,26 @@ namespace Persistance.Repositories
 
         public override async Task<IEnumerable<Holding>> Get(string createdById)
         {
+            //GetPortfolioDto selectedPortfolio = await _unitOfWork.PortfolioRepository.SelectedPortfolio(userId);
+
             var result = await _dbContext.Holdings.Include(i => i.Trades).ToListAsync();
             return result;
         }
 
-        public async Task<IEnumerable<Holding>> Get( string userId,int portfolioId)
+        public async Task<IEnumerable<Holding>> Get(string userId, int portfolioId)
         {
+            //GetPortfolioDto selectedPortfolio = await _unitOfWork.PortfolioRepository.SelectedPortfolio(userId);
+
             var result = await _dbContext.Holdings.Include(i => i.Trades).Where(h => h.PortfolioId == portfolioId).ToListAsync();
+
             return result;
+            // throw new NotImplementedException();
         }
 
         public async Task<Holding> GetExistingHolding(string code, int portfolioId)
         {
-            Holding availTrade =await  _dbContext.Holdings.FirstOrDefaultAsync(item => item.StockCode == code && item.Quantity > 0 && item.PortfolioId == portfolioId);
-                return availTrade;
+            Holding availTrade = await this._dbContext.Holdings.FirstOrDefaultAsync(item => item.StockCode == code && item.Quantity > 0 && item.PortfolioId == portfolioId);
+            return availTrade;
         }
     }
 }

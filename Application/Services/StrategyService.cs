@@ -1,13 +1,7 @@
 ﻿using Application.Dtos;
 using Application.Dtos.Strategy;
-using Application.IRepositories;
 using Application.IServices;
 using Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Services
 {
@@ -20,7 +14,7 @@ namespace Application.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<GetStrategyDto> AddStrategy(AddStrategyDto strategy,string addedBy)
+        public async Task<GetStrategyDto> AddStrategy(AddStrategyDto strategy, string addedBy)
         {
             var newStrategy = new Strategy()
             {
@@ -42,7 +36,7 @@ namespace Application.Services
 
         public async Task DeleteStrategyById(string strategyId, string userId)
         {
-            await _unitOfWork.StrategyRepository.Delete(strategyId,userId);
+            await _unitOfWork.StrategyRepository.Delete(strategyId, userId);
             await _unitOfWork.SaveChangesAsync();
         }
 
@@ -61,7 +55,7 @@ namespace Application.Services
 
         public async Task<GetStrategyDto> GetStrategyById(string strategyId, string userId)
         {
-            var result = await _unitOfWork.StrategyRepository.Get(strategyId,userId);
+            var result = await _unitOfWork.StrategyRepository.Get(strategyId, userId);
             var strategy = new GetStrategyDto();
             strategy.Id = result.Identifier.ToString();
             strategy.Name = result.Name;
@@ -83,6 +77,6 @@ namespace Application.Services
         {
             var result = await _unitOfWork.StrategyRepository.Get(identifier, userId);
             return result.Id;
-        } 
+        }
     }
 }

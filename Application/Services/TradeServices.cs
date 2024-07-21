@@ -1,5 +1,4 @@
-﻿using Application.Dtos;
-using Application.Dtos.Holdings;
+﻿using Application.Dtos.Holdings;
 using Application.Dtos.Image;
 using Application.Dtos.Portfolio;
 using Application.Dtos.Trade;
@@ -16,21 +15,19 @@ namespace Application.Services
         private IHoldingsServices _holdingsService;
         IPortfolioServices _portfolioService;
         IStrategyService _strategyService;
-        IStockPriceManager _stockPriceManager;
 
-        public TradeServices(IUnitOfWork unitOfWork, IImageService imageService, IStrategyService strategyService, IHoldingsServices holdingsServices, IPortfolioServices portfolioService, IStockPriceManager stockPriceManager)
+        public TradeServices(IUnitOfWork unitOfWork, IImageService imageService, IStrategyService strategyService, IHoldingsServices holdingsServices, IPortfolioServices portfolioService)
         {
             _unitOfWork = unitOfWork;
             _imageService = imageService;
             _holdingsService = holdingsServices;
             _portfolioService = portfolioService;
             _strategyService = strategyService;
-            _stockPriceManager = stockPriceManager;
         }
         public async Task<GetTradeDto> AddTrade(AddTradeDto trade, string contentRoot, string userId)
         {
             GetPortfolioDto selectedPortfolio = await _unitOfWork.PortfolioRepository.SelectedPortfolio(userId);
-            
+
             AddHoldingsDto addHoldingsDto = new AddHoldingsDto
             {
                 Code = trade.Code,
@@ -62,7 +59,7 @@ namespace Application.Services
 
             TradeImage tradeImage = new TradeImage();
 
-            if(trade.Images != null)
+            if (trade.Images != null)
             {
                 foreach (var image in trade.Images)
                 {
@@ -73,7 +70,7 @@ namespace Application.Services
                     newTrade.Images = new List<TradeImage> { tradeImage };
                 }
             }
-          
+
 
             var addedTrade = await _unitOfWork.TradeRepository.Add(newTrade);
             await _unitOfWork.SaveChangesAsync();
@@ -145,11 +142,9 @@ namespace Application.Services
 
         public async Task<List<GetTradeDto>> GetTrades(string userId)
         {
-
-            _stockPriceManager.ReadStockEntries();
             GetPortfolioDto selectedPortfolio = await _unitOfWork.PortfolioRepository.SelectedPortfolio(userId);
 
-            var result = await _unitOfWork.TradeRepository.Get(userId,selectedPortfolio.PortfolioId);
+            var result = await _unitOfWork.TradeRepository.Get(userId, selectedPortfolio.PortfolioId);
             var trades = result.Select(t => new GetTradeDto
             {
                 Id = t.Identifier.ToString(),
@@ -161,7 +156,7 @@ namespace Application.Services
                 Description = t.Description,
                 Code = t.Holdings.StockCode,
                 StrategyId = t.Strategy.Identifier.ToString(),
-              Action=t.Action,
+                Action = t.Action,
             }).ToList();
 
             return trades;
@@ -169,7 +164,7 @@ namespace Application.Services
 
         public async Task<List<GetTradeDto>> GetTradesByHolidingID(string userId, string holdingId)
         {
-            var result = await _unitOfWork.TradeRepository. GetTradesByHolidingID(userId, holdingId);
+            var result = await _unitOfWork.TradeRepository.GetTradesByHolidingID(userId, holdingId);
             var trades = result.Select(t => new GetTradeDto
             {
                 HoldingsId = t.HoldingsId,
@@ -186,13 +181,13 @@ namespace Application.Services
         public async Task UpdateTrade(string TradeId, UpdateTradeDto trade, string userId)
         {
             var resultTrade = await _unitOfWork.TradeRepository.Get(TradeId, userId);
-            var resultHolding=await _unitOfWork.HoldingsRepository.Get(trade.HoldingsId,userId);
+            var resultHolding = await _unitOfWork.HoldingsRepository.Get(trade.HoldingsId, userId);
 
             int strategyId = await this._strategyService.GetStrategyId(trade.StrategyId, userId);
 
-            resultHolding.BuyPrice = ((resultHolding.BuyPrice *resultHolding.Quantity)-(resultTrade.Price*resultTrade.Quantity)+(trade.Quantity*trade.Price))
-                                                        /( resultHolding.Quantity - resultTrade.Quantity + trade.Quantity);
-            resultHolding.Quantity = resultHolding.Quantity -resultTrade.Quantity+ trade.Quantity;
+            resultHolding.BuyPrice = ((resultHolding.BuyPrice * resultHolding.Quantity) - (resultTrade.Price * resultTrade.Quantity) + (trade.Quantity * trade.Price))
+                                                        / (resultHolding.Quantity - resultTrade.Quantity + trade.Quantity);
+            resultHolding.Quantity = resultHolding.Quantity - resultTrade.Quantity + trade.Quantity;
             resultHolding.TrailingStoploss = trade.StopLoss;
             _unitOfWork.HoldingsRepository.Update(resultHolding);
 

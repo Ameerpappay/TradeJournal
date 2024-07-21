@@ -1,11 +1,6 @@
 ﻿using Application.IRepositories;
 using Domain.Entities;
 using Persistance.Context;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Persistance.Repositories
 {
@@ -14,7 +9,7 @@ namespace Persistance.Repositories
         private TradeJournalDataContext _dbContext;
         public StrategyRepository(TradeJournalDataContext context) : base(context)
         {
-            _dbContext = context;   
+            _dbContext = context;
         }
     }
 }

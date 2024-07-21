@@ -1,6 +1,4 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Newtonsoft.Json;
-using System.Drawing.Text;
+﻿using Newtonsoft.Json;
 using System.Net;
 
 namespace WebApi.ExceptionHandler
@@ -26,7 +24,7 @@ namespace WebApi.ExceptionHandler
                 HandleExceptionAsync(context, ex);
             }
         }
-        private Task HandleExceptionAsync(HttpContext context, Exception exception)        
+        private Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             var code = HttpStatusCode.InternalServerError;
             var result = JsonConvert.SerializeObject(new { Error = "Something wrong" });
@@ -47,7 +45,7 @@ namespace WebApi.ExceptionHandler
 
                 if (File.Exists(fullPath))
                 {
-                    using (var fileStream = new StreamWriter(fullPath, true)) 
+                    using (var fileStream = new StreamWriter(fullPath, true))
                     {
                         fileStream.WriteLine(logMessage);
                     }

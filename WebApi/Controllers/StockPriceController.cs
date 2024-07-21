@@ -1,5 +1,4 @@
 ﻿using Application.IServices;
-using Google.Apis.Sheets.v4.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
@@ -8,17 +7,17 @@ namespace WebApi.Controllers
     [ApiController]
     //[Authorize(Roles = "Admin,Trader")]
 
-    public class StockPriceController: ControllerBase
+    public class StockPriceController : ControllerBase
     {
-        private IStockPriceManager _StockPriceManager;
-        public StockPriceController( IStockPriceManager stockPriceManager)
+        private IStockDetailsService _StockPriceManager;
+        public StockPriceController(IStockDetailsService stockPriceManager)
         {
             _StockPriceManager = stockPriceManager;
         }
         [HttpGet]
         public async Task<ActionResult> GetStockPrice(string code)
         {
-            object response =  _StockPriceManager.GetStockPrice(code);
+            var response = _StockPriceManager.GetStockDetails(code);
             return Ok(response);
         }
     }

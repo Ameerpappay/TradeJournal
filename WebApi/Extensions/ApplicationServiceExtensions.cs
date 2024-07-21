@@ -1,7 +1,5 @@
 ﻿using Application.IServices;
 using Application.Services;
-using Domain.Entities;
-using Microsoft.AspNetCore.Identity;
 
 namespace WebApi.Extensions
 {
@@ -15,7 +13,7 @@ namespace WebApi.Extensions
             services.AddScoped<IUserAccountService, UserAccountService>();
             services.AddScoped<IPortfolioServices, PortfolioService>();
             services.AddScoped<IHoldingsServices, HoldingsService>();
-            services.AddScoped<IStockPriceManager, StockPriceManager>();
+            services.AddScoped<IStockDetailsService,StockDetailsService>();
         }
     }
 }

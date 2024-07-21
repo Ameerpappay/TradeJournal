@@ -1,17 +1,12 @@
 ﻿using Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.IRepositories
 {
-    public interface IHoldingsRepository:IGenericRepository<Holding>
+    public interface IHoldingsRepository : IGenericRepository<Holding>
     {
-        public Task< Holding> GetExistingHolding(string code, int portfolioId);
+        public Task<Holding> GetExistingHolding(string code, int portfolioId);
 
-        public Task<IEnumerable<Holding>> Get( string userId,int portfolioId);
+        public Task<IEnumerable<Holding>> Get(string userId, int portfolioId);
 
     }
 }

@@ -1,10 +1,5 @@
 ﻿using Application.Dtos;
 using Application.Dtos.Strategy;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.IServices
 {
@@ -12,7 +7,7 @@ namespace Application.IServices
     {
         Task<List<GetStrategyDto>> GetStrategies(string userId);
 
-        Task<GetStrategyDto> AddStrategy(AddStrategyDto strategy,string addedBy);
+        Task<GetStrategyDto> AddStrategy(AddStrategyDto strategy, string addedBy);
 
         Task<GetStrategyDto> GetStrategyById(string strategyId, string userId);
 

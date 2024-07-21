@@ -1,11 +1,7 @@
-﻿using Application.Dtos.Strategy;
-using Application.Dtos;
+﻿using Application.Dtos.Portfolio;
 using Application.IServices;
-using Application.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Application.Dtos.Portfolio;
-using Application.Dtos.Trade;
 using WebApi.Extensions;
 
 namespace WebApi.Controllers
@@ -19,7 +15,7 @@ namespace WebApi.Controllers
 
         public PortfolioController(IPortfolioServices portfolioServices)
         {
-            _portfolioServices = portfolioServices;            
+            _portfolioServices = portfolioServices;
         }
 
         [HttpGet]
@@ -51,27 +47,27 @@ namespace WebApi.Controllers
         {
             var userId = User.GetUserId();
             return Ok(await _portfolioServices.GetPortfolioById(id, userId));
-        }     
+        }
 
         [HttpPost]
         public async Task<ActionResult<GetPortfolioDto>> Add(AddPortfolioDto requestBody)
         {
             var userId = User.GetUserId();
-            return Ok(await _portfolioServices.AddPortfolio(requestBody,userId));
+            return Ok(await _portfolioServices.AddPortfolio(requestBody, userId));
         }
 
         [HttpPut("{id}")]
         public async Task Update(string id, [FromBody] UpdatePortfolioDto requestBody)
         {
             var userId = User.GetUserId();
-            await _portfolioServices.UpdatePortfolio(id, requestBody,userId);
+            await _portfolioServices.UpdatePortfolio(id, requestBody, userId);
         }
 
         [HttpDelete("{id}")]
         public async Task Delete(string id)
         {
             var userId = User.GetUserId();
-            await _portfolioServices.DeletePortfolioById(id,userId);
+            await _portfolioServices.DeletePortfolioById(id, userId);
         }
     }
 }

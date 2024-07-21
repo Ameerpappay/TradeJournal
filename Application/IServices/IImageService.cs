@@ -1,10 +1,5 @@
 ﻿using Application.Dtos.Image;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.IServices
 {
@@ -12,7 +7,7 @@ namespace Application.IServices
     {
         Task<List<GetImageDto>> GetTradeImage(string userId);
 
-        Task<List<GetImageDto>> GetTradeImageByTradeId(string userId,string tradeId); 
+        Task<List<GetImageDto>> GetTradeImageByTradeId(string userId, string tradeId);
 
         Task AddImage(AddImageDto image);
 

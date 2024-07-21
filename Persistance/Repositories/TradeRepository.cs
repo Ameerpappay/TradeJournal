@@ -3,16 +3,11 @@ using Application.IRepositories;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Persistance.Context;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Persistance.Repositories
 {
-     public class TradeRepository : GenericRepository<Trade>,ITradeRepository
-     {
+    public class TradeRepository : GenericRepository<Trade>, ITradeRepository
+    {
         private TradeJournalDataContext _dbContext;
         private DbSet<Trade> _dbSet;
         public TradeRepository(TradeJournalDataContext context) : base(context)
@@ -23,14 +18,14 @@ namespace Persistance.Repositories
 
         public async override Task<Trade> Get(string id, string createdById)
         {
-            var result = await _dbSet.Include(i => i.Holdings).Include(s => s.Strategy).Include(i=>i.Images).FirstOrDefaultAsync(x => x.Identifier.ToString() == id && !x.IsDeleted);
+            var result = await _dbSet.Include(i => i.Holdings).Include(s => s.Strategy).Include(i => i.Images).FirstOrDefaultAsync(x => x.Identifier.ToString() == id && !x.IsDeleted);
 
             return result;
         }
 
-        public  override async Task<IEnumerable<Trade>> Get(string createdById)
+        public override async Task<IEnumerable<Trade>> Get(string createdById)
         {
-            var result = await _dbSet.Include(h=>h.Holdings).Include(s=>s.Strategy).Include(i=>i.Images).Where(x=>!x.IsDeleted && x.CreatedByUserId==createdById).ToListAsync();
+            var result = await _dbSet.Include(h => h.Holdings).Include(s => s.Strategy).Include(i => i.Images).Where(x => !x.IsDeleted && x.CreatedByUserId == createdById).ToListAsync();
 
             return result;
         }
@@ -42,8 +37,8 @@ namespace Persistance.Repositories
 
         async Task<IEnumerable<Trade>> ITradeRepository.Get(string createdById, int portfolioId)
         {
-            var result = await _dbSet.Include(h => h.Holdings).Include(s => s.Strategy).Include(i => i.Images).Where(x => !x.IsDeleted && x.CreatedByUserId == createdById && x.Holdings.PortfolioId== portfolioId).ToListAsync();
+            var result = await _dbSet.Include(h => h.Holdings).Include(s => s.Strategy).Include(i => i.Images).Where(x => !x.IsDeleted && x.CreatedByUserId == createdById && x.Holdings.PortfolioId == portfolioId).ToListAsync();
             return result;
-        }         
+        }
     }
 }

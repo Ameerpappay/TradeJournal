@@ -1,7 +1,4 @@
-﻿using Application.Dtos;
-using Application.IServices;
-using Domain.Entities;
-using Domain.Enum;
+﻿using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Persistance.Context;
 
@@ -27,12 +24,12 @@ namespace WebApi.Extensions
 
             var adminEmail = "admin@admin.com";
 
-            if (!context.Users.Any(item => item.Email ==adminEmail ))
+            if (!context.Users.Any(item => item.Email == adminEmail))
             {
                 var userManager = services.GetRequiredService<UserManager<User>>();
                 var result = await userManager.CreateAsync(new User
                 {
-                    UserName=adminEmail,
+                    UserName = adminEmail,
                     Email = adminEmail,
                     EmailConfirmed = true,
                 }, "Admin@123"

@@ -7,7 +7,7 @@ namespace WebApi.Controllers
 {
     [Route("api/Holding")]
     [ApiController]
-    public class HoldingController:ControllerBase
+    public class HoldingController : ControllerBase
     {
         IHoldingsServices _holdingsServices;
         public HoldingController(IHoldingsServices holdingsServices)
@@ -18,7 +18,9 @@ namespace WebApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetTradeDto>>> GetAll()
         {
+            //var userId = User.Claims.FirstOrDefault(c => c.Type == "userIdentifier")?.Value;
             var userId = User.GetUserId();
+
             var response = await _holdingsServices.GetHoldings(userId);
             return Ok(response);
         }

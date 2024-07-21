@@ -1,23 +1,13 @@
 using Application;
 using Application.IRepositories;
-using Application.IServices;
-using Application.Services;
-using Domain.Entities;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 using Persistance.Context;
+using Persistance.Helpers;
 using Persistance.Repositories;
 using Persistance.UnitOfWork;
-using System.Net.Mail;
 using System.Net;
-using System.Text;
+using System.Net.Mail;
 using WebApi.BuilderServices;
-using WebApi.Error;
 using WebApi.ExceptionHandler;
 using WebApi.Extensions;
 
@@ -41,7 +31,9 @@ namespace WebApi
 
             //unitofwork
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-            builder.Services.AddScoped<IGoogleSheetRepository, GoogleSheetRepository>();
+
+            //google sheet auth
+            builder.Services.AddSingleton<GoogleSheetAuth>();
 
             //Services
             builder.Services.AddApplicationServices();

@@ -1,10 +1,5 @@
 ﻿using Application.Dtos;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.IServices
 {
@@ -17,6 +12,6 @@ namespace Application.IServices
         Task<JwtSecurityToken> Login(LoginRequestDto loginRequest);
         Task VerifyEmailAsync(string token, string userId);
         Task<bool> ForgotPassword(string email);
-        Task<bool> ResetPassword(string token,string userId,string newPassword);
+        Task<bool> ResetPassword(string token, string userId, string newPassword);
     }
 }

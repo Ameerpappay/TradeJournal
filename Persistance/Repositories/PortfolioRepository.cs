@@ -3,11 +3,6 @@ using Application.IRepositories;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Persistance.Context;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Persistance.Repositories
 {
@@ -45,6 +40,6 @@ namespace Persistance.Repositories
                 portfolio.IsSelected = false;
             }
             _dbContext.SaveChanges();
-        }       
+        }
     }
 }

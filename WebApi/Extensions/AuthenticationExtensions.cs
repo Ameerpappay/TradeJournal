@@ -5,7 +5,7 @@ namespace WebApi.Extensions
 {
     public static class AuthenticationExtensions
     {
-        public static void AddJwtAuthentication(this IServiceCollection services,IConfiguration configuration)
+        public static void AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddAuthentication(options =>
             {

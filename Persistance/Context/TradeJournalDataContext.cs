@@ -1,10 +1,8 @@
 ﻿using Domain.Common;
 using Domain.Entities;
-using Domain.Enum;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics.Metrics;
 
 namespace Persistance.Context
 {

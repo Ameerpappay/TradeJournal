@@ -1,5 +1,4 @@
-﻿using Domain.Entities;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 
 namespace WebApi.Extensions
 {

@@ -1,21 +1,16 @@
 ﻿using Application;
 using Application.IRepositories;
-using Application.IServices;
 using Microsoft.EntityFrameworkCore.Storage;
 using Persistance.Context;
-using Persistance.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Transactions;
+
 
 namespace Persistance.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {
         private readonly TradeJournalDataContext _dbContext;
+
+        private IDbContextTransaction _transaction;
 
         public IStrategyRepository StrategyRepository { get; set; }
 
@@ -37,9 +32,52 @@ namespace Persistance.UnitOfWork
             HoldingsRepository = holdingsRepository;
         }
 
-        public Task SaveChangesAsync()
+        public async Task BeginTransactionAsync()
         {
-            return _dbContext.SaveChangesAsync();
+            _transaction = await _dbContext.Database.BeginTransactionAsync();
+        }
+
+        public async Task CommitAsync()
+        {
+            try
+            {
+                await _dbContext.SaveChangesAsync();
+                if (_transaction != null)
+                {
+                    await _transaction.CommitAsync();
+                }
+            }
+            catch
+            {
+                if (_transaction != null)
+                {
+                    await _transaction.RollbackAsync();
+                }
+                throw;
+            }
+            finally
+            {
+                if (_transaction != null)
+                {
+                    await _transaction.DisposeAsync();
+                    _transaction = null;
+                }
+            }
+        }
+
+        public async Task RollbackAsync()
+        {
+            if (_transaction != null)
+            {
+                await _transaction.RollbackAsync();
+                await _transaction.DisposeAsync();
+                _transaction = null;
+            }
+        }
+
+        public async Task<int> SaveChangesAsync()
+        {
+            return await _dbContext.SaveChangesAsync();
         }
 
         public void Dispose()

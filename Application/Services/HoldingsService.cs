@@ -1,15 +1,8 @@
 ﻿using Application.Dtos.Holdings;
 using Application.Dtos.Portfolio;
-using Application.Dtos.StockPrice;
 using Application.Dtos.Trade;
 using Application.IServices;
 using Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 
 namespace Application.Services
@@ -18,19 +11,17 @@ namespace Application.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IPortfolioServices _portfolioServices;
-        private readonly IStockPriceManager _stockPriceManager;
-        public HoldingsService(IUnitOfWork unitOfWork , IPortfolioServices portfolioServices , IStockPriceManager stockPriceManager)
+        public HoldingsService(IUnitOfWork unitOfWork, IPortfolioServices portfolioServices)
         {
             _unitOfWork = unitOfWork;
             _portfolioServices = portfolioServices;
-            _stockPriceManager = stockPriceManager;
         }
 
         public async Task<GetHoldingsDto> AddHoldings(AddHoldingsDto AddHoldingDto, string UserId)
         {
-            Holding availTrade = await _unitOfWork.HoldingsRepository.GetExistingHolding(AddHoldingDto.Code,AddHoldingDto.PortfolioId);
+            Holding availTrade = await _unitOfWork.HoldingsRepository.GetExistingHolding(AddHoldingDto.Code, AddHoldingDto.PortfolioId);
 
-            if (availTrade == null )
+            if (availTrade == null)
             {
                 var newHoldings = new Holding()
                 {
@@ -60,15 +51,15 @@ namespace Application.Services
             {
                 var result = await _unitOfWork.HoldingsRepository.Get(availTrade.Identifier.ToString(), UserId);
                 result.Quantity += AddHoldingDto.Quantity;
-                result.BuyPrice =(result.BuyPrice+ AddHoldingDto.BuyPrice)/2;
-       
-                var addedHoldings =  _unitOfWork.HoldingsRepository.Update(result);
+                result.BuyPrice = (result.BuyPrice + AddHoldingDto.BuyPrice) / 2;
+
+                var addedHoldings = _unitOfWork.HoldingsRepository.Update(result);
 
                 await _unitOfWork.SaveChangesAsync();
 
                 return new GetHoldingsDto()
                 {
-                    Id=addedHoldings.Id,
+                    Id = addedHoldings.Id,
                     Identifier = addedHoldings.Identifier.ToString(),
                     Code = addedHoldings.StockCode,
                     Quantity = addedHoldings.Quantity,
@@ -76,14 +67,14 @@ namespace Application.Services
                     TrailingStoploss = addedHoldings.TrailingStoploss,
                     PortfolioId = addedHoldings.PortfolioId,
                 };
-            }                 
+            }
         }
 
         public async Task DeleteHoldingsById(string holdingId, string userId)
         {
             await _unitOfWork.HoldingsRepository.Delete(holdingId, userId);
             await _unitOfWork.SaveChangesAsync();
-        }            
+        }
 
         public Holding GetExistingHolding(string code, int portfolioId)
         {
@@ -99,20 +90,17 @@ namespace Application.Services
             holding.Identifier = result.Identifier.ToString();
             holding.Code = result.StockCode;
             holding.Quantity = result.Quantity;
-            holding.TrailingStoploss= result.TrailingStoploss;
-            holding.BuyPrice= result.BuyPrice;
+            holding.TrailingStoploss = result.TrailingStoploss;
+            holding.BuyPrice = result.BuyPrice;
             holding.PortfolioId = result.PortfolioId;
             return holding;
         }
 
         public async Task<List<GetHoldingsDto>> GetHoldings(string userId)
         {
-
-            _stockPriceManager.ReadStockEntries();
-
             GetPortfolioDto selectedPortfolio = await _unitOfWork.PortfolioRepository.SelectedPortfolio(userId);
-            var result = await _unitOfWork.HoldingsRepository.Get(userId,selectedPortfolio.PortfolioId);
- 
+
+            var result = await _unitOfWork.HoldingsRepository.Get(userId, selectedPortfolio.PortfolioId);
             var holding = result.Select(s => new GetHoldingsDto
             {
                 Identifier = s.Identifier.ToString(),
@@ -127,18 +115,12 @@ namespace Application.Services
                     HoldingsId = s.Identifier.ToString(),
                     Description = x.Description,
                     Price = x.Price,
+                    //     StrategyId = x.StrategyId,
                     Quantity = x.Quantity,
                     StopLoss = x.StopLoss,
                     Id = x.Identifier.ToString()
                 }).ToList(),
             }).ToList();
-
-            //foreach (GetHoldingsDto hold in holding)              
-            //{
-            //    GetStockPriceDto getStockPriceDto = _stockPriceManager.GetStockPrice(hold.Code.ToString());
-            //    hold.CurrentPrice =decimal.Parse( getStockPriceDto.StockPrice.ToString());
-            //}
-
             return holding;
         }
 
@@ -148,7 +130,7 @@ namespace Application.Services
             result.StockCode = updateHoldingsDto.Code;
             result.BuyPrice = updateHoldingsDto.BuyPrice;
             result.Quantity = updateHoldingsDto.Quantity;
-            result.PortfolioId= updateHoldingsDto.PortfolioId;           
+            result.PortfolioId = updateHoldingsDto.PortfolioId;
 
             _unitOfWork.HoldingsRepository.Update(result);
             await _unitOfWork.SaveChangesAsync();
