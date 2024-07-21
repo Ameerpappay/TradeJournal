@@ -9,15 +9,16 @@ namespace WebApi.Controllers
 
     public class StockPriceController : ControllerBase
     {
-        private IStockDetailsService _StockPriceManager;
-        public StockPriceController(IStockDetailsService stockPriceManager)
+        private IStockDetailsService _stockDetailsService;
+        public StockPriceController(IStockDetailsService stockDetailsService)
         {
-            _StockPriceManager = stockPriceManager;
+            _stockDetailsService = stockDetailsService;
         }
+
         [HttpGet]
         public async Task<ActionResult> GetStockPrice(string code)
         {
-            var response = _StockPriceManager.GetStockDetails(code);
+            var response = await _stockDetailsService.GetStockDetails(code);
             return Ok(response);
         }
     }
