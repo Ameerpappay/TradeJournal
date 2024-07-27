@@ -101,6 +101,9 @@ namespace Persistance.Migrations
                     b.Property<Guid>("Identifier")
                         .HasColumnType("uuid");
 
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("boolean");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
@@ -120,6 +123,9 @@ namespace Persistance.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedByUserId");
+
+                    b.HasIndex("Identifier")
+                        .IsUnique();
 
                     b.HasIndex("UpdatedByUserId");
 
@@ -168,6 +174,9 @@ namespace Persistance.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedByUserId");
+
+                    b.HasIndex("Identifier")
+                        .IsUnique();
 
                     b.HasIndex("UpdatedByUserId");
 
@@ -510,7 +519,6 @@ namespace Persistance.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Photo")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasDiscriminator().HasValue("User");

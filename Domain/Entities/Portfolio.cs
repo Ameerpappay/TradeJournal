@@ -14,6 +14,7 @@ namespace Domain.Entities
 
         public List<Holding>? Holdings { get; set; }
 
+        public bool IsDefault { get; set; } = false;
         public bool IsSelected { get; set; }
 
     }

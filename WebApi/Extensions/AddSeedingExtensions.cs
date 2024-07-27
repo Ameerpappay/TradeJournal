@@ -1,6 +1,9 @@
-﻿using Domain.Entities;
+﻿using Application;
+using Application.Dtos.Portfolio;
+using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Persistance.Context;
+using Persistance.UnitOfWork;
 
 namespace WebApi.Extensions
 {
@@ -14,6 +17,8 @@ namespace WebApi.Extensions
             if (!context.Roles.Any(item => item.Name == "Admin"))
             {
                 context.Roles.Add(new IdentityRole { Name = "Admin", ConcurrencyStamp = Guid.NewGuid().ToString(), NormalizedName = "ADMIN" });
+               
+
                 await context.SaveChangesAsync();
             }
             if (!context.Roles.Any(item => item.Name == "Trader"))
@@ -37,7 +42,18 @@ namespace WebApi.Extensions
 
                 var addedUser = await userManager.FindByEmailAsync(adminEmail);
 
-                await userManager.AddToRoleAsync(addedUser, Domain.Enum.Role.Admin.ToString());
+                context.Portfolios.Add(new Portfolio
+                {
+                    Name = "Default Portfolio",
+                    Description = "This is by default",
+                    IsSelected = true,
+                    IsDefault = true,
+                    CreatedByUserId = addedUser.Id,
+                    CreatedDate = DateTime.UtcNow
+                });
+                
+                await userManager.AddToRoleAsync(addedUser, Domain.Enum.Role.Admin.ToString());           
+                await context.SaveChangesAsync();          
             }
         }
     }

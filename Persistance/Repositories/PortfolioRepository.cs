@@ -27,6 +27,19 @@ namespace Persistance.Repositories
             };
         }
 
+        public void SetDefaultPortfolio(string userId)
+        {
+            _dbContext.Portfolios.Add(new Portfolio
+            {
+                Name = "Default Portfolio",
+                Description = "This is by default",
+                IsSelected = true,
+                IsDefault = true,
+                CreatedByUserId = userId,
+                CreatedDate = DateTime.UtcNow
+            });
+        }
+
         public void SetSelectedPortfolio(string userId, string portfolioId)
         {
             var portfolioToUpdate = _dbContext.Set<Portfolio>().FirstOrDefault(p => p.Identifier.ToString() == portfolioId);

@@ -6,6 +6,8 @@ namespace Application.IServices
     {
         Task<GetStockDetailsDto> GetStockDetails(string stockCode);
 
-        Task<List<GetStockDetailsDto>> GetStocksDetails(List<string> stockCodes);
+        Task<bool> GetStocksDetailsIntoCache();
+        Task<List<GetStockDetailsDto>> GetStocksDetailsFromCache();
+
     }
 }

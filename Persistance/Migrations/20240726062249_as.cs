@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
@@ -6,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Persistance.Migrations
 {
     /// <inheritdoc />
-    public partial class User : Migration
+    public partial class @as : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -168,6 +169,7 @@ namespace Persistance.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
+                    IsDefault = table.Column<bool>(type: "boolean", nullable: false),
                     IsSelected = table.Column<bool>(type: "boolean", nullable: false),
                     Identifier = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -414,6 +416,12 @@ namespace Persistance.Migrations
                 column: "CreatedByUserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Portfolios_Identifier",
+                table: "Portfolios",
+                column: "Identifier",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Portfolios_Name_IsDeleted_CreatedByUserId",
                 table: "Portfolios",
                 columns: new[] { "Name", "IsDeleted", "CreatedByUserId" },
@@ -429,6 +437,12 @@ namespace Persistance.Migrations
                 name: "IX_Strategies_CreatedByUserId",
                 table: "Strategies",
                 column: "CreatedByUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Strategies_Identifier",
+                table: "Strategies",
+                column: "Identifier",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Strategies_Name_IsDeleted_CreatedByUserId",

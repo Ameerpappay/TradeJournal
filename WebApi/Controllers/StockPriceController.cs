@@ -15,10 +15,20 @@ namespace WebApi.Controllers
             _stockDetailsService = stockDetailsService;
         }
 
-        [HttpGet]
+        [HttpGet("Code")]
         public async Task<ActionResult> GetStockPrice(string code)
         {
             var response = await _stockDetailsService.GetStockDetails(code);
+
+
+
+            return Ok(response);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> GetStockPriceList()
+        {
+            var response = await _stockDetailsService.GetStocksDetailsFromCache();
             return Ok(response);
         }
     }

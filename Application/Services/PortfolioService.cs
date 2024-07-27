@@ -38,10 +38,19 @@ namespace Application.Services
             };
         }
 
+        public async Task DefaultPortfolioByUserId(string userId)
+        {
+            _unitOfWork.PortfolioRepository.SetDefaultPortfolio(userId);
+        }
+
         public async Task DeletePortfolioById(string portfolioId, string userId)
         {
-            await _unitOfWork.PortfolioRepository.Delete(portfolioId, userId);
-            await _unitOfWork.SaveChangesAsync();
+            var result = await _unitOfWork.PortfolioRepository.Get(portfolioId, userId);
+            if (!result.IsDefault)
+            {
+                await _unitOfWork.PortfolioRepository.Delete(portfolioId, userId);
+                await _unitOfWork.SaveChangesAsync();
+            }
         }
 
         public async Task<List<GetPortfolioDto>> GetPortfolio(string userId)

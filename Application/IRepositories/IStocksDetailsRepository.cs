@@ -6,7 +6,7 @@ namespace Application.IRepositories
     {
         Task<GetStockDetailsDto> GetStockDetails(string code);
 
-        Task<List<GetStockDetailsDto>> GetStocksDetails(List<string> stockCodes);
+        Task<List<GetStockDetailsDto>> GetStocksDetails();
 
     }
 }

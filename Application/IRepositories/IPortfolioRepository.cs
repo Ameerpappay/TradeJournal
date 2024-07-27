@@ -9,5 +9,7 @@ namespace Application.IRepositories
 
         public void SetSelectedPortfolio(string userId, string portfolioId);
 
+        public void SetDefaultPortfolio(string userId);
+
     }
 }

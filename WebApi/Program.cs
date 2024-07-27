@@ -64,6 +64,8 @@ namespace WebApi
                  return smtpClient;
              });
 
+
+            builder.Services.AddMemoryCache();
             // builder.Services.AddIdentity<User, IdentityRole>().AddDefaultTokenProviders();
 
             builder.Services.AddJwtAuthentication(builder.Configuration);

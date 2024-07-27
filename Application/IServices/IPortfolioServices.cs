@@ -19,5 +19,7 @@ namespace Application.IServices
         Task UpdatePortfolio(string Id, UpdatePortfolioDto updatePortfolioDto, string userId);
 
         Task DeletePortfolioById(string portfolioId, string userId);
+
+        Task DefaultPortfolioByUserId(string userId);
     }
 }
