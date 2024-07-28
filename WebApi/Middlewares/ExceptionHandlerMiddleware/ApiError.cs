@@ -1,4 +1,4 @@
-﻿namespace WebApi.Error
+﻿namespace WebApi.Middlewares.ExceptionHandlerMiddleware
 {
     public class ApiError
     {

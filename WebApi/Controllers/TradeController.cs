@@ -5,7 +5,7 @@ using WebApi.Extensions;
 
 namespace WebApi.Controllers
 {
-    [Route("api/Trade")]
+    [Route("api/trade-management")]
     [ApiController]
     public class TradeController : ControllerBase
     {
@@ -20,7 +20,7 @@ namespace WebApi.Controllers
             _environment = environment;
         }
 
-        [HttpGet]
+        [HttpGet("trades")]
         public async Task<ActionResult<IEnumerable<GetTradeDto>>> GetAll()
         {
             // var userId = User.Claims.FirstOrDefault(c => c.Type == "userIdentifier")?.Value;
@@ -30,28 +30,28 @@ namespace WebApi.Controllers
             return Ok(response);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("trades/{id}")]
         public async Task<ActionResult<GetTradeDto>> Get(string id)
         {
             var userId = User.GetUserId();
             return Ok(await _services.GetTradeById(id, userId));
         }
 
-        [HttpPost]
+        [HttpPost("trades")]
         public async Task<ActionResult<GetTradeDto>> Add([FromForm] AddTradeDto requestBody)
         {
             var userId = User.GetUserId();
             return Ok(await _services.AddTrade(requestBody, _environment.ContentRootPath, userId));
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("trades/{id}")]
         public async Task Update(string id, [FromForm] UpdateTradeDto requestBody)
         {
             var userId = User.GetUserId();
             await _services.UpdateTrade(id, requestBody, userId);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("trades/{id}")]
         public async Task Delete(string id)
         {
             var userId = User.GetUserId();

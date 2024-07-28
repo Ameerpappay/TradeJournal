@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Net;
 
-namespace WebApi.ExceptionHandler
+namespace WebApi.Middlewares.ExceptionHandlerMiddleware
 {
     public class ApiExceptionHandler
     {

@@ -6,7 +6,7 @@ using WebApi.Extensions;
 
 namespace WebApi.Controllers
 {
-    [Route("api/Portfolio")]
+    [Route("api/portfolio-management")]
     [ApiController]
     [Authorize(Roles = "Admin,Trader")]
     public class PortfolioController : ControllerBase
@@ -18,7 +18,7 @@ namespace WebApi.Controllers
             _portfolioServices = portfolioServices;
         }
 
-        [HttpGet]
+        [HttpGet("portfolios")]
         public async Task<ActionResult<IEnumerable<GetPortfolioDto>>> GetAll()
         {
             var userId = User.GetUserId();
@@ -26,7 +26,7 @@ namespace WebApi.Controllers
             return Ok(response);
         }
 
-        [HttpGet("selectedPortfolio")]
+        [HttpGet("portfolios/selected-portfolio")]
         public async Task<ActionResult> GetSelectedPortfolioId()
         {
             var userId = User.GetUserId();
@@ -34,7 +34,7 @@ namespace WebApi.Controllers
             return Ok(response);
         }
 
-        [HttpPut("changePortfolio{portfolioId}")]
+        [HttpPut("portfolios/{portfolioId}/selected-portfolio")]
         public async Task<ActionResult> SetSelectedPortfolioId(string portfolioId)
         {
             var userId = User.GetUserId();
@@ -42,28 +42,28 @@ namespace WebApi.Controllers
             return Ok(response);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("portfolios/{id}")]
         public async Task<ActionResult<GetPortfolioDto>> Get(string id)
         {
             var userId = User.GetUserId();
             return Ok(await _portfolioServices.GetPortfolioById(id, userId));
         }
 
-        [HttpPost]
+        [HttpPost("portfolios")]
         public async Task<ActionResult<GetPortfolioDto>> Add(AddPortfolioDto requestBody)
         {
             var userId = User.GetUserId();
             return Ok(await _portfolioServices.AddPortfolio(requestBody, userId));
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("portfolios/{id}")]
         public async Task Update(string id, [FromBody] UpdatePortfolioDto requestBody)
         {
             var userId = User.GetUserId();
             await _portfolioServices.UpdatePortfolio(id, requestBody, userId);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("portfolios/{id}")]
         public async Task Delete(string id)
         {
             var userId = User.GetUserId();

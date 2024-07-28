@@ -5,7 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 
 namespace WebApi.Controllers
 {
-    [Route("api/user-accounts")]
+    [Route("api/user-account-management")]
     [ApiController]
     public class UserAccountController : ControllerBase
     {

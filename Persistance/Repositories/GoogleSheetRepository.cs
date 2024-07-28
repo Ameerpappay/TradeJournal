@@ -17,19 +17,10 @@ namespace Persistance.Repositories
         const string SPREADSHEET_ID = "1KwKecChnD3-iu7BHUN5_GAUoQ6VuubBHpqRbfW4-MV4";
         const string STOCKPRICE_SHEETNAME = "FullStockList";
 
-
         public GoogleSheetRepository(GoogleSheetAuth googleSheetAuth)
         {
             _googleSheetAuth = googleSheetAuth;
             _sheetService = _googleSheetAuth.GetSheetsService();
-        }
-
-        public async Task<GetStockDetailsDto> GetStockDetails(string code)
-        {
-            var range = $"{STOCKPRICE_SHEETNAME}!A1:E";
-            var request = _sheetService.Spreadsheets.Values.Get(SPREADSHEET_ID, range);
-            var response = await request.ExecuteAsync();
-            return new GetStockDetailsDto();
         }
 
         public async Task<List<GetStockDetailsDto>> GetStocksDetails()

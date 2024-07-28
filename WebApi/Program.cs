@@ -8,8 +8,8 @@ using Persistance.UnitOfWork;
 using System.Net;
 using System.Net.Mail;
 using WebApi.BuilderServices;
-using WebApi.ExceptionHandler;
 using WebApi.Extensions;
+using WebApi.Middlewares.ExceptionHandlerMiddleware;
 
 namespace WebApi
 {

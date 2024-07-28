@@ -5,7 +5,7 @@ using WebApi.Extensions;
 
 namespace WebApi.Controllers
 {
-    [Route("api/Holding")]
+    [Route("api/holdings-management")]
     [ApiController]
     public class HoldingController : ControllerBase
     {
@@ -15,7 +15,7 @@ namespace WebApi.Controllers
             _holdingsServices = holdingsServices;
         }
 
-        [HttpGet]
+        [HttpGet("holdings")]
         public async Task<ActionResult<IEnumerable<GetTradeDto>>> GetAll()
         {
             //var userId = User.Claims.FirstOrDefault(c => c.Type == "userIdentifier")?.Value;
@@ -25,7 +25,7 @@ namespace WebApi.Controllers
             return Ok(response);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("holdings/{id}")]
         public async Task<ActionResult<GetTradeDto>> Get(string id)
         {
             var userId = User.GetUserId();

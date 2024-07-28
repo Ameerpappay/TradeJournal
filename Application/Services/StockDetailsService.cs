@@ -1,78 +1,35 @@
 ﻿using Application.Dtos;
 using Application.IRepositories;
 using Application.IServices;
-using Microsoft.Extensions.Caching.Memory;
-using System;
+using Application.IServices.ICacheServices;
 
 namespace Application.Services
 {
     public class StockDetailsService : IStockDetailsService
     {
-        IStocksDetailsRepository _stockDetailsRepository;
-        private readonly IMemoryCache _cache;
+        private readonly IStocksDetailsRepository _stockDetailsRepository;
 
+        private readonly IStocksDetailsCacheService _stocksDetailsCacheService;
 
-        public StockDetailsService(IStocksDetailsRepository stocksDetailsRepository, IMemoryCache memoryCache)
+        public StockDetailsService(IStocksDetailsRepository stocksDetailsRepository, IStocksDetailsCacheService stocksDetailsCacheService)
         {
             _stockDetailsRepository = stocksDetailsRepository;
-            _cache = memoryCache;
+            _stocksDetailsCacheService = stocksDetailsCacheService;
         }
 
         public async Task<GetStockDetailsDto> GetStockDetails(string stockCode)
         {
-            if (_cache.TryGetValue("stocksList", out List<GetStockDetailsDto> stocksList))
-            {
-                var stock = stocksList.FirstOrDefault(s =>  s.BSECode.Equals(stockCode, StringComparison.OrdinalIgnoreCase)|| s.NSECode.Equals(stockCode, StringComparison.OrdinalIgnoreCase));
-                return stock;
-            }
-            else
-            {
-                await GetStocksDetailsIntoCache();
-                if (_cache.TryGetValue("stocksList", out List<GetStockDetailsDto> stockList))
-                {
-                    var stock = stockList.FirstOrDefault(s => s.BSECode.Equals(stockCode, StringComparison.OrdinalIgnoreCase) || s.NSECode.Equals(stockCode, StringComparison.OrdinalIgnoreCase));
-                    return stock;
-                }
-                return null;
-            }
+            var stocksDetails = await _stocksDetailsCacheService.GetStocksDetails();
+            var stock = stocksDetails.FirstOrDefault(s => s.BSECode.Equals(stockCode, StringComparison.OrdinalIgnoreCase) || s.NSECode.Equals(stockCode, StringComparison.OrdinalIgnoreCase));
+
+            return stock;
         }
 
-        public async Task<List<GetStockDetailsDto>> GetStocksDetailsFromCache()
+        public async Task<List<GetStockDetailsDto>> GetStocksDetails()
         {
-            if (_cache != null)
-            {
-                await GetStocksDetailsIntoCache();
+            var stocksDetails = await _stocksDetailsCacheService.GetStocksDetails();
 
-                if (_cache.TryGetValue("stocksList", out List<GetStockDetailsDto> stocksList))
-                {
-                    return stocksList;
-                }
-            }
-            else
-            {
-                GetStocksDetailsIntoCache();
-                if (_cache.TryGetValue("stocksList", out List<GetStockDetailsDto> stocksList))
-                {
-                    return stocksList;
-                }            
-            }
-            return null;
-        }
-
-        public async Task<bool> GetStocksDetailsIntoCache()
-        {
-            string cacheKey = "GoogleSheetData_FullSheet";
-            try
-            {
-                var stocksDetails = await _stockDetailsRepository.GetStocksDetails();
-                _cache.Set("stocksList", stocksDetails, TimeSpan.FromMinutes(10));
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error: Forbidden access to the Google Sheets API. Ensure proper permissions and credentials.");
-                return false;
-            }
+            return stocksDetails;
         }
     }
 }

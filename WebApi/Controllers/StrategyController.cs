@@ -7,7 +7,7 @@ using WebApi.Extensions;
 
 namespace WebApi.Controllers
 {
-    [Route("api/strategies")]
+    [Route("api/strategy-management")]
     [ApiController]
     [Authorize(Roles = "Admin,Trader")]
     public class StrategyController : ControllerBase
@@ -18,7 +18,7 @@ namespace WebApi.Controllers
             _strategyService = strategyService;
         }
 
-        [HttpGet]
+        [HttpGet("strategies")]
         public async Task<ActionResult<IEnumerable<GetStrategyDto>>> GetAll()
         {
             var userId = User.GetUserId();
@@ -26,14 +26,14 @@ namespace WebApi.Controllers
             return Ok(response);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("strategies/{id}")]
         public async Task<ActionResult<GetStrategyDto>> Get(string id)
         {
             var userId = User.GetUserId();
             return Ok(await _strategyService.GetStrategyById(id, userId));
         }
 
-        [HttpPost]
+        [HttpPost("strategies")]
         public async Task<ActionResult<GetStrategyDto>> Add(AddStrategyDto requestBody)
         {
             var userId = User.GetUserId();
@@ -41,14 +41,14 @@ namespace WebApi.Controllers
             return Ok(response);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("strategies/{id}")]
         public async Task Update(string id, [FromBody] UpdateStrategyDto requestBody)
         {
             var userId = User.GetUserId();
             await _strategyService.UpdateStrategy(id, requestBody, userId);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("strategies/{id}")]
         public async Task Delete(string id)
         {
             var userId = User.GetUserId();

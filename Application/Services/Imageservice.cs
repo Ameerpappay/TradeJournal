@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.Http;
 
 namespace Application.Services
 {
-    public class Imageservice : IImageService
+    public class ImageService : IImageService
     {
         private readonly IUnitOfWork _unitOfWork;
-        public Imageservice(IUnitOfWork unitOfWork)
+        public ImageService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
@@ -18,17 +18,10 @@ namespace Application.Services
             var newImage = new TradeImage()
             {
                 ImageTag = image.imageTag,
-                //   TradeId = image.TradeId
             };
             var addedImage = await _unitOfWork.ImageRepository.Add(newImage);
 
             await _unitOfWork.SaveChangesAsync();
-
-            //return new GetImageDto()
-            //{
-            //    imageTag = addedImage.ImageTag,
-
-            //};
 
         }
 
