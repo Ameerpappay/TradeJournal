@@ -3,7 +3,6 @@ using Application.Dtos.Portfolio;
 using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Persistance.Context;
-using Persistance.UnitOfWork;
 
 namespace WebApi.Extensions
 {
