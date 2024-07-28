@@ -28,12 +28,13 @@ namespace Persistance.Repositories
             var stocksList = response.Values.Skip(1).Select(row =>
             {
                 float marketCap, closingPrice, wk52;
-                if (!float.TryParse(row[6]?.ToString(), out marketCap))
+
+                if (!float.TryParse(row[5]?.ToString(), out marketCap))
                 {
                     marketCap = 0;
                 }
 
-                if (!float.TryParse(row[7]?.ToString(), out closingPrice))
+                if (!float.TryParse(row[6]?.ToString(), out closingPrice))
                 {
                     closingPrice = 0;
                 }
@@ -44,10 +45,10 @@ namespace Persistance.Repositories
 
                 return new GetStockDetailsDto
                 {
-                    StockName = row[3]?.ToString(),
-                    BSECode = row[1]?.ToString(),
-                    NSECode = row[2]?.ToString(),
-                    Industry = row[2]?.ToString(),
+                    StockName = row[2]?.ToString(),
+                    BSECode = row[0]?.ToString(),
+                    NSECode = row[1]?.ToString(),
+                    Industry = row[3]?.ToString(),
                     MarketCap = marketCap,
                     ClosingPrice = closingPrice,
                     WK52 = wk52,
