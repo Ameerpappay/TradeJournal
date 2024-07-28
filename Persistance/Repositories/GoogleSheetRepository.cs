@@ -1,11 +1,7 @@
 ﻿using Application.Dtos;
-using Application.Dtos.Trade;
 using Application.IRepositories;
 using Google.Apis.Sheets.v4;
-using Google.Apis.Sheets.v4.Data;
-using Microsoft.Extensions.Caching.Memory;
 using Persistance.Helpers;
-using System;
 
 namespace Persistance.Repositories
 {
@@ -31,10 +27,10 @@ namespace Persistance.Repositories
 
             var stocksList = response.Values.Skip(1).Select(row =>
             {
-                float marketCap,closingPrice,wk52;
+                float marketCap, closingPrice, wk52;
                 if (!float.TryParse(row[6]?.ToString(), out marketCap))
                 {
-                    marketCap = 0; 
+                    marketCap = 0;
                 }
 
                 if (!float.TryParse(row[7]?.ToString(), out closingPrice))
@@ -53,8 +49,8 @@ namespace Persistance.Repositories
                     NSECode = row[2]?.ToString(),
                     Industry = row[2]?.ToString(),
                     MarketCap = marketCap,
-                    ClosingPrice=closingPrice,
-                    WK52=wk52,                   
+                    ClosingPrice = closingPrice,
+                    WK52 = wk52,
 
                 };
             }).ToList();

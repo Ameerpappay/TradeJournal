@@ -21,7 +21,7 @@ namespace Persistance.Context
 
             modelBuilder.Entity<Strategy>(options => options.HasIndex(m => new { m.Name, m.IsDeleted, m.CreatedByUserId }).IsUnique().HasFilter("\"IsDeleted\" = false"));
             modelBuilder.Entity<Portfolio>(options => options.HasIndex(m => new { m.Name, m.IsDeleted, m.CreatedByUserId }).IsUnique().HasFilter("\"IsDeleted\" = false"));
-    
+
             // Get all DbSet properties in your DbContext
             var dbSetProperties = GetType().GetProperties()
                                             .Where(p => p.PropertyType.IsGenericType && p.PropertyType.GetGenericTypeDefinition() == typeof(DbSet<>));

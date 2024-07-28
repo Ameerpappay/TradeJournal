@@ -77,10 +77,10 @@ namespace Application.Services
         public async Task<bool> Add(CreateTraderDto createTraderRequest, string contentRoot)
         {
             var isUserAdded = await AddUser(createTraderRequest, contentRoot);
-            if (!isUserAdded) 
+            if (!isUserAdded)
                 return false;
 
-            await AddRoleToUser(createTraderRequest.Email, Domain.Enum.Role.Trader);                    
+            await AddRoleToUser(createTraderRequest.Email, Domain.Enum.Role.Trader);
 
             return isUserAdded;
         }
@@ -195,7 +195,7 @@ namespace Application.Services
             var isTokenValid = await _userManager.VerifyUserTokenAsync(user, TokenOptions.DefaultProvider, UserManager<User>.ConfirmEmailTokenPurpose, token);
             if (isTokenValid)
             {
-          
+
 
 
                 await _userManager.ConfirmEmailAsync(user, token);

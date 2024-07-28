@@ -1,6 +1,4 @@
-﻿using Application;
-using Application.Dtos.Portfolio;
-using Domain.Entities;
+﻿using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Persistance.Context;
 
@@ -16,7 +14,7 @@ namespace WebApi.Extensions
             if (!context.Roles.Any(item => item.Name == "Admin"))
             {
                 context.Roles.Add(new IdentityRole { Name = "Admin", ConcurrencyStamp = Guid.NewGuid().ToString(), NormalizedName = "ADMIN" });
-               
+
 
                 await context.SaveChangesAsync();
             }
@@ -50,9 +48,9 @@ namespace WebApi.Extensions
                     CreatedByUserId = addedUser.Id,
                     CreatedDate = DateTime.UtcNow
                 });
-                
-                await userManager.AddToRoleAsync(addedUser, Domain.Enum.Role.Admin.ToString());           
-                await context.SaveChangesAsync();          
+
+                await userManager.AddToRoleAsync(addedUser, Domain.Enum.Role.Admin.ToString());
+                await context.SaveChangesAsync();
             }
         }
     }

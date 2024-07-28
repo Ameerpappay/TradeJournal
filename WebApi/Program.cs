@@ -1,9 +1,7 @@
 using Application;
-using Application.IRepositories;
 using Microsoft.EntityFrameworkCore;
 using Persistance.Context;
 using Persistance.Helpers;
-using Persistance.Repositories;
 using Persistance.UnitOfWork;
 using System.Net;
 using System.Net.Mail;
