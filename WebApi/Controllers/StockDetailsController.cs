@@ -16,10 +16,13 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("{code}/stock-details")]
-        public async Task<ActionResult> GetStockPrice(string code)
+        public async Task<ActionResult> GetStockDetails(string code)
         {
             var response = await _stockDetailsService.GetStockDetails(code);
-
+            if (response == null)
+            {
+                return NoContent();
+            }
             return Ok(response);
         }
 

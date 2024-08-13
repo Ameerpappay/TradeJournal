@@ -13,7 +13,7 @@ namespace Application.Services.CacheServices
         }
         public async void AddToCache(string cacheKey, T value)
         {
-            _cache.Set(cacheKey, value, TimeSpan.FromMinutes(10));
+            _cache.Set(cacheKey, value, TimeSpan.FromHours(1));
         }
 
         public T GetValueFromCache(string cacheKey)

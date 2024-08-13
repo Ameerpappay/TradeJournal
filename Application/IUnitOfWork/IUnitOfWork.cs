@@ -17,5 +17,6 @@ namespace Application
         IPortfolioRepository PortfolioRepository { get; }
 
         IHoldingsRepository HoldingsRepository { get; }
+        IExcelSheetRepository ExcelSheetRepository { get; }
     }
 }

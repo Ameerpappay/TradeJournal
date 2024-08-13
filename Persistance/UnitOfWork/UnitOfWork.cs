@@ -21,8 +21,10 @@ namespace Persistance.UnitOfWork
         public IPortfolioRepository PortfolioRepository { get; set; }
 
         public IHoldingsRepository HoldingsRepository { get; set; }
+        public IExcelSheetRepository ExcelSheetRepository { get; set; }
 
-        public UnitOfWork(TradeJournalDataContext context, IStrategyRepository strategyRepository, ITradeRepository tradeRepository, IImageRepository imageRepository, IPortfolioRepository portfolioRepository, IHoldingsRepository holdingsRepository)
+
+        public UnitOfWork(TradeJournalDataContext context, IStrategyRepository strategyRepository, ITradeRepository tradeRepository, IImageRepository imageRepository, IPortfolioRepository portfolioRepository, IHoldingsRepository holdingsRepository , IExcelSheetRepository excelSheetRepository)
         {
             _dbContext = context;
             StrategyRepository = strategyRepository;
@@ -30,6 +32,7 @@ namespace Persistance.UnitOfWork
             ImageRepository = imageRepository;
             PortfolioRepository = portfolioRepository;
             HoldingsRepository = holdingsRepository;
+            ExcelSheetRepository = excelSheetRepository;
         }
 
         public async Task BeginTransactionAsync()

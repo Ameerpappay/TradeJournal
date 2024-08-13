@@ -13,6 +13,8 @@ namespace WebApi.Extensions
             services.AddScoped<IPortfolioRepository, PortfolioRepository>();
             services.AddScoped<IHoldingsRepository, HoldingsRepository>();
             services.AddScoped<IStocksDetailsRepository, GoogleSheetRepository>();
+            services.AddScoped<IExcelSheetRepository, ExcelSheetRepository>();
+
         }
     }
 }

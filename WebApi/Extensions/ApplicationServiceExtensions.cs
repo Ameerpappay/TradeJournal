@@ -18,6 +18,8 @@ namespace WebApi.Extensions
             services.AddScoped<IPortfolioServices, PortfolioService>();
             services.AddScoped<IHoldingsServices, HoldingsService>();
             services.AddScoped<IStockDetailsService,StockDetailsService>();
+            services.AddScoped<IExcelSheetService, ExcelSheetService>();
+
 
             //cache
             services.AddScoped(typeof(ICacheService<>), typeof(InMemoryCacheService<>));

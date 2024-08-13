@@ -27,7 +27,7 @@ namespace Persistance.Repositories
 
             var stocksList = response.Values.Skip(1).Select(row =>
             {
-                float marketCap, closingPrice, wk52;
+                float marketCap, closingPrice, wk52,perChange;
 
                 if (!float.TryParse(row[5]?.ToString(), out marketCap))
                 {
@@ -38,6 +38,12 @@ namespace Persistance.Repositories
                 {
                     closingPrice = 0;
                 }
+
+                if (!float.TryParse(row[7]?.ToString(), out perChange))
+                {
+                    perChange = 0;
+                }
+
                 if (!float.TryParse(row[8]?.ToString(), out wk52))
                 {
                     wk52 = 0;
@@ -52,6 +58,7 @@ namespace Persistance.Repositories
                     MarketCap = marketCap,
                     ClosingPrice = closingPrice,
                     WK52 = wk52,
+                    PercentageChange= perChange
 
                 };
             }).ToList();

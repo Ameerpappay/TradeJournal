@@ -4,7 +4,7 @@ namespace Application.Dtos.Holdings
 {
     public class GetHoldingsDto
     {
-        public int Id { get; set; }
+         public int Id { get; set; }
         public string Identifier { get; set; }
         public string Code { get; set; }
 

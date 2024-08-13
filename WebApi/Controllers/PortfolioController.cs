@@ -34,7 +34,7 @@ namespace WebApi.Controllers
             return Ok(response);
         }
 
-        [HttpPut("portfolios/{portfolioId}/selected-portfolio")]
+        [HttpPut("portfolios/selected-portfolio/{portfolioId}")]
         public async Task<ActionResult> SetSelectedPortfolioId(string portfolioId)
         {
             var userId = User.GetUserId();

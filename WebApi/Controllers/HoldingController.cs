@@ -32,6 +32,5 @@ namespace WebApi.Controllers
             return Ok(await _holdingsServices.GetHoldingByID(id, userId));
         }
 
-
     }
 }
